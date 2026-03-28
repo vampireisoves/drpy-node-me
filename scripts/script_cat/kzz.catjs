@@ -1,0 +1,409 @@
+// ==UserScript==
+// @name         可转债监控脚本
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  监控东方财富网的可转债数据，使用ScriptCat弹窗通知
+// @author       YourName
+// @match        *://*/*
+// @grant        GM_xmlhttpRequest
+// @grant        GM_notification
+// @require      https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js
+// @require      https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.min.js
+// @run-at       document-end
+// ==/UserScript==
+
+(function () {
+    'use strict';
+
+    // 扩展dayjs以支持自定义格式解析
+    dayjs.extend(dayjs_plugin_customParseFormat);
+
+    // 默认用户代理
+    const DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36';
+
+    // ScriptCat弹窗通知函数
+    function showNotification(message, title = '可转债监控', delay = 5000) {
+        GM_notification({
+            text: message,
+            title: title,
+            silent: false,
+            timeout: delay,
+            ondone: null
+        });
+    }
+
+    // 日志函数 - 同时输出到控制台和弹窗
+    function log(taskId, message, isError = false) {
+        const prefix = taskId ? `[任务 ${taskId}] ` : '';
+        const fullMessage = `${prefix}${message}`;
+
+        // 输出到控制台
+        if (isError) {
+            console.error(fullMessage);
+        } else {
+            console.log(fullMessage);
+        }
+
+        // 显示弹窗通知
+        // showNotification(fullMessage, isError ? '错误' : '信息');
+    }
+
+    /**
+     * 获取可转债数据
+     * @param {string|number} taskId - 任务ID
+     * @param {string} [url='http://data.eastmoney.com/kzz/'] - 东方财富网查询地址
+     * @param {number} [dayeExtra=0] - 日期偏移量。正数：未来天数，负数：过去天数
+     * @param {Object} [kwargs] - 其他可选参数
+     * @returns {Promise<Array>} - 可转债列表
+     */
+    async function getNowKzz(taskId, url = 'http://data.eastmoney.com/kzz/', dayeExtra = 0, kwargs = {}) {
+        log(taskId, `开始获取可转债数据，日期偏移量: ${dayeExtra}, 参数: ${JSON.stringify(kwargs)}`);
+
+        const headers = {
+            'User-Agent': DEFAULT_USER_AGENT,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Pragma': 'no-cache',
+            'Cache-Control': 'no-cache'
+        };
+
+        try {
+            // 先访问首页获取必要的cookies
+            log(taskId, '访问首页获取cookies...');
+            await makeRequest('GET', url, headers);
+
+            // 构建数据API URL - 使用随机回调函数名
+            const callbackName = `jQuery${Math.floor(Math.random() * 1000000000)}_${Date.now()}`;
+            const dataUrl = `https://datacenter-web.eastmoney.com/api/data/v1/get?callback=${callbackName}&sortColumns=PUBLIC_START_DATE&sortTypes=-1&pageSize=50&pageNumber=1&reportName=RPT_BOND_CB_LIST&columns=ALL&quoteColumns=f2~01~CONVERT_STOCK_CODE~CONVERT_STOCK_PRICE%2Cf235~10~SECURITY_CODE~TRANSFER_PRICE%2Cf236~10~SECURITY_CODE~TRANSFER_VALUE%2Cf2~10~SECURITY_CODE~CURRENT_BOND_PRICE%2Cf237~10~SECURITY_CODE~TRANSFER_PREMIUM_RATIO%2Cf239~10~SECURITY_CODE~RESALE_TRIG_PRICE%2Cf240~10~SECURITY_CODE~REDEEM_TRIG_PRICE%2Cf23~01~CONVERT_STOCK_CODE~PBV_RATIO&quoteType=0&source=WEB&client=WEB`;
+
+            log(taskId, '请求API数据...');
+            const response = await makeRequest('GET', dataUrl, headers);
+
+            // 解析JSONP响应
+            log(taskId, '解析响应数据...');
+            const jsonStr = extractJsonFromJsonp(response.responseText);
+            const data = safeParseJson(jsonStr);
+
+            log(taskId, '处理可转债数据...');
+            return processKzzData(taskId, data, dayeExtra);
+        } catch (error) {
+            const errorMsg = `获取可转债数据失败: ${error.message}`;
+            log(taskId, errorMsg, true);
+            throw new Error(errorMsg);
+        }
+    }
+
+    // 封装GM_xmlhttpRequest为Promise
+    function makeRequest(method, url, headers) {
+        return new Promise((resolve, reject) => {
+            GM_xmlhttpRequest({
+                method: method,
+                url: url,
+                headers: headers,
+                timeout: 15000,
+                onload: (response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        resolve(response);
+                    } else {
+                        reject(new Error(`HTTP错误: ${response.status}`));
+                    }
+                },
+                onerror: (error) => reject(error),
+                ontimeout: () => reject(new Error('请求超时'))
+            });
+        });
+    }
+
+    /**
+     * 从JSONP响应中提取JSON字符串
+     * @param {string} jsonp - JSONP响应字符串
+     * @returns {string} - JSON字符串
+     */
+    function extractJsonFromJsonp(jsonp) {
+        // 尝试多种解析方式
+        const patterns = [
+            /^[^{]*?\(({.*})\)[^}]*?$/,
+            /^.*?\(({.*})\)$/,
+            /^.*?\(({.*})\);?$/,
+            /({.*})/
+        ];
+
+        for (const pattern of patterns) {
+            const match = jsonp.match(pattern);
+            if (match && match[1]) {
+                return match[1];
+            }
+        }
+
+        // 尝试直接解析为JSON
+        try {
+            JSON.parse(jsonp);
+            return jsonp;
+        } catch (e) {
+            throw new Error('无法解析JSONP响应: ' + jsonp.substring(0, 100) + '...');
+        }
+    }
+
+    /**
+     * 安全解析JSON字符串
+     * @param {string} jsonStr - JSON字符串
+     * @returns {Object} - 解析后的对象
+     */
+    function safeParseJson(jsonStr) {
+        try {
+            return JSON.parse(jsonStr);
+        } catch (e) {
+            // 尝试修复常见的JSON格式问题
+            try {
+                const fixedJson = jsonStr
+                    .replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
+                    .replace(/:\s*'([^']*)'/g, ': "$1"')
+                    .replace(/(\w+)\s*:/g, '"$1":')  // 修复键名缺少引号
+                    .replace(/:\s*([a-zA-Z_][\w]*)([,\}])/g, ':"$1"$2'); // 修复字符串值缺少引号
+
+                return JSON.parse(fixedJson);
+            } catch (e2) {
+                console.error('JSON解析错误:', e2.message);
+                console.error('原始JSON字符串:', jsonStr.substring(0, 200));
+                throw new Error('JSON解析失败: ' + e2.message);
+            }
+        }
+    }
+
+    function compareDates(dateStr1, dateStr2) {
+        const date1 = new Date(dateStr1);
+        const date2 = new Date(dateStr2);
+        return date1.getTime() - date2.getTime();
+    }
+
+    /**
+     * 处理可转债数据
+     * @param {string} taskId - 任务ID
+     * @param {Object} data - 原始数据
+     * @param {number} dayeExtra - 日期偏移量
+     * @returns {Array} - 处理后的可转债列表
+     */
+    function processKzzData(taskId, data, dayeExtra) {
+        if (!data || !data.result || !Array.isArray(data.result.data)) {
+            throw new Error('API返回的数据结构无效');
+        }
+
+        const resultData = data.result.data;
+
+        // 计算目标日期范围
+        const today = dayjs();
+        const targetDate = today.add(dayeExtra, 'day');
+        const targetDateStr = targetDate.format('YYYY-MM-DD');
+
+        log(taskId, `筛选日期: ${targetDateStr} (偏移量: ${dayeExtra}天)`);
+
+        // 处理数据
+        const kzzList = [];
+        const dateFormats = [
+            'YYYY-MM-DD HH:mm:ss',
+            'YYYY/MM/DD HH:mm:ss',
+            'YYYY-MM-DD',
+            'YYYY/MM/DD',
+            'YYYY-M-DD',
+            'YYYY-M-D',
+            'YYYY/MM/DD'
+        ];
+
+        for (const item of resultData) {
+            if (!item.PUBLIC_START_DATE) {
+                log(taskId, `跳过无发行日期的项目: ${item.SECURITY_NAME_ABBR}`, false);
+                continue;
+            }
+
+            // 解析日期
+            let publicDate;
+            for (const format of dateFormats) {
+                publicDate = dayjs(item.PUBLIC_START_DATE, format, true);
+                if (publicDate.isValid()) break;
+            }
+
+            if (!publicDate.isValid()) {
+                log(taskId, `无效的日期格式: ${item.PUBLIC_START_DATE} (项目: ${item.SECURITY_NAME_ABBR})`, false);
+                continue;
+            }
+
+            const dateStr = publicDate.format('YYYY-MM-DD');
+
+            // 检查是否匹配目标日期
+            if (compareDates(dateStr, targetDateStr) >= 0) {
+                kzzList.push({
+                    name: item.SECURITY_NAME_ABBR,
+                    code: item.SECURITY_CODE,
+                    date: dateStr
+                });
+            }
+        }
+
+        log(taskId, `找到 ${kzzList.length} 个匹配的可转债`);
+        return kzzList;
+    }
+
+    /**
+     * 主函数 - 测试用
+     */
+    async function main() {
+        try {
+            // 支持正负偏移量测试
+            const testCases = [
+                {offset: 0, desc: "今天"},
+                {offset: 1, desc: "明天"},
+                {offset: -1, desc: "昨天"},
+                {offset: 7, desc: "7天后"},
+                {offset: -7, desc: "7天前"}
+            ];
+
+            for (const testCase of testCases) {
+                log(null, `\n===== 测试 ${testCase.desc} (偏移量: ${testCase.offset}) =====`);
+                const kzzData = await getNowKzz(
+                    `test_${testCase.offset}`,
+                    'http://data.eastmoney.com/kzz/',
+                    testCase.offset
+                );
+
+                if (kzzData.length > 0) {
+                    log(null, `找到 ${kzzData.length} 个可转债:`);
+                    kzzData.forEach((item, index) => {
+                        log(null, `${index + 1}. ${item.name} (${item.code}) - ${item.date}`);
+                    });
+                } else {
+                    log(null, `未找到 ${testCase.desc} 的可转债数据`);
+                }
+            }
+
+            log(null, '\n所有测试完成');
+        } catch (error) {
+            log(null, `测试失败: ${error.message}`, true);
+        }
+    }
+
+    // 添加UI控制面板
+    function createControlPanel() {
+        const panel = document.createElement('div');
+        panel.style.position = 'fixed';
+        panel.style.top = '20px';
+        panel.style.right = '20px';
+        panel.style.backgroundColor = '#2c3e50';
+        panel.style.color = 'white';
+        panel.style.padding = '15px';
+        panel.style.borderRadius = '8px';
+        panel.style.zIndex = '9999';
+        panel.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        panel.style.fontFamily = 'Arial, sans-serif';
+        panel.style.width = '300px';
+
+        const title = document.createElement('h3');
+        title.textContent = '可转债监控';
+        title.style.marginTop = '0';
+        title.style.color = '#3498db';
+        title.style.borderBottom = '1px solid #3498db';
+        title.style.paddingBottom = '10px';
+        panel.appendChild(title);
+
+        // 日期偏移量设置
+        const offsetLabel = document.createElement('label');
+        offsetLabel.textContent = '日期偏移量:';
+        offsetLabel.style.display = 'block';
+        offsetLabel.style.marginBottom = '5px';
+        panel.appendChild(offsetLabel);
+
+        const offsetInput = document.createElement('input');
+        offsetInput.type = 'number';
+        offsetInput.value = '7';
+        offsetInput.style.width = '100%';
+        offsetInput.style.padding = '8px';
+        offsetInput.style.borderRadius = '4px';
+        offsetInput.style.border = '1px solid #3498db';
+        offsetInput.style.backgroundColor = '#34495e';
+        offsetInput.style.color = 'white';
+        panel.appendChild(offsetInput);
+
+        // 操作按钮
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.display = 'flex';
+        buttonContainer.style.justifyContent = 'space-between';
+        buttonContainer.style.marginTop = '15px';
+
+        const testBtn = document.createElement('button');
+        testBtn.textContent = '测试运行';
+        testBtn.style.backgroundColor = '#3498db';
+        testBtn.style.color = 'white';
+        testBtn.style.border = 'none';
+        testBtn.style.padding = '8px 15px';
+        testBtn.style.borderRadius = '4px';
+        testBtn.style.cursor = 'pointer';
+        testBtn.style.flex = '1';
+        testBtn.style.marginRight = '5px';
+        testBtn.addEventListener('click', () => {
+            main();
+        });
+
+        const runBtn = document.createElement('button');
+        runBtn.textContent = '执行查询';
+        runBtn.style.backgroundColor = '#2ecc71';
+        runBtn.style.color = 'white';
+        runBtn.style.border = 'none';
+        runBtn.style.padding = '8px 15px';
+        runBtn.style.borderRadius = '4px';
+        runBtn.style.cursor = 'pointer';
+        runBtn.style.flex = '1';
+        runBtn.addEventListener('click', async () => {
+            try {
+                const offset = parseInt(offsetInput.value) || 7;
+                const kzzData = await getNowKzz(
+                    `run_${Date.now()}`,
+                    'http://data.eastmoney.com/kzz/',
+                    offset
+                );
+
+                if (kzzData.length > 0) {
+                    let resultMsg = `找到 ${kzzData.length} 个可转债:\n`;
+                    kzzData.forEach((item, index) => {
+                        resultMsg += `${index + 1}. ${item.name} (${item.code}) - ${item.date}\n`;
+                    });
+                    log(null, resultMsg);
+                    showNotification(resultMsg, '信息');
+                } else {
+                    log(null, `未找到偏移量 ${offset} 天的可转债数据`);
+                }
+            } catch (error) {
+                log(null, `查询失败: ${error.message}`, true);
+            }
+        });
+
+        buttonContainer.appendChild(testBtn);
+        buttonContainer.appendChild(runBtn);
+        panel.appendChild(buttonContainer);
+
+        // 关闭按钮
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '&times;';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '5px';
+        closeBtn.style.right = '5px';
+        closeBtn.style.background = 'none';
+        closeBtn.style.border = 'none';
+        closeBtn.style.color = '#e74c3c';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.fontSize = '20px';
+        closeBtn.style.lineHeight = '1';
+        closeBtn.addEventListener('click', () => {
+            panel.style.display = 'none';
+        });
+        panel.appendChild(closeBtn);
+
+        document.body.appendChild(panel);
+    }
+
+    // 初始化控制面板
+    window.addEventListener('load', () => {
+        createControlPanel();
+        showNotification('可转债监控脚本已加载，请使用右上角控制面板操作', '信息');
+    });
+})();

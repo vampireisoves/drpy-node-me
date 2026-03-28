@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cron 表达式生成器</title>
+    <style>
+        :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#7c3aed;--glass: rgba(255,255,255,0.03)}
+        html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef8;background:linear-gradient(180deg,#071025 0%, #081226 60%);-webkit-font-smoothing:antialiased}
+        .wrap{max-width:980px;margin:28px auto;padding:20px}
+        .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;box-shadow:0 6px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+        h1{margin:0 0 6px;font-size:20px}
+        p.lead{margin:0 0 16px;color:var(--muted);font-size:13px}
+
+        .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+        @media(max-width:880px){.grid{grid-template-columns:1fr} .right{order:2}}
+
+        .field{display:flex;flex-direction:column;margin-bottom:10px}
+        label{font-size:13px;color:var(--muted);margin-bottom:6px}
+        select,input[type="time"],input[type="number"],input[type="text"]{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:8px;color:#e6eef8}
+        .row{display:flex;gap:10px}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:none;cursor:pointer}
+        .btn-primary{background:linear-gradient(90deg,var(--accent),#4f46e5);color:white}
+        .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+        .preset-list{display:flex;flex-wrap:wrap;gap:8px}
+        .chip{background:rgba(255,255,255,0.03);padding:8px 10px;border-radius:999px;font-size:13px;color:var(--muted);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+
+        pre.preview{background:#020617;padding:12px;border-radius:8px;color:#c7f9d7;overflow:auto}
+        .meta{font-size:13px;color:var(--muted);margin-top:8px}
+
+        .small{font-size:12px;color:var(--muted)}
+        .footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+
+        /* mobile tweaks */
+        @media(max-width:420px){.wrap{padding:12px} h1{font-size:18px}}
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="card">
+        <h1>Cron 表达式生成器</h1>
+        <p class="lead">以友好的交互方式选择时间/频率，自动生成支持 6 字段（秒 分 时 日 月 周）格式的 cron 表达式。移动端自适应。</p>
+
+        <div class="grid">
+            <div class="left">
+                <div class="field">
+                    <label>调度类型</label>
+                    <select id="mode">
+                        <option value="every">每隔（间隔）</option>
+                        <option value="daily">每天特定时间</option>
+                        <option value="weekly">每周（指定星期几）</option>
+                        <option value="monthly">每月（指定日）</option>
+                        <option value="custom">高级自定义（直接编辑字段）</option>
+                    </select>
+                </div>
+
+                <div id="intervalBox" class="field">
+                    <label>间隔设置</label>
+                    <div class="row">
+                        <select id="intervalUnit">
+                            <option value="minutes">分钟</option>
+                            <option value="hours">小时</option>
+                            <option value="days">天</option>
+                        </select>
+                        <input id="intervalValue" type="number" min="1" value="5" style="width:100px" />
+                    </div>
+                    <div class="small">示例：每 5 分钟</div>
+                </div>
+
+                <div id="dailyBox" class="field" style="display:none">
+                    <label>每天执行时间</label>
+                    <input id="dailyTime" type="time" value="09:00" />
+                    <div class="small">指定本地时间（例如 Asia/Shanghai）</div>
+                </div>
+
+                <div id="weeklyBox" class="field" style="display:none">
+                    <label>每周选择</label>
+                    <div class="row" style="flex-wrap:wrap">
+                        <label><input type="checkbox" value="0" class="weekday" /> 周日</label>
+                        <label><input type="checkbox" value="1" class="weekday" /> 周一</label>
+                        <label><input type="checkbox" value="2" class="weekday" /> 周二</label>
+                        <label><input type="checkbox" value="3" class="weekday" /> 周三</label>
+                        <label><input type="checkbox" value="4" class="weekday" /> 周四</label>
+                        <label><input type="checkbox" value="5" class="weekday" /> 周五</label>
+                        <label><input type="checkbox" value="6" class="weekday" /> 周六</label>
+                    </div>
+                    <div class="field" style="margin-top:8px">
+                        <label>执行时间</label>
+                        <input id="weeklyTime" type="time" value="09:00" />
+                    </div>
+                </div>
+
+                <div id="monthlyBox" class="field" style="display:none">
+                    <label>每月的哪一天</label>
+                    <input id="monthDay" type="number" min="1" max="31" value="1" />
+                    <div class="field" style="margin-top:8px">
+                        <label>执行时间</label>
+                        <input id="monthlyTime" type="time" value="09:00" />
+                    </div>
+                </div>
+
+                <div id="customBox" class="field" style="display:none">
+                    <label>自定义字段（秒 分 时 日 月 周）</label>
+                    <input id="customFields" type="text" placeholder="例: 0 0 9 * * *" />
+                    <div class="small">请提供 6 个字段的 cron 表达式，秒为首位。</div>
+                </div>
+
+                <div class="field">
+                    <label>时区（可选）</label>
+                    <select id="timezone">
+                        <option value="">默认 (系统时区)</option>
+                        <option value="Asia/Shanghai">Asia/Shanghai (北京时间)</option>
+                        <option value="UTC">UTC</option>
+                        <option value="Europe/London">Europe/London</option>
+                        <option value="America/New_York">America/New_York</option>
+                    </select>
+                    <div class="small">如果你希望在特定时区执行，请选择。否则使用服务器默认时区。</div>
+                </div>
+
+                <div class="field">
+                    <label>执行次数限制（说明）</label>
+                    <input id="limitCount" type="number" min="0" value="0" />
+                    <div class="small">注意：cron 本身无法限制总执行次数。填写 >0 仅会在下方显示建议的实现方式。</div>
+                </div>
+
+                <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+                    <button id="generate" class="btn btn-primary">生成 Cron</button>
+                    <button id="copy" class="btn btn-ghost">复制到剪贴板</button>
+                    <button id="reset" class="btn btn-ghost">重置</button>
+                </div>
+
+                <div style="margin-top:12px">
+                    <div class="preset-list">
+                        <div class="chip" data-preset="@every_minute">每分钟</div>
+                        <div class="chip" data-preset="@hourly">每小时</div>
+                        <div class="chip" data-preset="@daily">每天 00:00</div>
+                        <div class="chip" data-preset="@weekday9">工作日 09:00</div>
+                        <div class="chip" data-preset="@monthly1">每月 1 日 09:00</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="right card" style="padding:14px">
+                <h2 style="margin-top:0">预览</h2>
+                <pre id="cronPreview" class="preview"># 生成的 cron 表达式会在这里显示</pre>
+                <div class="meta" id="metaZone">时区: <span id="metaTz">系统时区</span></div>
+                <div class="meta" id="metaLimit" style="margin-top:6px;color:var(--muted)"></div>
+                <div class="footer">
+                    <div class="small">支持 6 字段 cron（秒 分 时 日 月 周）</div>
+                    <div style="display:flex;gap:8px">
+                        <button id="explain" class="btn btn-ghost">字段说明</button>
+                        <button id="download" class="btn btn-ghost">下载 .txt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // DOM refs
+    const mode = document.getElementById('mode');
+    const intervalBox = document.getElementById('intervalBox');
+    const dailyBox = document.getElementById('dailyBox');
+    const weeklyBox = document.getElementById('weeklyBox');
+    const monthlyBox = document.getElementById('monthlyBox');
+    const customBox = document.getElementById('customBox');
+    const intervalUnit = document.getElementById('intervalUnit');
+    const intervalValue = document.getElementById('intervalValue');
+    const dailyTime = document.getElementById('dailyTime');
+    const weeklyTime = document.getElementById('weeklyTime');
+    const monthDay = document.getElementById('monthDay');
+    const monthlyTime = document.getElementById('monthlyTime');
+    const customFields = document.getElementById('customFields');
+    const timezone = document.getElementById('timezone');
+    const generate = document.getElementById('generate');
+    const copyBtn = document.getElementById('copy');
+    const cronPreview = document.getElementById('cronPreview');
+    const metaTz = document.getElementById('metaTz');
+    const limitCount = document.getElementById('limitCount');
+    const reset = document.getElementById('reset');
+    const chips = document.querySelectorAll('.chip');
+    const explain = document.getElementById('explain');
+    const download = document.getElementById('download');
+
+    function showBoxes() {
+        intervalBox.style.display = mode.value === 'every' ? 'block' : 'none';
+        dailyBox.style.display = mode.value === 'daily' ? 'block' : 'none';
+        weeklyBox.style.display = mode.value === 'weekly' ? 'block' : 'none';
+        monthlyBox.style.display = mode.value === 'monthly' ? 'block' : 'none';
+        customBox.style.display = mode.value === 'custom' ? 'block' : 'none';
+    }
+
+    mode.addEventListener('change', showBoxes);
+    showBoxes();
+
+    chips.forEach(c => c.addEventListener('click', (e) => {
+        const p = e.currentTarget.dataset.preset;
+        if(p==='@every_minute'){ mode.value='every'; intervalUnit.value='minutes'; intervalValue.value=1; }
+        if(p==='@hourly'){ mode.value='daily'; dailyTime.value='00:00'; }
+        if(p==='@daily'){ mode.value='daily'; dailyTime.value='00:00'; }
+        if(p==='@weekday9'){ mode.value='weekly'; weeklyTime.value='09:00'; document.querySelectorAll('.weekday').forEach(cb=>{cb.checked = ['1','2','3','4','5'].includes(cb.value)}); }
+        if(p==='@monthly1'){ mode.value='monthly'; monthDay.value=1; monthlyTime.value='09:00'; }
+        showBoxes();
+    }));
+
+    function pad(v){ return v.toString().padStart(2,'0'); }
+
+    function buildCron(){
+        let cron = '';
+        const tz = timezone.value;
+        metaTz.textContent = tz || '系统时区';
+
+        if(mode.value==='every'){
+            const unit = intervalUnit.value;
+            const val = Math.max(1, Math.floor(Number(intervalValue.value)||1));
+            if(unit==='minutes'){
+                // 每 N 分钟： 秒 分 时 日 月 周 -> 0 */N * * * *
+                cron = `0 */${val} * * * *`;
+            } else if(unit==='hours'){
+                // 每 N 小时： 0 0 */N * * *
+                cron = `0 0 */${val} * * *`;
+            } else if(unit==='days'){
+                // 每 N 天： 0 0 0 */N * *  (执行于每天 00:00 的间隔)
+                cron = `0 0 0 */${val} * *`;
+            }
+        }
+
+        if(mode.value==='daily'){
+            // dailyTime -> HH:MM
+            const [hh,mm] = dailyTime.value.split(':');
+            cron = `0 ${parseInt(mm,10)} ${parseInt(hh,10)} * * *`;
+        }
+
+        if(mode.value==='weekly'){
+            const days = Array.from(document.querySelectorAll('.weekday:checked')).map(i=>i.value);
+            const [hh,mm] = weeklyTime.value.split(':');
+            const dayField = days.length ? days.join(',') : '*';
+            cron = `0 ${parseInt(mm,10)} ${parseInt(hh,10)} * * ${dayField}`;
+        }
+
+        if(mode.value==='monthly'){
+            const day = Math.min(31, Math.max(1, Number(monthDay.value||1)));
+            const [hh,mm] = monthlyTime.value.split(':');
+            cron = `0 ${parseInt(mm,10)} ${parseInt(hh,10)} ${day} * *`;
+        }
+
+        if(mode.value==='custom'){
+            const txt = customFields.value.trim();
+            cron = txt || '';
+        }
+
+        if(!cron) cron = '# 请选择调度后点击 生成 Cron';
+        return { cron, tz };
+    }
+
+    function validateSixFields(expr){
+        if(!expr) return false;
+        const parts = expr.trim().split(/\s+/);
+        return parts.length === 6;
+    }
+
+    generate.addEventListener('click', ()=>{
+        const {cron, tz} = buildCron();
+        cronPreview.textContent = cron + (tz?`\n(timezone: ${tz})`:'');
+
+        // 显示 limit 建议
+        const limit = Number(limitCount.value||0);
+        const metaLimit = document.getElementById('metaLimit');
+        if(limit>0){
+            metaLimit.textContent = `执行次数限制：你填写了 ${limit} 次。建议在你的任务代码中记录并在达到次数后停止调度，或用外部调度器配合。`;
+        } else { metaLimit.textContent = '' }
+    });
+
+    copyBtn.addEventListener('click', async ()=>{
+        const text = cronPreview.textContent;
+        try{
+            await navigator.clipboard.writeText(text);
+            copyBtn.textContent = '已复制';
+            setTimeout(()=>copyBtn.textContent='复制到剪贴板',1200);
+        }catch(e){
+            alert('复制失败，请手动复制');
+        }
+    });
+
+    reset.addEventListener('click', ()=>{ location.reload(); });
+
+    explain.addEventListener('click', ()=>{
+        alert('字段说明（6 字段）:\n秒 分 时 日 月 周\n示例: 0 0 9 * * * -> 每天 09:00 执行（秒:0 分:0 时:9）');
+    });
+
+    download.addEventListener('click', ()=>{
+        const blob = new Blob([cronPreview.textContent], {type:'text/plain;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'cron.txt'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    // 初始生成
+    document.getElementById('generate').click();
+</script>
+</body>
+</html>

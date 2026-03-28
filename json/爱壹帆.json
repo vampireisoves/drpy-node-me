@@ -1,0 +1,12 @@
+{
+    "作者": "EylinSir",
+    "站名": "爱壹帆",
+    "编码": "UTF-8",
+    "请求头": "User-Agent$MOBILE_UA",
+    "主页url": "https://m.yfsp.tv/",
+    "首页": "100",
+    "起始页": "1",
+    "分类url": "/m.yfsp.tv/{cateId}/lang/{lang}/letter/{letter}/page/{catePg}/year/{year}.html/?{cateId}",
+    "分类": "电视剧&电影&综艺&动漫",
+    "分类值": "2&1&3&4"
+}

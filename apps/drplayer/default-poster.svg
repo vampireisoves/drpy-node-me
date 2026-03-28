@@ -1,0 +1,6 @@
+<svg width="280" height="200" viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="200" fill="#f7f8fa"/>
+  <rect x="110" y="70" width="60" height="60" rx="30" fill="#e5e6eb"/>
+  <path d="M130 85L145 95L130 105V85Z" fill="#86909c"/>
+  <text x="140" y="130" text-anchor="middle" fill="#86909c" font-family="Arial, sans-serif" font-size="12">暂无图片</text>
+</svg>

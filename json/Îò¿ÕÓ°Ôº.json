@@ -1,0 +1,16 @@
+{
+                "作者": "班长",
+                "站名": "悟空影院",
+                "请求头": "User-Agent$MOBILE_UA",
+                "编码": "UTF-8",
+                "click": "document.querySelector(\"#playleft iframe\").contentWindow.document.querySelector(\"#start\").click()",
+                "数组": "stui-vodlist__box&&</div>",
+                "链接": "href=\"&&\"[替换:vod>>play#.html>>-1-1.html]",
+                "线路二次截取": "",
+                "线路数组": "stui-pannel__head bottom-line active clearfix&&</div>",
+                "线路标题": ">&&</h3",
+                "跳转播放链接": "document (\"&&\")",
+                "分类url": "https://wkvod.cc/vodshow/id/{cateId}/page/{catePg}.html",
+                "分类": "电影&剧集&综艺&动漫&短剧",
+                "分类值": "dianying&juji&zongyi&dongman&duanju"
+            }

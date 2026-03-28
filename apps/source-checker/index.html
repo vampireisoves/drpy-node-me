@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>源可用性检测器</title>
+    <style>
+        :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#7c3aed;--success:#10b981;--warning:#f59e0b;--error:#ef4444;--glass: rgba(255,255,255,0.03)}
+        html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef8;background:linear-gradient(180deg,#071025 0%, #081226 60%);-webkit-font-smoothing:antialiased}
+        .wrap{max-width:1200px;margin:20px auto;padding:20px}
+        .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;box-shadow:0 6px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03);margin-bottom:16px}
+        h1{margin:0 0 6px;font-size:20px}
+        p.lead{margin:0 0 16px;color:var(--muted);font-size:13px}
+
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        @media(max-width:768px){.grid{grid-template-columns:1fr}}
+
+        .field{display:flex;flex-direction:column;margin-bottom:12px}
+        label{font-size:13px;color:var(--muted);margin-bottom:6px}
+        input[type="text"],input[type="url"],input[type="number"],textarea,select{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:8px;color:#e6eef8;width:100%;box-sizing:border-box}
+        textarea{resize:vertical;min-height:80px}
+        
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;border:none;cursor:pointer;font-size:14px;transition:all 0.2s}
+        .btn:disabled{opacity:0.5;cursor:not-allowed}
+        .btn-primary{background:linear-gradient(90deg,var(--accent),#4f46e5);color:white}
+        .btn-primary:hover:not(:disabled){transform:translateY(-1px)}
+        .btn-success{background:linear-gradient(90deg,var(--success),#059669);color:white}
+        .btn-warning{background:linear-gradient(90deg,var(--warning),#d97706);color:white}
+        .btn-info{background:linear-gradient(90deg,#0ea5e9,#0284c7);color:white}
+        .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+        
+        .btn-group{display:flex;gap:8px;flex-wrap:wrap}
+        @media(max-width:480px){.btn-group{flex-direction:column}}
+
+        .status{padding:8px 12px;border-radius:6px;font-size:12px;font-weight:500}
+        .status-success{background:rgba(16,185,129,0.1);color:var(--success);border:1px solid rgba(16,185,129,0.2)}
+        .status-error{background:rgba(239,68,68,0.1);color:var(--error);border:1px solid rgba(239,68,68,0.2)}
+        .status-warning{background:rgba(245,158,11,0.1);color:var(--warning);border:1px solid rgba(245,158,11,0.2)}
+        .status-pending{background:rgba(148,163,184,0.1);color:var(--muted);border:1px solid rgba(148,163,184,0.2)}
+
+        .source-item{background:var(--glass);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:12px;margin-bottom:8px}
+        .source-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+        .source-info{flex:1}
+        .source-name{font-weight:500;color:#e6eef8;margin-bottom:2px}
+        .source-url{font-size:11px;color:var(--muted)}
+        .source-actions{display:flex;align-items:center;gap:8px}
+        .source-status{padding:4px 8px;border-radius:4px;font-size:11px;font-weight:500}
+        .manual-check-btn,.manual-mark-btn{background:var(--glass);border:1px solid rgba(255,255,255,0.1);color:var(--muted);padding:4px 6px;border-radius:4px;cursor:pointer;font-size:12px;transition:all 0.2s}
+        .manual-check-btn:hover{background:rgba(16,185,129,0.1);border-color:var(--success);color:var(--success)}
+        .manual-mark-btn:hover{background:rgba(245,158,11,0.1);border-color:var(--warning);color:var(--warning)}
+        .source-details{font-size:12px;color:var(--muted);margin-bottom:8px}
+        .source-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}
+        .result-content{margin-top:8px;padding:8px;background:rgba(255,255,255,0.02);border-radius:4px;font-size:12px}
+        .test-link{color:var(--success);text-decoration:none}
+        .test-link:hover{text-decoration:underline}
+        .error-message{color:var(--error)}
+        
+        .result-item{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;background:rgba(255,255,255,0.02);border-radius:4px;font-size:11px}
+        .result-label{color:var(--muted)}
+        .result-status{font-weight:500}
+        
+        .progress-container{display:flex;align-items:center;gap:12px;margin:12px 0}
+        .progress{flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden}
+        .progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),#4f46e5);transition:width 0.3s ease}
+        .progress-text{font-size:12px;color:var(--muted);font-weight:500;min-width:30px;text-align:right}
+        .timer-text{font-size:12px;color:var(--muted);margin-top:8px;text-align:center}
+        
+        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px;margin-bottom:16px}
+        .stat-item{text-align:center;padding:12px;background:var(--glass);border-radius:8px;border:1px solid rgba(255,255,255,0.04)}
+        .stat-number{font-size:18px;font-weight:600;margin-bottom:4px}
+        .stat-label{font-size:11px;color:var(--muted)}
+        
+        .filter-btn{cursor:pointer;transition:all 0.2s ease;user-select:none}
+        .filter-btn:hover{background:rgba(255,255,255,0.08);transform:translateY(-1px)}
+        .filter-btn.active{background:linear-gradient(90deg,var(--accent),#4f46e5);border-color:var(--accent)}
+        .filter-btn.active .stat-label{color:white}
+        .filter-btn.active .stat-number{color:white}
+        
+        .log{background:#020617;border-radius:8px;padding:12px;max-height:200px;overflow-y:auto;font-family:monospace;font-size:12px;line-height:1.4}
+        .log-entry{margin-bottom:4px}
+        .log-info{color:#94a3b8}
+        .log-success{color:#10b981}
+        .log-error{color:#ef4444}
+        .log-warning{color:#f59e0b}
+        
+        .hidden{display:none}
+        .loading{opacity:0.6;pointer-events:none}
+        
+        @media(max-width:480px){
+            .wrap{padding:12px;margin:10px}
+            h1{font-size:18px}
+            .source-results{grid-template-columns:1fr}
+            .stats{grid-template-columns:repeat(2,1fr)}
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="card">
+        <h1>源可用性检测器</h1>
+        <div id="statusIndicator" class="hidden" style="margin: 8px 0; padding: 8px 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 6px; font-size: 13px; color: #3b82f6;">
+            📊 当前显示历史报告数据
+        </div>
+        <p class="lead">检测drpyS源站的可用性状态，支持快速检测（推荐+分类）和全量检测模式。支持并发检测提高速度。移动端自适应。</p>
+        
+        <div class="grid">
+            <div class="left">
+                <div class="field">
+                    <label>数据源配置地址</label>
+                    <input type="url" id="configUrl" placeholder="输入包含sites数组的JSON配置地址" value="">
+                </div>
+                
+                <div class="btn-group" style="margin-bottom: 12px;">
+                    <button class="btn btn-ghost" id="getDefaultConfigBtn">获取默认配置</button>
+                </div>
+                
+                <div class="field">
+                    <label>检测模式</label>
+                    <select id="checkMode">
+                        <option value="quick">快速检测（推荐+分类接口）</option>
+                        <option value="full">全量检测（所有接口）</option>
+                    </select>
+                </div>
+                
+                <div class="field">
+                    <label>并发数量</label>
+                    <input type="number" id="concurrency" min="1" max="20" value="5" placeholder="同时检测的任务数量">
+                    <small style="color: var(--muted); font-size: 11px; margin-top: 4px;">建议1-10个，过多可能导致请求被限制</small>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="loadConfig">加载配置</button>
+                    <button class="btn btn-success" id="startCheck" disabled>开始检测</button>
+                    <button class="btn btn-warning" id="stopCheck" disabled>停止检测</button>
+                    <button class="btn btn-ghost" id="clearResults">清空结果</button>
+                    <button class="btn btn-info" id="exportReport" disabled>导出报告</button>
+                    <button class="btn btn-info" id="saveReport" disabled>保存报告</button>
+                    <button class="btn btn-secondary" id="loadLastReport">获取上次报告</button>
+                </div>
+            </div>
+            
+            <div class="right">
+                <div class="stats">
+                    <div class="stat-item filter-btn active" data-filter="all" onclick="window.sourceChecker.filterSources('all')">
+                        <div class="stat-number" id="totalCount">0</div>
+                        <div class="stat-label">全部</div>
+                    </div>
+                    <div class="stat-item filter-btn" data-filter="success" onclick="window.sourceChecker.filterSources('success')">
+                        <div class="stat-number stat-success" id="successCount">0</div>
+                        <div class="stat-label">正常</div>
+                    </div>
+                    <div class="stat-item filter-btn" data-filter="error" onclick="window.sourceChecker.filterSources('error')">
+                        <div class="stat-number stat-error" id="errorCount">0</div>
+                        <div class="stat-label">异常</div>
+                    </div>
+                    <div class="stat-item filter-btn" data-filter="pending" onclick="window.sourceChecker.filterSources('pending')">
+                        <div class="stat-number stat-warning" id="pendingCount">0</div>
+                        <div class="stat-label">待检测</div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">0%</div>
+                </div>
+                <div class="timer-text" id="timerText" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 style="margin:0 0 12px;font-size:16px">检测日志</h2>
+        <div class="log" id="logContainer"></div>
+    </div>
+    
+    <div class="card">
+        <h2 style="margin:0 0 12px;font-size:16px">检测结果</h2>
+        <div id="sourceList"></div>
+    </div>
+</div>
+
+<script>
+class SourceChecker {
+    constructor() {
+        this.sources = [];
+        this.isChecking = false;
+        this.currentIndex = 0;
+        this.results = new Map();
+        this.currentFilter = 'all'; // 当前筛选状态
+        this.startTime = null;
+        this.timerInterval = null;
+        
+        this.initElements();
+        this.bindEvents();
+        
+        // 页面加载时自动获取默认配置
+        this.getDefaultConfig();
+    }
+    
+    initElements() {
+        this.configUrl = document.getElementById('configUrl');
+        this.checkModeSelect = document.getElementById('checkMode');
+        this.concurrencyInput = document.getElementById('concurrency');
+        this.loadConfigBtn = document.getElementById('loadConfig');
+        this.startCheckBtn = document.getElementById('startCheck');
+        this.stopCheckBtn = document.getElementById('stopCheck');
+        this.clearResultsBtn = document.getElementById('clearResults');
+        this.exportReportBtn = document.getElementById('exportReport');
+        this.saveReportBtn = document.getElementById('saveReport');
+        this.loadLastReportBtn = document.getElementById('loadLastReport');
+        this.getDefaultConfigBtn = document.getElementById('getDefaultConfigBtn');
+        this.statusIndicator = document.getElementById('statusIndicator');
+        this.sourceList = document.getElementById('sourceList');
+        this.logContainer = document.getElementById('logContainer');
+        this.progressBar = document.getElementById('progressBar');
+        this.progressText = document.getElementById('progressText');
+        this.timerText = document.getElementById('timerText');
+        
+        this.totalCount = document.getElementById('totalCount');
+        this.successCount = document.getElementById('successCount');
+        this.errorCount = document.getElementById('errorCount');
+        this.pendingCount = document.getElementById('pendingCount');
+    }
+    
+    bindEvents() {
+        this.loadConfigBtn.addEventListener('click', () => this.loadConfig());
+        this.startCheckBtn.addEventListener('click', () => this.startCheck());
+        this.stopCheckBtn.addEventListener('click', () => this.stopCheck());
+        this.clearResultsBtn.addEventListener('click', () => this.clearResults());
+        this.exportReportBtn.addEventListener('click', () => this.exportReport());
+        this.saveReportBtn.addEventListener('click', () => this.saveReport());
+        this.loadLastReportBtn.addEventListener('click', () => this.loadLastReport());
+        this.getDefaultConfigBtn.addEventListener('click', () => this.getDefaultConfig());
+        this.checkModeSelect.addEventListener('change', (e) => {
+            // 检测模式变更事件处理
+        });
+    }
+    
+    log(message, type = 'info') {
+        const timestamp = new Date().toLocaleTimeString();
+        const entry = document.createElement('div');
+        entry.className = `log-entry log-${type}`;
+        entry.textContent = `[${timestamp}] ${message}`;
+        this.logContainer.appendChild(entry);
+        this.logContainer.scrollTop = this.logContainer.scrollHeight;
+    }
+    
+    async loadConfig() {
+        const url = this.configUrl.value.trim();
+        if (!url) {
+            this.log('请输入配置地址', 'error');
+            return;
+        }
+        
+        try {
+            this.log('正在加载配置...');
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            const config = await response.json();
+            if (!config.sites || !Array.isArray(config.sites)) {
+                throw new Error('配置格式错误：缺少sites数组');
+            }
+            
+            // 只保留type为4的源
+            this.sources = config.sites.filter(site => site.type === 4);
+            this.log(`加载成功，找到 ${this.sources.length} 个type=4的源`);
+            
+            this.updateStats();
+            this.renderSourceList();
+            this.startCheckBtn.disabled = this.sources.length === 0;
+            
+        } catch (error) {
+            this.log(`加载配置失败: ${error.message}`, 'error');
+        }
+    }
+    
+    renderSourceList() {
+        // 如果有筛选状态，使用筛选渲染
+        if (this.currentFilter && this.currentFilter !== 'all') {
+            const filteredSources = this.getFilteredSources();
+            this.renderFilteredSourceList(filteredSources);
+            return;
+        }
+        
+        this.sourceList.innerHTML = '';
+        
+        this.sources.forEach((source, index) => {
+            const item = document.createElement('div');
+            item.className = 'source-item';
+            
+            // 获取检测结果
+            const result = this.results.get(source.key);
+            let statusText = '待检测';
+            let statusClass = 'status-pending';
+            let resultsHtml = '';
+            
+            if (result) {
+                if (result.status === 'success') {
+                    statusText = '正常';
+                    statusClass = 'status-success';
+                    if (result.testUrl) {
+                        resultsHtml = `<div class="result-content"><a href="${result.testUrl}" target="_blank" class="test-link">测试链接</a></div>`;
+                    }
+                } else if (result.status === 'error') {
+                    statusText = '异常';
+                    statusClass = 'status-error';
+                    if (result.message) {
+                        resultsHtml = `<div class="result-content error-message">${result.message}</div>`;
+                    }
+                }
+            }
+            
+            item.innerHTML = `
+                <div class="source-header">
+                    <div class="source-info">
+                        <div class="source-name">${source.name}</div>
+                        <div class="source-url">${source.api}</div>
+                    </div>
+                    <div class="source-actions">
+                        <div class="source-status ${statusClass}" id="status-${index}">${statusText}</div>
+                        <button class="manual-check-btn" onclick="window.sourceChecker.manualCheckSource('${source.key}')" title="手动全量检测">🔍</button>
+                        <button class="manual-mark-btn" onclick="window.sourceChecker.toggleSourceStatus('${source.key}')" title="手动标记状态">🏷️</button>
+                    </div>
+                </div>
+                ${resultsHtml}
+                <div class="source-details">
+                    <div>API: ${source.api}</div>
+                    <div>语言: ${source.lang || 'unknown'} | 搜索: ${source.searchable ? '支持' : '不支持'}</div>
+                </div>
+                <div class="source-results" id="results-${index}">${resultsHtml}</div>
+            `;
+            this.sourceList.appendChild(item);
+        });
+    }
+    
+    updateStats() {
+        const total = this.sources.length;
+        const success = Array.from(this.results.values()).filter(r => r.status === 'success').length;
+        const error = Array.from(this.results.values()).filter(r => r.status === 'error').length;
+        const pending = total - success - error;
+        
+        this.totalCount.textContent = total;
+        this.successCount.textContent = success;
+        this.errorCount.textContent = error;
+        this.pendingCount.textContent = pending;
+        
+        const progress = total > 0 ? ((success + error) / total) * 100 : 0;
+        this.progressBar.style.width = `${progress}%`;
+        this.progressText.textContent = `${Math.round(progress)}%`;
+    }
+    
+    async startCheck() {
+        if (this.sources.length === 0) {
+            this.log('请先加载配置', 'error');
+            return;
+        }
+        
+        this.isChecking = true;
+        this.currentIndex = 0;
+        this.results.clear();
+        
+        // 隐藏历史报告状态指示器，进入实时检测模式
+        this.statusIndicator.classList.add('hidden');
+        
+        // 开始计时
+        this.startTime = Date.now();
+        this.timerText.style.display = 'block';
+        this.timerText.textContent = '检测中，已耗时 0 秒';
+        this.startTimer();
+        
+        this.startCheckBtn.disabled = true;
+        this.stopCheckBtn.disabled = false;
+        this.loadConfigBtn.disabled = true;
+        
+        const concurrency = parseInt(this.concurrencyInput.value) || 5;
+        const mode = this.checkModeSelect.value;
+        
+        this.log(`开始${mode === 'quick' ? '快速' : '全量'}检测，并发数: ${concurrency}...`);
+        
+        await this.checkSourcesConcurrently(concurrency);
+        
+        if (this.isChecking) {
+            this.log('检测完成');
+            this.stopCheck();
+        }
+    }
+    
+    async checkSourcesConcurrently(concurrency) {
+        const total = this.sources.length;
+        let completed = 0;
+        
+        // 创建任务队列
+        const tasks = this.sources.map((source, index) => ({ source, index }));
+        
+        // 并发执行任务
+        const executeTask = async (task) => {
+            if (!this.isChecking) return;
+            
+            try {
+                await this.checkSource(task.source, task.index);
+            } catch (error) {
+                this.log(`检测源 ${task.source.name} 时出错: ${error.message}`, 'error');
+            }
+            
+            completed++;
+            this.log(`进度: ${completed}/${total}`, 'info');
+        };
+        
+        // 分批执行，控制并发数
+        for (let i = 0; i < tasks.length; i += concurrency) {
+            if (!this.isChecking) break;
+            
+            const batch = tasks.slice(i, i + concurrency);
+            const promises = batch.map(executeTask);
+            
+            await Promise.allSettled(promises);
+            
+            // 批次间稍作延迟，避免请求过于密集
+            if (i + concurrency < tasks.length && this.isChecking) {
+                await this.delay(200);
+            }
+        }
+    }
+    
+    startTimer() {
+        this.timerInterval = setInterval(() => {
+            if (this.startTime && this.isChecking) {
+                const elapsed = Math.round((Date.now() - this.startTime) / 1000);
+                this.timerText.textContent = `检测中，已耗时 ${elapsed} 秒`;
+            }
+        }, 1000);
+    }
+    
+    stopCheck() {
+        this.isChecking = false;
+        
+        // 停止计时
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+        
+        // 显示总耗时
+        if (this.startTime) {
+            const totalTime = Math.round((Date.now() - this.startTime) / 1000);
+            this.timerText.textContent = `检测完毕，本轮检测共计耗时 ${totalTime} 秒`;
+            this.log(`检测完毕，本轮检测共计耗时 ${totalTime} 秒`);
+        }
+        
+        this.startCheckBtn.disabled = false;
+        this.stopCheckBtn.disabled = true;
+        this.loadConfigBtn.disabled = false;
+        this.exportReportBtn.disabled = this.results.size === 0;
+        this.saveReportBtn.disabled = this.results.size === 0;
+    }
+    
+    async checkSource(source, index) {
+        const statusEl = document.getElementById(`status-${index}`);
+        const resultsEl = document.getElementById(`results-${index}`);
+        
+        statusEl.textContent = '检测中...';
+        statusEl.className = 'status status-warning';
+        
+        try {
+            const result = {
+                status: 'error',
+                details: {},
+                message: ''
+            };
+            
+            // 构建基础API URL和参数
+            const baseUrl = source.api;
+            const extend = this.getExtendParam(source.ext);
+            
+            if (this.checkModeSelect.value === 'quick') {
+                // 快速检测：推荐接口 + 一级分类接口
+                await this.quickCheck(source, result, extend);
+            } else {
+                // 全量检测：所有接口
+                await this.fullCheck(source, result, extend);
+            }
+            
+            this.results.set(source.key, result);
+            this.updateSourceDisplay(index, result);
+            
+        } catch (error) {
+            const result = {
+                status: 'error',
+                details: {},
+                message: error.message
+            };
+            this.results.set(source.key, result);
+            this.updateSourceDisplay(index, result);
+            this.log(`${source.name}: ${error.message}`, 'error');
+        }
+        
+        this.updateStats();
+    }
+    
+    getExtendParam(ext) {
+        if (!ext) return '';
+        if (typeof ext === 'string') return ext;
+        if (typeof ext === 'object') return JSON.stringify(ext);
+        return '';
+    }
+    
+    async quickCheck(source, result, extend) {
+        // 1. 检测推荐接口（首页）
+        const homeResult = await this.testApi(source.api, { extend });
+        result.details.home = homeResult;
+        
+        const homeSuccess = homeResult.success && this.isValidData(homeResult.data);
+        if (homeSuccess) {
+            result.status = 'success';
+            result.message = '推荐接口正常';
+            this.log(`${source.name}: 推荐接口正常`, 'success');
+            return;
+        }
+        
+        // 2. 如果推荐接口异常，检测一级分类接口
+        let categorySuccess = false;
+        if (homeResult.data && homeResult.data.class && homeResult.data.class.length > 0) {
+            // 尝试检测前两个分类（容错机制）
+            const categoriesToCheck = homeResult.data.class.slice(0, 2);
+            
+            for (let i = 0; i < categoriesToCheck.length; i++) {
+                const category = categoriesToCheck[i];
+                if (!category.type_id) continue;
+
+                const cateResult = await this.testApi(source.api, {
+                    ac: 'list',
+                    t: category.type_id,
+                    pg: 1,
+                    extend
+                });
+                
+                // 记录结果：如果是第一个，直接记录；如果是后续且成功了，也记录覆盖
+                if (i === 0 || (cateResult.success && this.isValidData(cateResult.data))) {
+                    result.details.category = cateResult;
+                }
+                
+                categorySuccess = cateResult.success && this.isValidData(cateResult.data);
+                if (categorySuccess) {
+                    result.status = 'success';
+                    result.message = `分类接口正常${i > 0 ? ' (容错:分类2)' : ''}`;
+                    this.log(`${source.name}: 分类接口正常${i > 0 ? ' (容错:分类2)' : ''}`, 'success');
+                    return;
+                } else {
+                    // 如果是第一个失败且还有下一个，记录日志
+                    if (i === 0 && categoriesToCheck.length > 1) {
+                        this.log(`${source.name}: 分类1无数据，尝试容错检测分类2...`, 'warning');
+                    }
+                }
+            }
+        }
+        
+        // 3. 推荐和分类都异常时，直接标记为异常
+        result.status = 'error';
+        result.message = '推荐和分类接口均异常';
+        this.log(`${source.name}: 推荐和分类接口均异常`, 'error');
+    }
+    
+    async fullCheck(source, result, extend) {
+        // 先检测推荐和分类接口
+        const coreTests = [
+            { name: 'home', params: { extend } },
+            { name: 'category', params: { ac: 'list', t: '1', pg: 1, extend } }
+        ];
+        
+        let coreSuccessCount = 0;
+        
+        // 检测核心接口（推荐和分类）
+        for (const test of coreTests) {
+            try {
+                const testResult = await this.testApi(source.api, test.params);
+                result.details[test.name] = testResult;
+                
+                if (testResult.success && this.isValidData(testResult.data)) {
+                    coreSuccessCount++;
+                }
+            } catch (error) {
+                result.details[test.name] = { success: false, error: error.message };
+            }
+        }
+        
+        // 如果推荐和分类都异常，直接返回异常结果
+        if (coreSuccessCount === 0) {
+            result.status = 'error';
+            result.message = '推荐和分类接口均异常';
+            this.log(`${source.name}: 推荐和分类接口均异常`, 'error');
+            return;
+        }
+        
+        // 如果至少有一个核心接口正常，继续检测其他接口
+        const additionalTests = [
+            { name: 'search', params: { wd: '测试', extend } },
+            { name: 'detail', params: { ac: 'detail', ids: '1', extend } }
+        ];
+        
+        let totalSuccessCount = coreSuccessCount;
+        
+        for (const test of additionalTests) {
+            try {
+                const testResult = await this.testApi(source.api, test.params);
+                result.details[test.name] = testResult;
+                
+                if (testResult.success) {
+                    totalSuccessCount++;
+                }
+            } catch (error) {
+                result.details[test.name] = { success: false, error: error.message };
+            }
+        }
+        
+        if (totalSuccessCount >= 2) {
+            result.status = 'success';
+            result.message = `${totalSuccessCount}/4 接口正常`;
+            this.log(`${source.name}: ${totalSuccessCount}/4 接口正常`, 'success');
+        } else {
+            result.status = 'error';
+            result.message = `仅 ${totalSuccessCount}/4 接口正常`;
+            this.log(`${source.name}: 仅 ${totalSuccessCount}/4 接口正常`, 'error');
+        }
+    }
+    
+    async testApi(baseUrl, params) {
+        try {
+            const url = new URL(baseUrl);
+            Object.keys(params).forEach(key => {
+                if (params[key] !== undefined && params[key] !== '') {
+                    url.searchParams.set(key, params[key]);
+                }
+            });
+            
+            const response = await fetch(url.toString(), {
+                method: 'GET',
+                timeout: 10000
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return { success: true, data };
+            
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+    
+    isValidData(data) {
+        if (!data || !data.list || !Array.isArray(data.list)) {
+            return false;
+        }
+        
+        // 检查是否只有无效数据
+        const validItems = data.list.filter(item => 
+            item.vod_id !== 'no_data' && 
+            item.vod_name !== '无数据,防无限请求'
+        );
+        
+        return validItems.length > 0;
+    }
+    
+    updateSourceDisplay(index, result) {
+        const statusEl = document.getElementById(`status-${index}`);
+        const resultsEl = document.getElementById(`results-${index}`);
+        
+        // 更新状态
+        statusEl.textContent = result.status === 'success' ? '正常' : '异常';
+        statusEl.className = `status status-${result.status === 'success' ? 'success' : 'error'}`;
+        
+        // 更新详细结果
+        resultsEl.innerHTML = '';
+        Object.keys(result.details).forEach(key => {
+            const detail = result.details[key];
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            item.innerHTML = `
+                <span class="result-label">${this.getTestName(key)}</span>
+                <span class="result-status" style="color: ${detail.success ? 'var(--success)' : 'var(--error)'}">
+                    ${detail.success ? '✓' : '✗'}
+                </span>
+            `;
+            resultsEl.appendChild(item);
+        });
+        
+        if (result.message) {
+            const messageItem = document.createElement('div');
+            messageItem.style.gridColumn = '1 / -1';
+            messageItem.style.fontSize = '11px';
+            messageItem.style.color = 'var(--muted)';
+            messageItem.style.marginTop = '4px';
+            messageItem.textContent = result.message;
+            resultsEl.appendChild(messageItem);
+        }
+    }
+    
+    getTestName(key) {
+        const names = {
+            home: '推荐',
+            category: '分类',
+            search: '搜索',
+            detail: '详情',
+            play: '播放'
+        };
+        return names[key] || key;
+    }
+    
+    clearResults() {
+        this.results.clear();
+        this.renderSourceList();
+        this.updateStats();
+        this.logContainer.innerHTML = '';
+        this.exportReportBtn.disabled = true;
+        this.saveReportBtn.disabled = true;
+        
+        // 隐藏历史报告状态指示器，恢复实时检测模式
+        this.statusIndicator.classList.add('hidden');
+        
+        this.log('结果已清空');
+    }
+    
+    exportReport() {
+        if (this.results.size === 0) {
+            alert('没有检测结果可导出，请先进行检测');
+            return;
+        }
+        
+        const report = this.generateReportData();
+        
+        // 生成文件名
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+        const filename = `source-check-report-${timestamp}.json`;
+        
+        // 下载文件
+        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        this.log(`检测报告已导出: ${filename}`);
+    }
+    
+    async getDefaultConfig() {
+        try {
+            this.log('正在获取默认配置地址...');
+            const response = await fetch('/source-checker/config/default');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            const data = await response.json();
+            if (data.configUrl) {
+                this.configUrl.value = data.configUrl;
+                this.log(`已设置默认配置地址: ${data.configUrl}`, 'success');
+            } else {
+                throw new Error('服务器未返回配置地址');
+            }
+        } catch (error) {
+            this.log(`获取默认配置失败: ${error.message}`, 'error');
+        }
+    }
+    
+    async saveReport() {
+        if (this.results.size === 0) {
+            alert('没有检测结果可保存，请先进行检测');
+            return;
+        }
+
+        try {
+            this.log('正在验证配置来源...');
+            
+            // 获取默认配置地址进行同源验证
+            const defaultConfigResponse = await fetch('/source-checker/config/default');
+            if (!defaultConfigResponse.ok) {
+                throw new Error('无法获取默认配置地址');
+            }
+            
+            const defaultConfigData = await defaultConfigResponse.json();
+            const currentConfigUrl = this.configUrl.value.trim();
+            const defaultConfigUrl = defaultConfigData.configUrl;
+            
+            // 同源验证：检查当前配置URL是否与默认配置URL一致
+            if (currentConfigUrl !== defaultConfigUrl) {
+                const confirmSave = confirm(
+                    `检测到您使用的配置地址与本服务器默认配置不一致：\n\n` +
+                    `当前配置：${currentConfigUrl}\n` +
+                    `默认配置：${defaultConfigUrl}\n\n` +
+                    `这可能是检测的远程配置，确定要保存到本服务器吗？`
+                );
+                
+                if (!confirmSave) {
+                    this.log('用户取消保存操作', 'warning');
+                    return;
+                }
+            }
+            
+            this.log('正在保存报告到服务器...');
+            
+            const report = this.generateReportData();
+            
+            const response = await fetch('/source-checker/reports/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(report)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            // 显示成功提示
+            this.log(`✅ 报告保存成功！文件路径: ${result.path || 'data/source-checker/report.json'}`, 'success');
+            alert('检测报告已成功保存到服务器！');
+            
+        } catch (error) {
+            this.log(`❌ 保存报告失败: ${error.message}`, 'error');
+            alert(`保存失败: ${error.message}`);
+        }
+    }
+    
+    generateReportData() {
+        const report = {
+            exportTime: new Date().toISOString(),
+            configUrl: this.configUrl.value.trim(), // 记录检测时使用的配置地址
+            totalSources: this.results.size,
+            summary: {
+                success: 0,
+                error: 0,
+                pending: 0
+            },
+            sources: []
+        };
+        
+        // 统计和收集源信息
+        this.results.forEach((result, sourceKey) => {
+            const source = this.sources.find(s => s.key === sourceKey);
+            const extend = this.getExtendParam(source.ext);
+            
+            // 构建测试URL而不是保存完整数据
+            const testUrls = {};
+            if (result.details) {
+                // 推荐接口URL
+                if (result.details.home) {
+                    const homeUrl = new URL(source.api);
+                    if (extend) homeUrl.searchParams.set('extend', extend);
+                    testUrls.home = homeUrl.toString();
+                }
+                
+                // 分类接口URL
+                if (result.details.category) {
+                    const cateUrl = new URL(source.api);
+                    cateUrl.searchParams.set('ac', 'list');
+                    cateUrl.searchParams.set('t', '1'); // 使用第一个分类ID
+                    cateUrl.searchParams.set('pg', '1');
+                    if (extend) cateUrl.searchParams.set('extend', extend);
+                    testUrls.category = cateUrl.toString();
+                }
+                
+                // 搜索接口URL
+                if (result.details.search) {
+                    const searchUrl = new URL(source.api);
+                    searchUrl.searchParams.set('ac', 'list');
+                    searchUrl.searchParams.set('wd', '测试');
+                    if (extend) searchUrl.searchParams.set('extend', extend);
+                    testUrls.search = searchUrl.toString();
+                }
+                
+                // 详情接口URL
+                if (result.details.detail) {
+                    const detailUrl = new URL(source.api);
+                    detailUrl.searchParams.set('ac', 'detail');
+                    detailUrl.searchParams.set('ids', '1');
+                    if (extend) detailUrl.searchParams.set('extend', extend);
+                    testUrls.detail = detailUrl.toString();
+                }
+                
+                // 播放接口URL
+                if (result.details.play) {
+                    const playUrl = new URL(source.api);
+                    playUrl.searchParams.set('ac', 'play');
+                    playUrl.searchParams.set('id', '1');
+                    playUrl.searchParams.set('play', '1');
+                    if (extend) playUrl.searchParams.set('extend', extend);
+                    testUrls.play = playUrl.toString();
+                }
+            }
+            
+            const sourceInfo = {
+                key: source.key,
+                name: source.name || source.key,
+                api: source.api,
+                type: source.type,
+                searchable: source.searchable,
+                lang: source.lang || 'unknown',
+                status: result.status,
+                message: result.message || '',
+                testUrls: testUrls,
+                checkTime: new Date().toISOString(),
+                manuallyMarked: result.manuallyMarked || false // 保存手动标记状态
+            };
+            
+            report.sources.push(sourceInfo);
+            report.summary[result.status]++;
+        });
+        
+        // 按状态排序：成功 -> 错误 -> 待检测
+        report.sources.sort((a, b) => {
+            const statusOrder = { success: 0, error: 1, pending: 2 };
+            return statusOrder[a.status] - statusOrder[b.status];
+        });
+        
+        return report;
+    }
+    
+    async loadLastReport() {
+        try {
+            this.log('正在获取上次报告...', 'info');
+            
+            const response = await fetch('/source-checker/reports/latest', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const responseData = await response.json();
+            
+            if (!responseData.success || !responseData.data) {
+                throw new Error(responseData.error || '获取报告失败');
+            }
+            
+            const reportData = responseData.data;
+            
+            if (!reportData || !reportData.sources) {
+                throw new Error('报告数据格式无效或无源数据');
+            }
+            
+            this.log(`成功获取上次报告，包含 ${reportData.sources.length} 个源站`, 'success');
+            this.displayLastReport(reportData);
+            
+        } catch (error) {
+            this.log(`获取上次报告失败: ${error.message}`, 'error');
+            console.error('获取上次报告失败:', error);
+        }
+    }
+    
+    displayLastReport(reportData) {
+        try {
+            // 清空当前结果
+            this.sourceList.innerHTML = '';
+            this.sources = [];
+            this.results = new Map();
+            
+            // 设置配置URL（如果报告中有记录）
+            if (reportData.configUrl) {
+                this.configUrl.value = reportData.configUrl;
+            }
+            
+            // 模拟加载源站数据
+            this.sources = reportData.sources.map(source => ({
+                key: source.key,
+                name: source.name || source.key,
+                api: source.api,
+                type: source.type,
+                searchable: source.searchable,
+                lang: source.lang || 'unknown'
+            }));
+            
+            // 设置检测结果
+            reportData.sources.forEach(source => {
+                this.results.set(source.key, {
+                    status: source.status,
+                    message: source.message || '',
+                    testUrls: source.testUrls || [],
+                    testUrl: source.testUrls && source.testUrls.home ? source.testUrls.home : '',
+                    manuallyMarked: source.manuallyMarked || false // 加载手动标记状态
+                });
+            });
+            
+            // 渲染界面
+            this.renderSourceList();
+            this.updateStats();
+            
+            // 启用相关按钮
+            this.exportReportBtn.disabled = false;
+            this.saveReportBtn.disabled = false;
+            
+            // 显示历史报告状态指示器
+            const timestamp = reportData.exportTime ? new Date(reportData.exportTime).toLocaleString() : '未知时间';
+            this.statusIndicator.innerHTML = `📊 当前显示历史报告数据 (生成时间: ${timestamp})`;
+            this.statusIndicator.classList.remove('hidden');
+            
+            this.log(`已显示历史报告 (生成时间: ${timestamp})`, 'info');
+            
+        } catch (error) {
+            this.log(`显示历史报告失败: ${error.message}`, 'error');
+            console.error('显示历史报告失败:', error);
+        }
+    }
+    
+   async delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // 筛选源列表
+    filterSources(filter) {
+        this.currentFilter = filter;
+        
+        // 更新筛选按钮状态
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+        
+        // 筛选并显示源列表
+        const filteredSources = this.getFilteredSources();
+        this.renderFilteredSourceList(filteredSources);
+    }
+
+    // 获取筛选后的源列表
+    getFilteredSources() {
+        if (this.currentFilter === 'all') {
+            return this.sources;
+        }
+        
+        return this.sources.filter(source => {
+            const result = this.results.get(source.key);
+            
+            switch (this.currentFilter) {
+                case 'success':
+                    return result && result.status === 'success';
+                case 'error':
+                    return result && result.status === 'error';
+                case 'pending':
+                    return !result || result.status === 'pending';
+                default:
+                    return true;
+            }
+        });
+    }
+
+    // 渲染筛选后的源列表
+    renderFilteredSourceList(sources) {
+        this.sourceList.innerHTML = '';
+        
+        sources.forEach(source => {
+            const sourceElement = document.createElement('div');
+            sourceElement.className = 'source-item';
+            
+            // 找到源的原始索引
+            const originalIndex = this.sources.findIndex(s => s.key === source.key);
+            
+            const result = this.results.get(source.key);
+            let statusText = '待检测';
+            let statusClass = 'status-pending';
+            let resultHtml = '';
+            
+            if (result) {
+                if (result.status === 'success') {
+                    statusText = '正常';
+                    statusClass = 'status-success';
+                    if (result.testUrl) {
+                        resultHtml = `<div class="result-content"><a href="${result.testUrl}" target="_blank" class="test-link">测试链接</a></div>`;
+                    }
+                } else if (result.status === 'error') {
+                    statusText = '异常';
+                    statusClass = 'status-error';
+                    if (result.message) {
+                        resultHtml = `<div class="result-content error-message">${result.message}</div>`;
+                    }
+                }
+            }
+            
+            sourceElement.innerHTML = `
+                <div class="source-header">
+                    <div class="source-info">
+                        <div class="source-name">${source.name}</div>
+                        <div class="source-url">${source.api}</div>
+                    </div>
+                    <div class="source-actions">
+                        <div class="source-status ${statusClass}" id="status-${originalIndex}">${statusText}</div>
+                        <button class="manual-check-btn" onclick="window.sourceChecker.manualCheckSource('${source.key}')" title="手动全量检测">🔍</button>
+                        <button class="manual-mark-btn" onclick="window.sourceChecker.toggleSourceStatus('${source.key}')" title="手动标记状态">🏷️</button>
+                    </div>
+                </div>
+                ${resultHtml}
+                <div class="source-results" id="results-${originalIndex}"></div>
+            `;
+            
+            this.sourceList.appendChild(sourceElement);
+        });
+     }
+
+     // 手动检测单个源
+     async manualCheckSource(sourceKey) {
+         const source = this.sources.find(s => s.key === sourceKey);
+         if (!source) {
+             this.log(`未找到源: ${sourceKey}`, 'error');
+             return;
+         }
+         
+         this.log(`开始手动检测源: ${source.name}`, 'info');
+         
+         // 强制使用全量检测模式
+         const originalMode = this.checkModeSelect.value;
+         this.checkModeSelect.value = 'full';
+         
+         try {
+             await this.checkSource(source, this.sources.indexOf(source));
+             this.log(`手动检测完成: ${source.name}`, 'info');
+             // 重新渲染当前筛选的列表
+             const filteredSources = this.getFilteredSources();
+             this.renderFilteredSourceList(filteredSources);
+         } catch (error) {
+             this.log(`手动检测失败: ${source.name} - ${error.message}`, 'error');
+         } finally {
+             // 恢复原始检测模式
+             this.checkModeSelect.value = originalMode;
+         }
+     }
+     
+     // 手动标记源状态
+     toggleSourceStatus(sourceKey) {
+        const source = this.sources.find(s => s.key === sourceKey);
+        if (!source) {
+            this.log(`未找到源: ${sourceKey}`, 'error');
+            return;
+        }
+        
+        const currentResult = this.results.get(sourceKey) || { status: 'pending', message: '', testUrls: [] };
+        let newStatus, newMessage;
+        
+        // 切换状态逻辑
+        switch (currentResult.status) {
+            case 'success':
+                newStatus = 'error';
+                newMessage = '手动标记为异常';
+                break;
+            case 'error':
+                newStatus = 'success';
+                newMessage = '手动标记为正常';
+                break;
+            case 'pending':
+            default:
+                newStatus = 'success';
+                newMessage = '手动标记为正常';
+                break;
+        }
+        
+        // 更新结果
+        const newResult = {
+            ...currentResult,
+            status: newStatus,
+            message: newMessage,
+            manuallyMarked: true // 标记为手动修改
+        };
+        
+        this.results.set(sourceKey, newResult);
+        this.updateStats();
+        
+        // 重新渲染当前筛选的列表
+        const filteredSources = this.getFilteredSources();
+        this.renderFilteredSourceList(filteredSources);
+        
+        this.log(`手动标记源 ${source.name} 为 ${newStatus === 'success' ? '正常' : '异常'}`, 'info');
+    }
+}
+
+// 初始化应用
+document.addEventListener('DOMContentLoaded', () => {
+    window.sourceChecker = new SourceChecker();
+});
+</script>
+</body>
+</html>

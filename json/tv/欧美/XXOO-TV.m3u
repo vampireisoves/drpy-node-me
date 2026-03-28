@@ -1,0 +1,13 @@
+#EXTM3U
+#EXTINF:-1 group-title="未分类",VIVID TV
+http://de1cdn.plusx.tv:8880/354/mono.m3u8?token=b457d9d9a2dd39e2fa3333
+#EXTINF:-1 group-title="未分类",PENTHOUSE REALITY TV
+http://de1cdn.plusx.tv:8880/352/mono.m3u8?token=b457d9d9a2dd39e2fa3333
+#EXTINF:-1 group-title="未分类",PENTHOUSE TV
+http://de1cdn.plusx.tv:8880/353/mono.m3u8?token=b457d9d9a2dd39e2fa3333
+#EXTINF:-1 group-title="未分类",PRIVETP TV
+http://de1cdn.plusx.tv:8880/356/mono.m3u8?token=b457d9d9a2dd39e2fa3333
+#EXTINF:-1 group-title="未分类",REDLIGHT HD
+http://de1cdn.plusx.tv:8880/358/mono.m3u8?token=b457d9d9a2dd39e2fa3333
+#EXTINF:-1 group-title="未分类",DORCEL TV
+http://de1cdn.plusx.tv:8880/359/mono.m3u8?token=b457d9d9a2dd39e2fa3333

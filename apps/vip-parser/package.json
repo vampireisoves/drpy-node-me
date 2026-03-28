@@ -1,0 +1,11 @@
+{
+  "name": "vip-parser",
+  "pluginName": "解析测试工具",
+  "version": "1.0.0",
+  "description": "测试一些解析链接的可用性",
+  "main": "index.html",
+  "logo": "",
+  "pluginType": "ui",
+  "author": "drpy-node",
+  "dependencies": {}
+}

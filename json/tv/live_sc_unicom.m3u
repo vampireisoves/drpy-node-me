@@ -1,0 +1,501 @@
+#EXTM3U
+#EXTINF:-1 group-title="央视卫视",CCTV4K
+http://live2.rxip.sc96655.com/live/ys4Kcq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV1
+http://live2.rxip.sc96655.com/live/CCTV-1H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV2
+http://live2.rxip.sc96655.com/live/CCTV-2H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV3
+http://live2.rxip.sc96655.com/live/CCTV-3H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV4
+http://live2.rxip.sc96655.com/live/CCTV-4H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV5
+http://live2.rxip.sc96655.com/live/CCTV-5H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV5+
+http://live2.rxip.sc96655.com/live/CCTV-5plusH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV6
+http://live2.rxip.sc96655.com/live/CCTV-6H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV7
+http://live2.rxip.sc96655.com/live/CCTV-7H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV8
+http://live2.rxip.sc96655.com/live/CCTV-8H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV9
+http://live2.rxip.sc96655.com/live/CCTV-9H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV10
+http://live2.rxip.sc96655.com/live/CCTV-10H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV11
+http://live2.rxip.sc96655.com/live/CCTV-11-H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV12
+http://live2.rxip.sc96655.com/live/CCTV-12H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV13
+http://live2.rxip.sc96655.com/live/CCTV-xw_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV14
+http://live2.rxip.sc96655.com/live/CCTV-14H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV15
+http://live2.rxip.sc96655.com/live/CCTV-15-yyH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV16
+http://live2.rxip.sc96655.com/live/CCTV-16_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV16-4k
+http://live2.rxip.sc96655.com/live/CCTV-16-4K_8000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CCTV17
+http://live2.rxip.sc96655.com/live/CCTV-17_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CETV1
+http://live2.rxip.sc96655.com/live/CETV-1H264_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",CETV4
+http://live2.rxip.sc96655.com/live/CETV-4H264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",湖南卫视
+http://live2.rxip.sc96655.com/live/hnwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",安徽卫视
+http://live2.rxip.sc96655.com/live/ahwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",北京卫视
+http://live2.rxip.sc96655.com/live/bjwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",东方卫视
+http://live2.rxip.sc96655.com/live/dfwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",浙江卫视
+http://live2.rxip.sc96655.com/live/zjwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",江苏卫视
+http://live2.rxip.sc96655.com/live/jswsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",东方卫视
+http://live2.rxip.sc96655.com/live/dfwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",四川卫视
+http://live2.rxip.sc96655.com/live/scwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",重庆卫视
+http://live2.rxip.sc96655.com/live/cqwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",东南卫视
+http://live2.rxip.sc96655.com/live/dnwsfjwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",甘肃卫视
+http://live2.rxip.sc96655.com/live/gsws_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",广东卫视
+http://live2.rxip.sc96655.com/live/gdwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",广西卫视
+http://live2.rxip.sc96655.com/live/gxws_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",贵州卫视
+http://live2.rxip.sc96655.com/live/gzwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",海南卫视
+http://live2.rxip.sc96655.com/live/hnws_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",河南卫视
+http://live2.rxip.sc96655.com/live/hnws35_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",湖北卫视
+http://live2.rxip.sc96655.com/live/hbwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",吉林卫视
+http://live2.rxip.sc96655.com/live/jlwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",江西卫视
+http://live2.rxip.sc96655.com/live/jxwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",深圳卫视
+http://live2.rxip.sc96655.com/live/szwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",辽宁卫视
+http://live2.rxip.sc96655.com/live/lnwsHDH264_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",山东卫视
+http://live2.rxip.sc96655.com/live/sdwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",山西卫视
+http://live2.rxip.sc96655.com/live/sxws42_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",陕西卫视
+http://live2.rxip.sc96655.com/live/sxws_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",天津卫视
+http://live2.rxip.sc96655.com/live/tjwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",西藏卫视
+http://live2.rxip.sc96655.com/live/xzwsH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",云南卫视
+http://live2.rxip.sc96655.com/live/ynws_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",黑龙江卫视
+http://live2.rxip.sc96655.com/live/hljwsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",内蒙古卫视
+http://live2.rxip.sc96655.com/live/nmgws_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",山东教育卫视
+http://live2.rxip.sc96655.com/live/sdjy_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",兵团卫视
+http://live2.rxip.sc96655.com/live/btws_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="央视卫视",康巴卫视
+http://live2.rxip.sc96655.com/live/kbwsH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",凤凰中文
+http://live2.rxip.sc96655.com/live/test1_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",凤凰资讯
+http://live2.rxip.sc96655.com/live/test2_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",重温经典
+http://live2.rxip.sc96655.com/live/CWJD_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",欢笑剧场4K
+http://live2.rxip.sc96655.com/live/hxjc-4k_8000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",CHC影迷电影
+http://live2.rxip.sc96655.com/live/lnwsCHC-HDH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",CHC动作电影
+http://live2.rxip.sc96655.com/live/wqCHCdzdyH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",CHC家庭影院
+http://live2.rxip.sc96655.com/live/jbtygqCHCjtyyH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",新视觉
+http://live2.rxip.sc96655.com/live/ycxsjH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",动漫秀场
+http://live2.rxip.sc96655.com/live/yybb-dmxc-H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",都市剧场
+http://live2.rxip.sc96655.com/live/yxfydsjcHDH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",法治天地
+http://live2.rxip.sc96655.com/live/fztx_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",北京纪实科教
+http://live2.rxip.sc96655.com/live/bjjs_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",嘉佳卡通
+http://live2.rxip.sc96655.com/live/jjkt_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",财富天下
+http://live2.rxip.sc96655.com/live/cftx_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",金鹰纪实
+http://live2.rxip.sc96655.com/live/jyjsHDH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",金鹰卡通
+http://live2.rxip.sc96655.com/live/jykt_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",劲爆体育
+http://live2.rxip.sc96655.com/live/lqhxjcHDH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",卡酷少儿
+http://live2.rxip.sc96655.com/live/kkkt_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",快乐垂钓
+http://live2.rxip.sc96655.com/live/fyzqklcdHDH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",梨园频道
+http://live2.rxip.sc96655.com/live/ly_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",生活时尚
+http://live2.rxip.sc96655.com/live/shssH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",四海钓鱼
+http://live2.rxip.sc96655.com/live/shdy_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",天元围棋
+http://live2.rxip.sc96655.com/live/tywq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",武术世界
+http://live2.rxip.sc96655.com/live/wssj_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",先锋乒羽
+http://live2.rxip.sc96655.com/live/xfpy_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",中国天气
+http://live2.rxip.sc96655.com/live/zgqx_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",川网导视
+http://live2.rxip.sc96655.com/live/cwdsHDH264_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",精品导视
+http://live2.rxip.sc96655.com/live/jpdsH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",乐游
+http://live2.rxip.sc96655.com/live/qjs-HDH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",中央新影-老故事
+http://live2.rxip.sc96655.com/live/lgs_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",中央新影-中学生
+http://live2.rxip.sc96655.com/live/zxs_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="数字频道",中央新影-发现之旅
+http://live2.rxip.sc96655.com/live/fxzl_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",峨眉电影4K
+http://live2.rxip.sc96655.com/live/emdy4k_8000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",峨嵋电影
+http://live2.rxip.sc96655.com/live/emdygqH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",四川经济
+http://live2.rxip.sc96655.com/live/SCTV-2-H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",四川文化
+http://live2.rxip.sc96655.com/live/SCTV-3-H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",四川新闻
+http://live2.rxip.sc96655.com/live/SCTV-4H265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",四川影视
+http://live2.rxip.sc96655.com/live/SCTV-5-scysH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",四川妇女
+http://live2.rxip.sc96655.com/live/SCTV-7-_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",四川科教
+http://live2.rxip.sc96655.com/live/SCTV-ggSCTV-8_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",四川乡村
+http://live2.rxip.sc96655.com/live/SCTV-kjSCTV-9-_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",成都新闻
+http://live2.rxip.sc96655.com/live/CDTV-1_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",成都经济
+http://live2.rxip.sc96655.com/live/CDTV-2_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",成都都市
+http://live2.rxip.sc96655.com/live/CDTV-3_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",成都影视
+http://live2.rxip.sc96655.com/live/CDTV-4_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",成都公共
+http://live2.rxip.sc96655.com/live/CDTV-5_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",成都高新区
+http://live2.rxip.sc96655.com/live/cdgxdstgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",沙湾融媒
+http://live2.rxip.sc96655.com/live/swxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",安居综合
+http://live2.rxip.sc96655.com/live/ajxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",安岳综合
+http://live2.rxip.sc96655.com/live/ayxwzh_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",安州综合
+http://live2.rxip.sc96655.com/live/azgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",巴中文旅
+http://live2.rxip.sc96655.com/live/bzetH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",巴中综合
+http://live2.rxip.sc96655.com/live/bzytH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",巴州电视
+http://live2.rxip.sc96655.com/live/bzxw_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",宝兴综合
+http://live2.rxip.sc96655.com/live/bxdst_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",北川综合
+http://live2.rxip.sc96655.com/live/bcxwHD_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",苍溪综合
+http://live2.rxip.sc96655.com/live/cxxwgqH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",长宁综合
+http://live2.rxip.sc96655.com/live/znzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",朝天综合
+http://live2.rxip.sc96655.com/live/ctxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",船山综合
+http://live2.rxip.sc96655.com/live/csxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",达川新闻
+http://live2.rxip.sc96655.com/live/dcxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",达州导视
+http://live2.rxip.sc96655.com/live/dzds_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",达州公共
+http://live2.rxip.sc96655.com/live/dzgg_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",达州新闻
+http://live2.rxip.sc96655.com/live/dzxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",大英新闻
+http://live2.rxip.sc96655.com/live/dyxwzhH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",丹棱综合
+http://live2.rxip.sc96655.com/live/dlxwzhH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",峨眉综合
+http://live2.rxip.sc96655.com/live/emsxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",恩阳新闻
+http://live2.rxip.sc96655.com/live/eyxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",涪城综合
+http://live2.rxip.sc96655.com/live/fcgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",富顺综合
+http://live2.rxip.sc96655.com/live/fszh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",甘孜综合
+http://live2.rxip.sc96655.com/live/gzxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",古蔺新闻
+http://live2.rxip.sc96655.com/live/glxwzhgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",广安公共
+http://live2.rxip.sc96655.com/live/gagg_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",广汉综合
+http://live2.rxip.sc96655.com/live/ghxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",广元文化
+http://live2.rxip.sc96655.com/live/gyggH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",广元综合
+http://live2.rxip.sc96655.com/live/gyzhH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",汉源综合
+http://live2.rxip.sc96655.com/live/hyxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",合江新闻
+http://live2.rxip.sc96655.com/live/hjxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",洪雅新闻
+http://live2.rxip.sc96655.com/live/hyzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",华蓥综合
+http://live2.rxip.sc96655.com/live/hyxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",会理新闻
+http://live2.rxip.sc96655.com/live/hlyt_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",夹江新闻
+http://live2.rxip.sc96655.com/live/jjxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",简阳新闻
+http://live2.rxip.sc96655.com/live/jyxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",剑阁综合
+http://live2.rxip.sc96655.com/live/jgxwzhH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",江油综合
+http://live2.rxip.sc96655.com/live/jyxwHD_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",开江新闻
+http://live2.rxip.sc96655.com/live/kjxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",乐山公共
+http://live2.rxip.sc96655.com/live/lsggpd_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",乐山新闻
+http://live2.rxip.sc96655.com/live/lsxwzh_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",利州综合
+http://live2.rxip.sc96655.com/live/lzxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",凉山新闻
+http://live2.rxip.sc96655.com/live/lsxwHDH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",凉山彝语
+http://live2.rxip.sc96655.com/live/yyzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",龙泉综合
+http://live2.rxip.sc96655.com/live/lqxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",隆昌综合
+http://live2.rxip.sc96655.com/live/lcxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",芦山综合
+http://live2.rxip.sc96655.com/live/lszh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",马边综合
+http://live2.rxip.sc96655.com/live/mbxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",眉山综合
+http://live2.rxip.sc96655.com/live/msxwzhgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",米易综合
+http://live2.rxip.sc96655.com/live/myxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",绵阳科技
+http://live2.rxip.sc96655.com/live/myetH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",绵阳新闻
+http://live2.rxip.sc96655.com/live/myytH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",冕宁综合
+http://live2.rxip.sc96655.com/live/mnxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",南部综合
+http://live2.rxip.sc96655.com/live/nbxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",南充综合
+http://live2.rxip.sc96655.com/live/ncxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",南溪综合
+http://live2.rxip.sc96655.com/live/nxt_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",内江公共
+http://live2.rxip.sc96655.com/live/njgg_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",内江综合
+http://live2.rxip.sc96655.com/live/njzh_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",宁南综合
+http://live2.rxip.sc96655.com/live/nnt_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",攀钢新闻
+http://live2.rxip.sc96655.com/live/pgxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",彭山综合
+http://live2.rxip.sc96655.com/live/pszh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",彭州综合
+http://live2.rxip.sc96655.com/live/pzxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",蓬安综合
+http://live2.rxip.sc96655.com/live/pazh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",蓬溪新闻
+http://live2.rxip.sc96655.com/live/pxxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",平昌综合
+http://live2.rxip.sc96655.com/live/pcxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",平武综合
+http://live2.rxip.sc96655.com/live/pwgq_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",屏山综合
+http://live2.rxip.sc96655.com/live/psxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",蒲江综合
+http://live2.rxip.sc96655.com/live/pjxw_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",普格综合
+http://live2.rxip.sc96655.com/live/pgt_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",青川综合
+http://live2.rxip.sc96655.com/live/qcxwzhH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",青神综合
+http://live2.rxip.sc96655.com/live/qszh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",渠县新闻
+http://live2.rxip.sc96655.com/live/qxxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",仁和新闻
+http://live2.rxip.sc96655.com/live/rhxwH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",射洪综合
+http://live2.rxip.sc96655.com/live/shzhH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",双流综合
+http://live2.rxip.sc96655.com/live/slgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",遂宁综合
+http://live2.rxip.sc96655.com/live/snxwzhHDH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",天全新闻
+http://live2.rxip.sc96655.com/live/tqzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",通江综合
+http://live2.rxip.sc96655.com/live/tjxwH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",旺苍新闻
+http://live2.rxip.sc96655.com/live/wcxwzhH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",温江综合
+http://live2.rxip.sc96655.com/live/wjytH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",武胜综合
+http://live2.rxip.sc96655.com/live/wsxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",西充综合
+http://live2.rxip.sc96655.com/live/xczh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",新都综合
+http://live2.rxip.sc96655.com/live/xdzhpd_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",叙州新闻
+http://live2.rxip.sc96655.com/live/ybx_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",宣汉综合
+http://live2.rxip.sc96655.com/live/xhxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",雅安公共
+http://live2.rxip.sc96655.com/live/yagg_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",雅安新闻
+http://live2.rxip.sc96655.com/live/yazh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",雅安雨城
+http://live2.rxip.sc96655.com/live/ycpd_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",仪陇新闻
+http://live2.rxip.sc96655.com/live/ylxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",宜宾公共
+http://live2.rxip.sc96655.com/live/ybetH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",宜宾新闻
+http://live2.rxip.sc96655.com/live/ybytH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",越西综合
+http://live2.rxip.sc96655.com/live/yxt_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",昭化综合
+http://live2.rxip.sc96655.com/live/zhxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",中江新闻
+http://live2.rxip.sc96655.com/live/zjxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",资阳新闻
+http://live2.rxip.sc96655.com/live/zyxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",资中综合
+http://live2.rxip.sc96655.com/live/zzzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",自贡文化
+http://live2.rxip.sc96655.com/live/zggg_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",自贡综合
+http://live2.rxip.sc96655.com/live/zgxw_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",郫县新闻
+http://live2.rxip.sc96655.com/live/pxds1_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",阆中综合
+http://live2.rxip.sc96655.com/live/lzxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",沐川综合
+http://live2.rxip.sc96655.com/live/mcxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",泸定综合
+http://live2.rxip.sc96655.com/live/ldxw_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",泸县综合
+http://live2.rxip.sc96655.com/live/lxxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",珙县新闻
+http://live2.rxip.sc96655.com/live/gxzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",梓潼综合
+http://live2.rxip.sc96655.com/live/ztgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",犍为新闻
+http://live2.rxip.sc96655.com/live/qwxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",阿坝州藏语
+http://live2.rxip.sc96655.com/live/wypdgqH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",大邑电视台
+http://live2.rxip.sc96655.com/live/dyytH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",金口河综合
+http://live2.rxip.sc96655.com/live/jkhdst_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",攀枝花新闻
+http://live2.rxip.sc96655.com/live/pzhytH265_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",青白江综合
+http://live2.rxip.sc96655.com/live/qbjxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",盐边电视台
+http://live2.rxip.sc96655.com/live/ybtgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",纳溪1
+http://live2.rxip.sc96655.com/live/nxxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",盐亭1
+http://live2.rxip.sc96655.com/live/ytzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",崇州
+http://live2.rxip.sc96655.com/live/czyt_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",德昌
+http://live2.rxip.sc96655.com/live/dcxw_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",峨边
+http://live2.rxip.sc96655.com/live/ebdst_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",高县-1
+http://live2.rxip.sc96655.com/live/gxt_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",江安
+http://live2.rxip.sc96655.com/live/jat_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",金牛
+http://live2.rxip.sc96655.com/live/jnyx_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",金堂
+http://live2.rxip.sc96655.com/live/jtzhpd_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",邻水
+http://live2.rxip.sc96655.com/live/lsxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",罗江
+http://live2.rxip.sc96655.com/live/ljxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",绵竹
+http://live2.rxip.sc96655.com/live/mzxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",名山
+http://live2.rxip.sc96655.com/live/msdstH265_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",木里
+http://live2.rxip.sc96655.com/live/mltHD_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",南江
+http://live2.rxip.sc96655.com/live/njxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",前锋
+http://live2.rxip.sc96655.com/live/qfxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",三台TV
+http://live2.rxip.sc96655.com/live/stxwHD_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",石棉
+http://live2.rxip.sc96655.com/live/smxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",松潘
+http://live2.rxip.sc96655.com/live/spxwzhpdH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",万源
+http://live2.rxip.sc96655.com/live/wyxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",西昌
+http://live2.rxip.sc96655.com/live/xctHD_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",喜德
+http://live2.rxip.sc96655.com/live/xdxw_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",新津
+http://live2.rxip.sc96655.com/live/xjzh_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",叙永
+http://live2.rxip.sc96655.com/live/xyxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",雁江
+http://live2.rxip.sc96655.com/live/yjxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",营山
+http://live2.rxip.sc96655.com/live/ysxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",岳池
+http://live2.rxip.sc96655.com/live/ycxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",荥经
+http://live2.rxip.sc96655.com/live/xjdst_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",筠连
+http://live2.rxip.sc96655.com/live/ylyt_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",都江堰
+http://live2.rxip.sc96655.com/live/djyzh_4000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",广安区
+http://live2.rxip.sc96655.com/live/gaqxw_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",马尔康
+http://live2.rxip.sc96655.com/live/mekxwzhpd_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",通川区
+http://live2.rxip.sc96655.com/live/xcxwzhH264_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",五通桥
+http://live2.rxip.sc96655.com/live/wtqxwzh_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",兴文台
+http://live2.rxip.sc96655.com/live/xwt_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",阿坝州TV
+http://live2.rxip.sc96655.com/live/abxwzhpdgq_2000.m3u8?E=&U=&A=&K=&P=&S=
+#EXTINF:-1 group-title="四川地方台",青羊电视
+http://live2.rxip.sc96655.com/live/qyzh_4000.m3u8?E=&U=&A=&K=&P=&S=

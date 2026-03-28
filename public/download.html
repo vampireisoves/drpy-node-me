@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载 {{projectName}}</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-primary: #f1f5f9;
+                --bg-secondary: #ffffff;
+                --bg-card: rgba(255, 255, 255, 0.9);
+                --text-primary: #1e293b;
+                --text-secondary: #64748b;
+                --accent-primary: #2563eb;
+                --accent-secondary: #7c3aed;
+                --success: #059669;
+                --warning: #d97706;
+                --danger: #dc2626;
+                --border-color: rgba(148, 163, 184, 0.2);
+                --glass-bg: rgba(255, 255, 255, 0.8);
+                --glass-border: rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            background: var(--bg-primary);
+            background-image:
+                radial-gradient(ellipse at top, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            color: var(--text-primary);
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .clear-section {
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .clear-section strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--warning);
+        }
+
+        .clear-section .button-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .clear-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .clear-btn:active {
+            transform: translateY(0);
+        }
+
+        .clear-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .clear-section span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .download-list {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 768px) {
+            .download-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .download-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.3s ease forwards;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.3s ease;
+        }
+
+        .download-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .download-item:hover::before {
+            width: 3px;
+        }
+
+        .download-item:nth-child(1) { animation-delay: 0.05s; }
+        .download-item:nth-child(2) { animation-delay: 0.1s; }
+        .download-item:nth-child(3) { animation-delay: 0.15s; }
+        .download-item:nth-child(4) { animation-delay: 0.2s; }
+
+        .download-info {
+            overflow: hidden;
+        }
+
+        .download-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .file-type {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .build-info {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .download-size {
+            font-size: 0.85rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .download-size.not-packed {
+            color: #9ca3af;
+        }
+
+        .download-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .download-btn {
+            padding: 7px 14px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.35);
+        }
+
+        .copy-btn {
+            padding: 7px 12px;
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(100, 116, 139, 0.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(100, 116, 139, 0.35);
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .copy-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .copy-modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .copy-modal-content h3 {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .copy-modal-content p {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .copy-modal-content input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        .copy-modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .copy-modal-actions button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-modal-actions button:first-child {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .copy-modal-actions button:first-child:hover {
+            background: rgba(148, 163, 184, 0.3);
+        }
+
+        .copy-modal-actions button:last-child {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+        }
+
+        .copy-modal-actions button:last-child:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+                margin-bottom: 16px;
+            }
+
+            .clear-section {
+                padding: 12px;
+                margin-bottom: 16px;
+            }
+
+            .download-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .download-actions {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .download-item a,
+            .copy-btn {
+                flex: 1;
+                justify-content: center;
+                padding: 10px 14px;
+            }
+
+            .toast {
+                left: 10px;
+                right: 10px;
+                top: 10px;
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+
+            .copy-modal-content {
+                width: 90%;
+                max-width: 90%;
+                padding: 16px;
+            }
+
+            .copy-modal-content h3 {
+                font-size: 1rem;
+            }
+
+            .copy-modal-content input {
+                font-size: 0.8rem;
+                padding: 8px 10px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .download-item {
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{projectName}} 下载中心</h1>
+        
+        <div class="clear-section">
+            <strong>历史文件管理</strong>
+            <div class="button-group">
+                <button class="clear-btn" onclick="clearHistory()">清除所有历史打包文件</button>
+                <span id="clearStatus"></span>
+            </div>
+        </div>
+        
+        <div class="toast" id="toast">链接已复制到剪贴板</div>
+        
+        <div class="download-list">
+            {{downloadItems}}
+        </div>
+    </div>
+
+    <script>
+        function copyLink(url) {
+            const fullUrl = window.location.origin + url;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(fullUrl).then(() => {
+                    showToast('链接已复制到剪贴板');
+                }).catch(err => {
+                    fallbackCopy(fullUrl);
+                });
+            } else {
+                fallbackCopy(fullUrl);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast('链接已复制到剪贴板');
+                } else {
+                    showManualCopy(text);
+                }
+            } catch (err) {
+                showManualCopy(text);
+            }
+            
+            document.body.removeChild(textarea);
+        }
+
+        function showManualCopy(url) {
+            const modal = document.createElement('div');
+            modal.className = 'copy-modal';
+            modal.innerHTML = `
+                <div class="copy-modal-content">
+                    <h3>手动复制链接</h3>
+                    <p>您的浏览器不支持自动复制，请手动复制以下链接：</p>
+                    <input type="text" value="${url}" readonly>
+                    <div class="copy-modal-actions">
+                        <button onclick="this.closest('.copy-modal').remove()">关闭</button>
+                        <button onclick="selectAndCopy(this)">复制</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function selectAndCopy(btn) {
+            const input = btn.closest('.copy-modal-content').querySelector('input');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast('链接已复制到剪贴板');
+                    btn.closest('.copy-modal').remove();
+                }
+            } catch (err) {
+                showToast('复制失败，请手动复制');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        async function clearHistory() {
+            if (!confirm('确定要清除所有历史打包文件吗？此操作不可恢复！')) {
+                return;
+            }
+            
+            const btn = document.querySelector('.clear-btn');
+            const status = document.getElementById('clearStatus');
+            btn.disabled = true;
+            status.textContent = '清除中...';
+            
+            try {
+                const response = await fetch('/admin/download/clear', {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    status.textContent = `已清除 ${result.count} 个历史文件`;
+                    showToast('清除成功');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    status.textContent = result.message || '清除失败';
+                    btn.disabled = false;
+                    showToast('清除失败');
+                }
+            } catch (error) {
+                status.textContent = '清除失败: ' + error.message;
+                btn.disabled = false;
+                showToast('网络错误');
+            }
+        }
+    </script>
+</body>
+</html>

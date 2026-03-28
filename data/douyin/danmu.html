@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>Danmaku Display</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            overflow: hidden;
+        }
+
+        #danmu-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-color: transparent;
+            color: white;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .danmu {
+            position: absolute;
+            white-space: nowrap;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<div id="danmu-container"></div>
+<script>
+    const danmuContainer = document.getElementById('danmu-container');
+    const socket = new WebSocket('ws://{{hostname}}/dy-dm');
+    const maxRows = 5;
+    let currentRow = 0;
+    const rowHeight = 30;
+    const minDuration = 3; // 最小动画持续时间，单位为秒
+
+    // 随机生成颜色的函数
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    function moveDanmu(danmuElement, duration) {
+        const start = performance.now();
+        const startX = window.innerWidth;
+        const endX = -danmuElement.offsetWidth;
+        const interval = 1000 / 60; // 60fps
+        const move = () => {
+            const now = performance.now();
+            const elapsed = now - start;
+            if (elapsed < duration) {
+                const progress = elapsed / duration;
+                const x = startX - (startX - endX) * progress;
+                danmuElement.style.left = x + 'px';
+                requestAnimationFrame(move);
+            } else {
+                danmuContainer.removeChild(danmuElement);
+            }
+        };
+        requestAnimationFrame(move);
+    }
+
+    socket.onmessage = function (event) {
+        const danmuData = JSON.parse(event.data);
+        danmuData.forEach(danmu => {
+            const danmuElement = document.createElement('div');
+            danmuElement.textContent = danmu.text;
+            danmuElement.className = 'danmu';
+
+            // 设置随机颜色
+            danmuElement.style.color = getRandomColor();
+
+            danmuContainer.appendChild(danmuElement);
+
+            const y = currentRow * rowHeight;
+            danmuElement.style.top = y + 'px';
+
+            const textLength = danmu.text.length;
+            const baseSpeed = 0.2;
+            let animationDuration = textLength * baseSpeed;
+            if (animationDuration < minDuration) {
+                animationDuration = minDuration;
+            }
+
+            moveDanmu(danmuElement, animationDuration * 1000);
+
+            // 循环设置行
+            currentRow = (currentRow + 1) % maxRows;
+        });
+    };
+
+    socket.onerror = function (error) {
+        console.error('WebSocket error:', error);
+    };
+</script>
+</body>
+</html>

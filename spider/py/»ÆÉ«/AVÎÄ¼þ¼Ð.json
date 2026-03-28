@@ -1,0 +1,63 @@
+{
+                "首页": "0",
+                "主页url": "https://avfolder.com/zh",
+                "分类url": "https://avfolder.com/zh/{cateId}/online?page={catePg}",
+                "分类": "推荐$douban#日本$censored#国产$chinese#欧美$western#动画$hanime#排行$rank#筛选$filter#女优$actress#类别$genre",
+                "特殊分类url": "推荐$https://avfolder.com/zh/#排行$https://avfolder.com/zh/{cateId}/censored/day?page={catePg}#筛选$https://avfolder.com/zh/censored/{cateId}?c={by}&page={catePg}#女优$https://avfolder.com/zh/censored/{cateId}?page={catePg}#女优二级$https://avfolder.com/zh/actor/{cateId}?page={catePg}#类别$https://avfolder.com/zh/{cateId}/censored?page={catePg}#类别二级$https://avfolder.com/zh/censored/genre/{cateId}?page={catePg}",
+                "二级目录": "女优#类别",
+                "二级ID": "女优$https://avfolder.com/zh/actor/&&#类别$https://avfolder.com/zh/censored/genre/&&",
+                "数组": "class=\"video-list-item\">&&</a>||女优--class=\"actor-list-item\">&&</a>||类别--class=\"subtag\">&&</div>",
+                "标题": "class=\"video-list-item-username model-name\">*>&&</span></div></div>[不包含:色站搭建服务]||女优--class=\"actor-name\" title=\"&&\"||类别-->&&</a>",
+                "副标题": "class=\"video-list-item-username model-name\" title=\"*\">&&</div>",
+                "图片": "data-src=\"&&\"||女优--http://127.0.0.1:9978/file/Download/mengxin_Box/.R18/WJJ.jpg||类别--http://127.0.0.1:9978/file/Download/mengxin_Box/.R18/WJJ.jpg",
+                "链接": "href=\"&&\"",
+                "播放数组": "<script>&&</script>",
+                "播放链接": "href=\"&&\"",
+                "跳转播放链接": "m3u8.push(\"&&\")",
+                "搜索模式": "1",
+                "搜索url": "https://avfolder.com/zh/search?wd={wd}&page={pg}",
+                "搜索数组": "class=\"video-list-item\">&&</a>",
+                "搜索标题": "class=\"video-list-item-username model-name\">*>&&</span></div></div>",
+                "筛选": {
+                    "censored": [
+                        {
+                            "name": "类型",
+                            "key": "cateId",
+                            "value": [
+                                {
+                                    "n": "全部",
+                                    "v": "censored"
+                                },
+                                {
+                                    "n": "无码",
+                                    "v": "uncensored"
+                                },
+                                {
+                                    "n": "FC2",
+                                    "v": "fc2"
+                                }
+                            ]
+                        }
+                    ],
+                    "filter": [
+                        {
+                            "name": "标签",
+                            "key": "by",
+                            "value": [
+                                {
+                                    "n": "全部",
+                                    "v": "空"
+                                },
+                                {
+                                    "n": "处女",
+                                    "v": "7"
+                                },
+                                {
+                                    "n": "美少女",
+                                    "v": "5"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }

@@ -1,0 +1,78 @@
+[
+    {
+        "name": "电视家",
+        "url": "https://down.nigx.cn/dsj.zzong6599.workers.dev/",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": "",
+            "cookie": ""
+        },
+        "epg": "http://diyp5.112114.xyz/?ch={name}&date={date}",
+        "logo": "http://diyp5.112114.xyz/{name}.png"
+    },
+    {
+        "name": "裤佬",
+        "url": "https://down.nigx.cn/raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1",
+        "header": {
+            "Referer": "https://www.kds.tw/"
+        },
+        "epg": "http://diyp5.112114.xyz/?ch={name}&date={date}",
+        "logo": "http://diyp5.112114.xyz/{name}.png"
+    },
+    {
+        "name": "黄色",
+        "url": "https://down.nigx.cn/mpimg.cn/down.php/25da10b0cb7b90d422ae22852bd7d414.txt",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": "",
+            "cookie": ""
+        },
+        "epg": "http://diyp5.112114.xyz/?ch={name}&date={date}",
+        "logo": "http://diyp5.112114.xyz/{name}.png"
+    },
+    {
+        "name": "咪咕",
+        "url": "https://down.nigx.cn/raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": "",
+            "cookie": ""
+        },
+        "epg": "http://diyp5.112114.xyz/?ch={name}&date={date}",
+        "logo": "http://diyp5.112114.xyz/{name}.png"
+    },
+    {
+        "name": "日本",
+        "url": "https://down.nigx.cn/raw.githubusercontent.com/luongz/iptv-jp/refs/heads/main/jp_clean.m3u",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": "",
+            "cookie": ""
+        },
+        "epg": "http://diyp5.112114.xyz/?ch={name}&date={date}",
+        "logo": "http://diyp5.112114.xyz/{name}.png"
+    },
+    {
+        "name": "日本1",
+        "url": "https://down.nigx.cn/raw.githubusercontent.com/luongz/iptv-jp/refs/heads/main/jp.m3u",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": "",
+            "cookie": ""
+        },
+        "epg": "http://diyp5.112114.xyz/?ch={name}&date={date}",
+        "logo": "http://diyp5.112114.xyz/{name}.png"
+    },
+    {
+        "name": "秘密花园",
+        "type": 0,
+        "url": "https://down.nigx.cn/mmhy.zzong6599.workers.dev/",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": "",
+            "cookie": ""
+        },
+        "epg": "http://diyp5.112114.xyz/?ch={name}&date={date}",
+        "logo": "http://diyp5.112114.xyz/{name}.png"
+    }
+]

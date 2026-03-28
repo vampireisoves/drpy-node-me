@@ -1,0 +1,46 @@
+[
+  {
+    "name": "全部",
+    "code": "all",
+    "reg": ".*",
+    "mode": 0,
+    "sort": "",
+    "status": 1
+  },
+  {
+    "name": "29",
+    "code": "yellow",
+    "reg": "密",
+    "mode": 0,
+    "sort": "order_yellow",
+    "status": 1
+  },
+  {
+    "name": "不含29",
+    "code": "green",
+    "reg": "密",
+    "mode": 1,
+    "status": 1
+  },
+  {
+    "name": "电视用",
+    "code": "tv",
+    "reg": "\\[[画书密慢搜]\\]|jsapi|原始|直播转点播v2|密+",
+    "mode": 1,
+    "status": 1
+  },
+  {
+    "name": "仅网盘",
+    "code": "pan",
+    "reg": "\\[[盘]\\]|push_agent|推送",
+    "mode": 0,
+    "status": 1
+  },
+  {
+    "name": "仅HIPY",
+    "code": "hipy",
+    "reg": "hipy",
+    "mode": 0,
+    "status": 1
+  }
+]

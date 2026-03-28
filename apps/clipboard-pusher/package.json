@@ -1,0 +1,11 @@
+{
+  "name": "clipboard-pusher",
+  "pluginName": "剪切板推送内容管理工具",
+  "version": "0.0.1",
+  "description": "管理推送内容，可实时刷新查看，清空等操作！",
+  "main": "index.html",
+  "logo": "",
+  "pluginType": "ui",
+  "author": "hjdhnx",
+  "dependencies": {}
+}

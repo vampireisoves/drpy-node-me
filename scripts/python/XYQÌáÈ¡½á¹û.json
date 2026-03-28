@@ -1,0 +1,142 @@
+[
+  {
+    "name": "七新影视.json",
+    "url": "http://www.7xdy.com",
+    "avaliable": false
+  },
+  {
+    "name": "九八剧.json",
+    "url": "http://www.98wap.com",
+    "avaliable": false
+  },
+  {
+    "name": "云盘资源.json",
+    "url": null,
+    "avaliable": false
+  },
+  {
+    "name": "兔小贝.json",
+    "url": "https://www.tuxiaobei.com",
+    "avaliable": true
+  },
+  {
+    "name": "兔小贝2.json",
+    "url": "https://www.tuxiaobei.com",
+    "avaliable": true
+  },
+  {
+    "name": "八号影视.json",
+    "url": "http://www.bahaotv.com",
+    "avaliable": true
+  },
+  {
+    "name": "农民影视.json",
+    "url": "https://www.wwgz.cn",
+    "avaliable": true
+  },
+  {
+    "name": "剧圈圈.json",
+    "url": "https://www.jqqzx.me",
+    "avaliable": true
+  },
+  {
+    "name": "动漫巴士.json",
+    "url": "https://dm84.tv",
+    "avaliable": false
+  },
+  {
+    "name": "去看吧动漫.json",
+    "url": "https://qkan8.com",
+    "avaliable": true
+  },
+  {
+    "name": "可可影视.json",
+    "url": "https://www.keke1.app",
+    "avaliable": true
+  },
+  {
+    "name": "哔嘀影视.json",
+    "url": "https://v.xlys.ltd.ua",
+    "avaliable": true
+  },
+  {
+    "name": "嗷呜动漫.json",
+    "url": "https://www.aowu.tv",
+    "avaliable": true
+  },
+  {
+    "name": "戏曲多多.json",
+    "url": "https://main.xiquduoduo.com",
+    "avaliable": true
+  },
+  {
+    "name": "播视童趣.json",
+    "url": "https://www.boosj.com",
+    "avaliable": true
+  },
+  {
+    "name": "斗鱼直播.json",
+    "url": "https://m.douyu.com",
+    "avaliable": true
+  },
+  {
+    "name": "星辰影院.json",
+    "url": "http://www.40yb.com",
+    "avaliable": true
+  },
+  {
+    "name": "来看点播.json",
+    "url": "https://lkvod.me",
+    "avaliable": false
+  },
+  {
+    "name": "樱花动漫.json",
+    "url": "http://www.yinghuadm.cn",
+    "avaliable": true
+  },
+  {
+    "name": "爱看影视.json",
+    "url": "https://www.akysw.pro",
+    "avaliable": true
+  },
+  {
+    "name": "瓜子影视.json",
+    "url": "https://www.gzvod.cc",
+    "avaliable": true
+  },
+  {
+    "name": "电影盒子.json",
+    "url": "http://80kp.com",
+    "avaliable": true
+  },
+  {
+    "name": "看一看影视.json",
+    "url": "https://www.kykyy.cc",
+    "avaliable": true
+  },
+  {
+    "name": "短剧屋.json",
+    "url": "http://www.metaysw.com",
+    "avaliable": false
+  },
+  {
+    "name": "虎牙直播.json",
+    "url": "clan://XYQTVBox",
+    "avaliable": false
+  },
+  {
+    "name": "酷奇MV.json",
+    "url": "https://www.kuqimv.com",
+    "avaliable": false
+  },
+  {
+    "name": "风车动漫.json",
+    "url": "https://www.dmla5.com",
+    "avaliable": true
+  },
+  {
+    "name": "骚火电影VIP.json",
+    "url": "https://saohuo.tv",
+    "avaliable": false
+  }
+]

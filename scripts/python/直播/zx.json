@@ -1,0 +1,46 @@
+[
+    {
+        "name": "咪咕",
+        "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
+        "header": {
+            "User-Agent": "okhttp/3.8.1"
+        }
+    },
+    {
+        "name": "catvod",
+        "url": "https://iptv.catvod.com/list.php?token=43f49fbb0ee68c039f57cd12fd51eacdf5dfc94a270bc68384c9802db12b386a",
+        "header": {
+            "User-Agent": "Goiptv/8.8.8",
+            "Referer": "https://live.catvod.com/"
+        }
+    },
+    {
+        "name": "gather",
+        "url": "https://tv.iill.top/m3u/Gather",
+        "header": {
+            "User-Agent": "okhttp/3.8.1"
+        }
+    },
+    {
+        "name": "网络直播",
+        "url": "https://m.iill.top/Live.m3u",
+        "header": {
+            "User-Agent": "okhttp/5.1.0",
+            "Referer": "https://m.iill.top/"
+        }
+    },
+    {
+        "name": "肥羊直播",
+        "url": "https://live.ottiptv.cc/iptv.m3u?userid=5057339410&sign=f31937b555cacbd7f720f7ec50b524820779d19a6d44482852a447071ebcaf24df8c92e24472e82313a8d395d78ed8682210a8ec6ad2e17584925620a637c8d2b69bbae74af846&auth_token=bf61eef1e2b31c162f6483d2de30cf51",
+        "header": {
+            "User-Agent": "okHttp/Mod-1.4.0.0"
+        }
+    },
+    {
+        "name": "冰茶订阅",
+        "url": "https://fy.188766.xyz/?ip=&mishitong=true&lunbo=false&mima=bingcha1130",
+        "header": {
+            "User-Agent": "bingcha/1.1"
+        }
+    }
+]

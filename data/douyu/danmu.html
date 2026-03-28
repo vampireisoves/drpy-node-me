@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>弹幕系统</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+        #danmu-container {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .danmu-item {
+            position: absolute;
+            white-space: nowrap;
+            font-size: 16px;
+            line-height: 1.3;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            will-change: transform;
+            backface-visibility: hidden;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="danmu-container"></div>
+    <script>
+    (function() {
+        // 核心配置
+        const CONFIG = {
+            rowCount: 8,            // 弹幕行数
+            rowHeight: 26,           // 行高
+            baseSpeed: 150,          // 基准速度（px/s）
+            maxLoad: 5,              // 单行最大负载
+            speedBoost: 0.3,         // 速度增益系数
+            spacingRatio: 0.6        // 间距比例
+        };
+
+        const container = document.getElementById('danmu-container');
+        const socket = new WebSocket('ws://{{hostname}}/dy-dm');
+
+        // 智能分配系统
+        class SmartAllocator {
+            constructor() {
+                // 关键修改：初始化时固定行号从上到下
+                this.rows = Array.from({length: CONFIG.rowCount}, (_, index) => ({
+                    index: index,  // 行号0对应最上方
+                    active: 0,
+                    lastPos: 0,
+                    speed: CONFIG.baseSpeed
+                }));
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d');
+            }
+
+            // 核心分配算法
+            allocateRow(text) {
+                const textWidth = this.measureText(text);
+                
+                // 第一阶段：寻找空行（优先上方）
+                const emptyRows = this.rows
+                    .filter(r => r.active === 0)
+                    .sort((a, b) => a.index - b.index);  // 按行号升序排列
+
+                if (emptyRows.length > 0) {
+                    return emptyRows[0].index;
+                }
+
+                // 第二阶段：寻找最空闲行（优先上方）
+                const minActive = Math.min(...this.rows.map(r => r.active));
+                const candidateRows = this.rows
+                    .filter(r => r.active === minActive)
+                    .sort((a, b) => a.index - b.index);
+
+                return candidateRows[0].index;
+            }
+
+            updateRow(rowIndex, delta) {
+                const row = this.rows.find(r => r.index === rowIndex);
+                row.active += delta;
+                row.speed = CONFIG.baseSpeed * (1 + (row.active / CONFIG.maxLoad) * CONFIG.speedBoost);
+                row.lastPos = Date.now();
+            }
+
+            measureText(text) {
+                this.ctx.font = '16px sans-serif';
+                return this.ctx.measureText(text).width;
+            }
+        }
+
+        // 弹幕引擎（已修改）
+        class DanmuEngine {
+            constructor() {
+                this.allocator = new SmartAllocator();
+                this.elementPool = [];
+            }
+
+            launch(text) {
+                const element = this.getElement(text);
+                const textWidth = this.allocator.measureText(text);
+                const row = this.allocator.allocateRow(text);
+                
+                this.allocator.updateRow(row, +1);
+                this.animate(element, row, textWidth);
+            }
+
+            getElement(text) {
+                const el = this.elementPool.pop() || document.createElement('div');
+                el.className = 'danmu-item';
+                el.textContent = text;
+                el.style.color = `hsl(${Math.random()*360},70%,60%)`;
+                return el;
+            }
+
+            animate(element, row, textWidth) {
+                const startX = container.clientWidth;
+                const yPos = row * CONFIG.rowHeight;  // 行号0对应最上方
+                
+                element.style.transform = `translateX(${startX}px)`;
+                element.style.top = `${yPos}px`;
+                container.appendChild(element);
+
+                const speed = this.allocator.rows.find(r => r.index === row).speed;
+                const startTime = Date.now();
+                
+                const animateFrame = () => {
+                    const elapsed = Date.now() - startTime;
+                    const progress = elapsed / ((startX + textWidth) / speed * 1000);
+                    
+                    if (progress < 1) {
+                        const x = startX - (startX + textWidth) * progress;
+                        element.style.transform = `translateX(${x}px)`;
+                        requestAnimationFrame(animateFrame);
+                    } else {
+                        this.recycle(element, row);
+                    }
+                };
+                requestAnimationFrame(animateFrame);
+            }
+
+            recycle(element, row) {
+                this.allocator.updateRow(row, -1);
+                element.remove();
+                this.elementPool.push(element);
+            }
+        }
+
+        // 初始化系统
+        const engine = new DanmuEngine();
+
+        // WebSocket处理
+        socket.onmessage = event => {
+            const text = String(event.data).trim().substring(0, 100);
+            text && engine.launch(text);
+        };
+
+        // 窗口自适应
+        window.addEventListener('resize', () => {
+            container.style.width = window.innerWidth + 'px';
+            container.style.height = window.innerHeight + 'px';
+        });
+        
+        window.addEventListener('beforeunload', () => {
+            socket.close();
+        });
+    })();
+    </script>
+</body>
+</html>

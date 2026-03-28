@@ -1,0 +1,11 @@
+{
+  "name": "image-manager",
+  "pluginName": "内存图片管理器",
+  "version": "1.0.0",
+  "description": "往内存里读写图片，提供路由链接",
+  "main": "index.html",
+  "logo": "",
+  "pluginType": "ui",
+  "author": "drpy-node",
+  "dependencies": {}
+}

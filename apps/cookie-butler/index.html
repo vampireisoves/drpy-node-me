@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cookie管理</title>
+    <link rel="stylesheet" href="./static/css/style.css"/>
+    <link rel="stylesheet" href="./static/css/daisyui.min.css"/>
+    <script src="./static/js/tailwindcss.min.js"></script>
+    <script src="./static/js/axios.min.js"></script>
+    <script src="./static/js/qrcode.min.js"></script>
+    <script src="./static/js/crypto-js.min.js"></script>
+    <script src="./static/js/core.js"></script>
+    <script src="./static/js/cookie.js"></script>
+    <script src="./static/js/jsencrypt.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+<div class="artboard phone-2 box p-4">
+    <!-- Navigation Menu -->
+    <ul class="menu menu-horizontal lg:menu-horizontal bg-base-200 rounded-box mb-4">
+        <li><a class="btn-scan" data-platform="ali">阿里</a></li>
+        <li><a class="btn-scan" data-platform="quark">夸克</a></li>
+        <li><a class="btn-scan" data-platform="quark_token">夸克TV</a></li>
+        <li><a class="btn-scan" data-platform="uc">UC</a></li>
+        <li><a class="btn-scan" data-platform="uc_token">UC_TOKEN</a></li>
+        <li><a class="btn-scan" data-platform="bili">哔哩哔哩</a></li>
+        <li><a class="btn-scan" data-platform="yun">移动</a></li>
+        <li><a class="btn-scan" data-platform="baidu">百度</a></li>
+        <li><a class="btn-scan" data-platform="pikpak">PikPak</a></li>
+    </ul>
+
+    <!-- QR Code -->
+    <div class="qrcode-container text-center mb-4">
+        <img id="qrcode" src="./static/img/qrcode_expired.jpg" alt="二维码" class="mx-auto"/>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider divider-neutral mb-4">请使用手机APP扫码登录</div>
+
+    <!-- Textarea with improved styling -->
+    <textarea
+            id="cookie-res"
+            class="textarea textarea-bordered w-full h-40 p-4 bg-white border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="扫码确认后将在此处展示cookie"
+    ></textarea>
+
+    <!-- Buttons with improved design -->
+    <div class="flex justify-center gap-4 mt-4">
+        <button
+                id="copy-btn"
+                class="btn btn-primary w-28 py-2 rounded-lg text-white shadow-lg transform transition-all duration-200 hover:bg-blue-600 hover:scale-105"
+                onclick="copyToClipboard()"
+        >
+            复制
+        </button>
+        <button
+                id="store-btn"
+                class="btn btn-success w-28 py-2 rounded-lg text-white shadow-lg transform transition-all duration-200 hover:bg-green-600 hover:scale-105"
+                onclick="storeCookie()"
+        >
+            入库
+        </button>
+    </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast toast-top toast-end">
+    <div class="toast-content" id="toast" style="display: none;">
+        <span id="toast-content"></span>
+    </div>
+</div>
+
+<script>
+    // Copy text to clipboard
+    function copyToClipboard() {
+        const textArea = document.getElementById("cookie-res");
+        textArea.select();
+        document.execCommand("copy");
+
+        // Show success message
+        const toast = document.getElementById("toast");
+        const toastContent = document.getElementById("toast-content");
+        toastContent.textContent = "内容已复制到剪切板";
+        toast.style.display = "block";
+
+        // Hide toast after 2 seconds
+        setTimeout(() => {
+            toast.style.display = "none";
+        }, 2000);
+    }
+
+    // Store cookie (just an alert for now)
+    function storeCookie() {
+        // 获取当前激活的 li
+        const activeLi = document.querySelector("ul.menu a.active");
+        if (activeLi) {
+            const textValue = document.getElementById("cookie-res").value || '';
+            const active_name = activeLi.textContent.trim();
+            const active_key = activeLi.getAttribute('data-platform').trim();
+            let save_key = ''
+            if (/ali|pikpak/.test(active_key)) {
+                save_key = active_key + '_token'
+            } else {
+                save_key = active_key + '_cookie';
+            }
+
+            console.log(`准备入库cookie:${active_name} ${save_key},值为:${textValue}`);
+
+            const cookie_auth_code = prompt('cookie入库功能需要管理员授权码,请你正确输入后继续');
+            if (cookie_auth_code) {
+                if (save_key.includes('pikpak')) {
+                    // 使用 axios 发送 POST 请求
+                    axios.post('/admin/cookie-set', {
+                        cookie_auth_code: cookie_auth_code,
+                        key: save_key,
+                        value: textValue.split(';')[0].trim().replaceAll('\n', '')
+                    }).then(response => {
+                        if (response.data.success) {
+                            alert(`Cookie 入库成功：${active_name} (${save_key})`);
+                        } else {
+                            alert(`入库失败：${response.data.message}`);
+                        }
+                    }).catch(error => {
+                        console.error('请求失败:', error);
+                        alert(`入库失败，服务器出现问题，请稍后再试。\n${error.response.data.message}`);
+                    });
+                    axios.post('/admin/cookie-set', {
+                        cookie_auth_code: cookie_auth_code,
+                        key: save_key.replace('token', 'refresh_token'),
+                        value: textValue.split(';')[1].trim().replaceAll('\n', '')
+                    }).then(response => {
+                        if (response.data.success) {
+                            alert(`Cookie 入库成功：${active_name} (${save_key.replace('token', 'refresh_token')})`);
+                        } else {
+                            alert(`入库失败：${response.data.message}`);
+                        }
+                    }).catch(error => {
+                        console.error('请求失败:', error);
+                        alert(`入库失败，服务器出现问题，请稍后再试。\n${error.response.data.message}`);
+                    });
+                } else {
+                    // 使用 axios 发送 POST 请求
+                    axios.post('/admin/cookie-set', {
+                        cookie_auth_code: cookie_auth_code,
+                        key: save_key,
+                        value: textValue.trim().replaceAll('\n', '')
+                    })
+                        .then(response => {
+                            if (response.data.success) {
+                                alert(`Cookie 入库成功：${active_name} (${save_key})`);
+                            } else {
+                                alert(`入库失败：${response.data.message}`);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('请求失败:', error);
+                            alert(`入库失败，服务器出现问题，请稍后再试。\n${error.response.data.message}`);
+                        });
+                }
+
+            }
+        } else {
+            alert('至少选中一个cookie入库项目');
+        }
+    }
+
+
+    // Initialize the page
+    initializePage();
+</script>
+</body>
+</html>

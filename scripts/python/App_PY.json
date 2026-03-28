@@ -1,0 +1,294 @@
+[
+  {
+    "key": "Py_AppFox",
+    "name": "AFX",
+    "type": 3,
+    "changeable": 0,
+    "api": "clan://sites/lib/AppFox.py",
+    "exts": {
+      "TVB云播": "http://app.hktvyb.cc",
+      "火猫影视": {
+        "host": "https://cunchu8.obs.cn-north-4.myhuaweicloud.com/config.json",
+        "parse": {
+          "JL4K": "http://194.147.100.155:7891/?url="
+        }
+      },
+      "未来影视": {
+        "host": "http://kumiao.yzbao.com.cn",
+        "parse": {
+          "qq|qiyi|mgtv|youku|bilibili": "https://api.qljson.xyz/api/?key=67f6a108dc6d84eaf81ac58417c1f72a&url="
+        }
+      }
+    }
+  },
+  {
+    "key": "Py_AppFei",
+    "name": "AF",
+    "type": 3,
+    "changeable": 0,
+    "api": "clan://sites/lib/AppFei.py",
+    "exts": {
+      "呀哩4K": "https://ysc.yy-fun.cc/feiapp",
+      "森林动漫": "https://ysa.yy-fun.cc/feiapp"
+    }
+  },
+  {
+    "key": "Py_AppGet",
+    "name": "AG¹",
+    "type": 3,
+    "api": "clan://sites/lib/AppGet.py",
+    "exts": {
+      "橘子": {
+        "host": "https://api1.bffree.cn",
+        "key": "2015692015692015"
+      },
+      "五八": {
+        "host": "https://dy.58ys.vip",
+        "key": "JEWibY1AgWF0V1xx"
+      },
+      "玲珑": {
+        "host": "https://mac.555618.xyz",
+        "key": "#getapp@TMD@2025"
+      },
+      "火猫": {
+        "host": "http://154.12.90.59:14500",
+        "key": "J6AIORKJ3PQOJKM3"
+      },
+      "米诺-旧": {
+        "host": "http://www.milkidc.cn",
+        "key": "20c79c979da8db0f"
+      },
+      "米兔-旧": {
+        "host": "http://new.tkbot.fun",
+        "key": "d032c12876bc6848"
+      },
+      "OMOfun": {
+        "host": "https://app.omofun1.top",
+        "key": "66dc309cbeeca454"
+      },
+      "丫丫动漫": {
+        "host": "http://tv.yy-fun.cc",
+        "key": "qkxnwkfjwpcnwycl"
+      }
+    }
+  },
+  {
+    "key": "Py_AppGet2",
+    "name": "AG²",
+    "type": 3,
+    "api": "clan://sites/lib/AppGet.py",
+    "exts": {
+      "仓鼠": {
+        "host": "https://newappcms.cs4k.top",
+        "key": "Z98KXaLtO2wC1Pte",
+        "path": "/api.php/qijiappapi"
+      },
+      "雄鹰": {
+        "host": "https://lanyinghz.oss-cn-hangzhou.aliyuncs.com/lanyingxmy.txt",
+        "key": "ca94b06ca359d80e",
+        "path": "/api.php/qijiappapi"
+      }
+    }
+  },
+  {
+    "key": "Py_AppMuou",
+    "name": "AM",
+    "type": 3,
+    "api": "clan://sites/lib/AppMuou.py",
+    "exts": {
+      "23影视": {
+        "host": "https://muouapp.oss-cn-hangzhou.aliyuncs.com/MUOUAPP/764119293.txt",
+        "version": "4.2.0"
+      }
+    }
+  },
+  {
+    "key": "Py_AppSk",
+    "name": "AS",
+    "type": 3,
+    "api": "clan://sites/lib/AppSk.py",
+    "exts": {
+      "即看影视": {
+        "host": "https://skyappdata-1321528676.cos.accelerate.myqcloud.com/4kapp/appipr.txt",
+        "key": "ygcnbckhcuvygdyb",
+        "iv": "4023892775143708"
+      },
+      "看客联盟": {
+        "host": "https://kankelm.cn:2024/appdomain.txt",
+        "key": "ygcnbcvybqqckwqy",
+        "iv": "1583560747143708"
+      },
+      "2k动漫": {
+        "host": "https://dmsk.oss-rg-china-mainland.aliyuncs.com/dmapp/dmapi.txt",
+        "key": "ygcnbcobcegtgigg",
+        "iv": "4058263969143708"
+      },
+      "Free影视": {
+        "host": "https://sk.xiaoyaoys.top/skkkkkkk.txt",
+        "key": "ygcnbcczduwydmrs",
+        "iv": "4672921073143708"
+      }
+    }
+  },
+  {
+    "key": "Py_AppV⁶",
+    "name": "AV⁶",
+    "type": 3,
+    "changeable": 0,
+    "api": "clan://sites/lib/AppV6.py",
+    "exts": {
+      "剧永久": {
+        "api": "http://yjyi.juyongjiu.com/icciu_api.php/v1.vod",
+        "datasignkey": "6QQNUsP3PkD2ajJCPCY8",
+        "apisignkey": "lvdoutv-1.0.0"
+      },
+      "剧下饭": "http://jxfmax.juxiafan.com/icciu_api.php/v1.vod"
+    }
+  },
+  {
+    "key": "Py_ApptoV⁵",
+    "name": "ATV⁵",
+    "type": 3,
+    "api": "clan://sites/lib/AppToV5.py",
+    "exts": {
+      "番喜": "http://118.89.203.120:8762",
+      "畅看": "http://118.89.203.120:8366",
+      "爱看剧Fax": "http://111.173.114.61:8762",
+      "皮皮虾": "http://38.55.237.41:8762"
+    }
+  },
+  {
+    "key": "Py_AppV²",
+    "name": "AV²",
+    "type": 3,
+    "filterable": 1,
+    "searchable": 1,
+    "quickSearch": 1,
+    "api": "clan://sites/lib/AppV2².py",
+    "exts": {
+      "大米": "https://dmz8k4.wiki",
+      "河狸！": "https://www.heli888.cc",
+      "闪影": "http://38.47.213.61:41271",
+      "热剧": "https://www.rebovod.com",
+      "好震惊": "http://v.lnhaozhenjin.cn",
+      "剧下饭": "http://jxfmax.juxiafan.com"
+    }
+  },
+  {
+    "key": "Py_AppV¹",
+    "name": "AV¹",
+    "type": 3,
+    "searchable": 1,
+    "quickSearch": 1,
+    "filterable": 1,
+    "api": "clan://sites/lib/AppV1.py",
+    "exts": {
+      "紫云": "http://ziyuncms.feifan12.xyz/api.php"
+    }
+  },
+  {
+    "key": "py_getapp3.4.4",
+    "name": "AG³",
+    "type": 3,
+    "api": "clan://sites/lib/getapp3.4.4.py",
+    "exts": {
+      "鲸鱼影视": {
+        "host": "https://jingyu4k-1312635929.cos.ap-nanjing.myqcloud.com/1.json",
+        "datakey": "AAdgrdghjfgswerA",
+        "api": 2
+      },
+      "云云": {
+        "host": "https://staraugust123456.oss-cn-hangzhou.aliyuncs.com/1.txt",
+        "datakey": "staraugust123456",
+        "api": 2
+      },
+      "白蛇": {
+        "host": "http://tengxunyunaliyun.oss-cn-shanghai.aliyuncs.com/tengxunyun.txt",
+        "datakey": "n3l2tx5jdkp9s2c8"
+      },
+      "4K大全": {
+        "host": "http://appcms.4kdq.icu",
+        "key": "R6FVRw4jsy4Hsitj"
+      },
+      "瓜萌": {
+        "host": "https://www.guahd.com/1.txt",
+        "key": "f2A7D4B9E8C16531"
+      },
+      "萝卜": {
+        "host": "https://apiapplbys.lbys.app:5678",
+        "key": "apiapplbyskey168"
+      },
+      "七月": {
+        "host": "https://99.jl8.top/1.txt",
+        "key": "xnybssspqtwotuwj"
+      },
+      "掌上追剧": {
+        "host": "http://tvb.yy-fun.cc",
+        "key": "jcTz6Jda2aKrH8Tk"
+      }
+    }
+  },
+  {
+    "key": "Py_AppHs",
+    "name": "Hs",
+    "type": 3,
+    "searchable": 1,
+    "quickSearch": 1,
+    "filterable": 1,
+    "api": "clan://sites/lib/AppHs.py",
+    "exts": {
+      "拾光视频": {
+        "host": "https://dy.jmzp.net.cn",
+        "app_id": "shiguang",
+        "deviceid": "",
+        "versionCode": "10000",
+        "UMENG_CHANNEL": "guan"
+      },
+      "雪豹视频": {
+        "host": "https://dy.jszdzs.com",
+        "app_id": "xuebao",
+        "deviceid": "",
+        "versionCode": "21300",
+        "UMENG_CHANNEL": "share"
+      },
+      "海狗视频": {
+        "host": "https://dy.stxbed.com",
+        "app_id": "haigou",
+        "deviceid": "",
+        "versionCode": "20100",
+        "UMENG_CHANNEL": "zhuan"
+      }
+    }
+  },
+  {
+    "key": "Py_AppYqk",
+    "name": "Ayq",
+    "type": 3,
+    "searchable": 1,
+    "quickSearch": 1,
+    "filterable": 1,
+    "api": "clan://sites/lib/AppYqk.py",
+    "exts": {
+      "一起看": {
+        "host": "https://gapi0320.3njzmrx1.com/config.json,https://gapi0320.lq0okex8.com/config.json,https://gapi0320.zabqs8xp.com/config.json,https://yappconfig-20250628-1318635097.cos.ap-shanghai.myqcloud.com/config.json,https://yconfig-20250628-1360051343.cos.ap-guangzhou.myqcloud.com/config.json",
+        "appId": "d6d520ea90904f1ba680ed6c9c9f9007",
+        "appkey": "70af67d2b6cf47679b397ea4c1886877",
+        "udid": "bfc18c00-c866-46cb-8d7b-121c39b942d4",
+        "bundlerId": "com.flotimingo.ts",
+        "source": "1001_default",
+        "version": "1.3.10",
+        "versionCode": 1104
+      },
+      "橘子TV": {
+        "host": "https://gapi0725.5p8jcjc.com/config.json,https://gapi0725.olrv5gz.com/config.json,https://gapi0725.mvljeat.com/config.json,https://jzapp-1318635097.cos.ap-shanghai.myqcloud.com/config.json,https://juzi-config-1360051343.cos.ap-shanghai.myqcloud.com/config.json",
+        "appId": "fea23e11fc1241409682880e15fb2851",
+        "appkey": "f384b87cc9ef41e4842dda977bae2c7f",
+        "udid": "bfc18c00-c866-46cb-8d7b-121c39b942d4",
+        "bundlerId": "com.voraguzzee.ts",
+        "source": "1003_default",
+        "version": "1.0.1",
+        "versionCode": 1000
+      }
+    }
+  }
+]

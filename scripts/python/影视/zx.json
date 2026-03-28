@@ -1,0 +1,39 @@
+[
+    {
+        "name": "肥羊直播",
+        "url": "https://live.ottiptv.cc/iptv.m3u?userid=5057339410&sign=ff39847e33abc289f14ab56a075d6e7a630617054796b781c561ca2b5714703c08bc304d06c13b19351d0fe295939b2dfb96d31a2e3a58a8963fad3255d5c29da7f3ce18b21c6a&auth_token=bf61eef1e2b31c162f6483d2de30cf51",
+        "header": {
+            "User-Agent": "okHttp/Mod-1.4.0.0"
+        }
+    },
+    {
+        "name": "咪咕",
+        "url": "https://down.nigx.cn/raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": "",
+            "cookie": ""
+        }
+    },
+    {
+        "name": "冰茶",
+        "url": "https://fy.188766.xyz/?ip=&mishitong=true&lunbo=false&mima=mianfeidehaimaiqian",
+        "header": {
+            "User-Agent": "bingcha/1.1"
+        }
+    },
+    {
+        "name": "风云直播",
+        "url": "http://iptv.4666888.xyz/FYTV.m3u",
+        "header": {
+            "User-Agent": "okhttp/5.1.0"
+        }
+    },
+    {
+        "name": "gather",
+        "url": "https://tv.iill.top/m3u/Gather",
+        "header": {
+            "User-Agent": "okhttp/5.1.0"
+        }
+    }
+]

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Parser by 道长</title>
+    <link rel="icon" href="/public/icon.svg" type="image/x-icon">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .container h2 {
+            margin-bottom: 10px;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .container p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+            resize: none;
+            line-height: 1.5;
+            overflow-y: auto;
+        }
+
+        .clear-button {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            opacity: 0.8;
+        }
+
+        .clear-button:hover {
+            background-color: #ff4949;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 24px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .example-button {
+            font-size: 16px;
+            color: #333;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .example-button:hover {
+            background-color: #e2e2e2;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            position: relative;
+            word-break: break-all;
+            text-align: left;
+        }
+
+        .copy-button {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            padding: 6px 12px;
+            font-size: 14px;
+            color: #333;
+            background-color: #e6e6e6;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .copy-button:hover {
+            background-color: #d4d4d4;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>视频直链解析器 v1.0.2 2024/11/26</h2>
+    <p>请输入抓包获取的央视网点播视频直链</p>
+    <div class="input-group">
+        <textarea id="urlInput" placeholder="输入网页链接"></textarea>
+        <button class="clear-button" onclick="clearInput()">×</button>
+    </div>
+    <div class="button-group">
+        <button onclick="parseUrl()">解析</button>
+        <button class="example-button" onclick="fillExample1()">示例地址1</button>
+        <button class="example-button" onclick="fillExample2()">示例地址2</button>
+    </div>
+    <div id="result" class="result" style="display: none;">
+        <span id="parsedUrl"></span>
+        <button class="copy-button" onclick="copyToClipboard()">复制</button>
+    </div>
+</div>
+
+<script>
+    function parseUrl() {
+        const inputUrl = document.getElementById("urlInput").value.trim();
+        const resultDiv = document.getElementById("result");
+        const parsedUrlSpan = document.getElementById("parsedUrl");
+
+        if (!inputUrl) {
+            resultDiv.style.display = 'none';
+            alert("请输入有效的链接");
+            return;
+        }
+
+        try {
+            const baseUrl = `${location.origin}/proxy/央视大全[官]/asp/h5e/hls`;
+            const regex = /\/asp\/(?:h5e\/)?hls\/(.+)/;
+            const match = inputUrl.match(regex);
+
+            if (match) {
+                const proxyUrl = `${baseUrl}/${match[1]}`;
+                parsedUrlSpan.textContent = proxyUrl;
+                resultDiv.style.display = 'block';
+            } else {
+                resultDiv.style.display = 'none';
+                alert("链接格式无效，请输入包含 /asp/h5e 或 /asp/hls 的链接");
+            }
+        } catch (error) {
+            resultDiv.style.display = 'none';
+            alert("处理链接时出错，请检查输入格式");
+        }
+    }
+
+    function copyToClipboard() {
+        const parsedUrl = document.getElementById("parsedUrl").textContent;
+        copyText(parsedUrl);
+    }
+
+    function copyText(str) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(str).then(() => {
+                alert("链接已通过第1种方式复制到剪贴板");
+            }, () => {
+                alert("复制失败，请手动复制");
+            });
+        } else {
+            let textArea = document.createElement("textarea");
+            textArea.value = str;
+            textArea.style.position = "absolute";
+            textArea.style.opacity = 0;
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            let res = new Promise((res, rej) => {
+                res(() => {
+                    document.execCommand('copy');
+                    textArea.remove();
+                });
+                rej(false);
+            });
+            res.then((res) => {
+                res();
+                alert("链接已通过第2种方式复制到剪贴板");
+            })
+        }
+
+    }
+
+    function fillExample1() {
+        document.getElementById("urlInput").value = "https://dh5.cntv.myalicdn.com/asp/h5e/hls/2000/0303000a/3/default/7048673ae21f4929a30701318754497b/2000.m3u8";
+    }
+
+    function fillExample2() {
+        document.getElementById("urlInput").value = "https://hls09.cntv.myhwcdn.cn/asp/hls/2000/0303000a/3/default/d9b0eaa065934f25abd193d391f731b6/2000.m3u8";
+    }
+
+    function clearInput() {
+        document.getElementById("urlInput").value = "";
+        document.getElementById("result").style.display = "none";
+    }
+</script>
+</body>
+</html>

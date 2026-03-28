@@ -1,0 +1,24 @@
+[
+   {
+      "name": "🙋丫仙女",
+      "server": "http://alist.xiaoya.pro/",
+      "startPage": "/",
+      "showAll": false,
+      "search": true,
+      "headers": {
+         "Authorization": ""
+      },
+      "params": {
+         "/abc": {
+            "password": "123"
+         },
+         "/abc/abc": {
+            "password": "123"
+         }
+      }
+   },
+   {
+      "name": "🌊七米蓝",
+      "server": "https://al.chirmyram.com"
+   }
+]

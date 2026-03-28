@@ -1,0 +1,225 @@
+{
+  "spider": "./lib/yt.jar",
+  "wallpaper": "",
+  "warningText": "此文件可以随意调节自己想要的任何数据",
+  "logo": "http://php.540734621.xyz/logo/logo.php",
+  "sites": [
+    {
+      "key": "独播库[剧](JS)",
+      "name": "🟢 Peek影视[首页]",
+      "type": 3,
+      "api": "./lib/js/peekpili.js",
+      "searchable": 1,
+      "filterable": 1,
+      "switchable": 1
+    },
+   {
+            "key": "影视清单",
+            "name": "影视清单",
+            "type": 4,
+            "api": "http://127.0.0.1:9800/lb?lb=9",
+            "ext": "/storage/emulated/0/peekpili/php-scripts/lz/txt/采集影视/",
+            "style": {
+                "type": "rect",
+                "ratio": 1.33
+            },
+            "changeable": 1
+        },
+    {
+      "key": "config1",
+      "name": "🟢 长按左上角更新[首页]",
+      "type": 4,
+      "api": "http://127.0.0.1:9980/start.php?mode=scan-only"
+    },
+    {
+      "key": "config2",
+      "name": "🟢 只玩本包 | 长按更新",
+      "type": 4,
+      "api": "http://127.0.0.1:9980/start.php?mode=template"
+    },
+    {
+      "key": "config0",
+      "name": "🟢 更新端口 | PHP换端口后",
+      "type": 3,
+      "api": "./start.py"
+    },
+    {
+      "key": "config3",
+      "name": "🟢 合并道长 | 长按更新",
+      "type": 4,
+      "api": "http://127.0.0.1:9980/start.php?mode=insert"
+    },
+    {
+      "key": "config4",
+      "name": "🟢 只用道长 | 长按更新",
+      "type": 4,
+      "api": "http://127.0.0.1:9980/start.php?mode=cover"
+    },
+  
+    {
+      "key": "push_agent",
+      "name": "Push | 推送",
+      "type": 3,
+      "hide": 1,
+      "api": "csp_Push"
+    }
+  ],
+  "doh": [
+    {
+      "name": "Google",
+      "url": "https://dns.google/dns-query",
+      "ips": [
+        "8.8.4.4",
+        "8.8.8.8"
+      ]
+    },
+    {
+      "name": "Cloudflare",
+      "url": "https://cloudflare-dns.com/dns-query",
+      "ips": [
+        "1.1.1.1",
+        "1.0.0.1",
+        "2606:4700:4700::1111",
+        "2606:4700:4700::1001"
+      ]
+    },
+    {
+      "name": "AdGuard",
+      "url": "https://dns.adguard.com/dns-query",
+      "ips": [
+        "94.140.14.140",
+        "94.140.14.141"
+      ]
+    },
+    {
+      "name": "DNSWatch",
+      "url": "https://resolver2.dns.watch/dns-query",
+      "ips": [
+        "84.200.69.80",
+        "84.200.70.40"
+      ]
+    },
+    {
+      "name": "Quad9",
+      "url": "https://dns.quad9.net/dns-quer",
+      "ips": [
+        "9.9.9.9",
+        "149.112.112.112"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "name": "hwk",
+      "hosts": [
+        "haiwaikan"
+      ],
+      "regex": [
+        "10.0099",
+        "10.3333",
+        "16.0599",
+        "8.1748",
+        "10.85"
+      ]
+    },
+    {
+      "name": "yqk",
+      "hosts": [
+        "yqk88"
+      ],
+      "regex": [
+        "18.4",
+        "15.1666"
+      ]
+    },
+    {
+      "name": "sn",
+      "hosts": [
+        "suonizy"
+      ],
+      "regex": [
+        "15.1666",
+        "15.2666"
+      ]
+    },
+    {
+      "name": "bf",
+      "hosts": [
+        "bfzy"
+      ],
+      "regex": [
+        "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:3,[\\s\\S]*?#EXT-X-DISCONTINUITY"
+      ]
+    },
+    {
+      "name": "xx",
+      "hosts": [
+        "aws.ulivetv.net"
+      ],
+      "regex": [
+        "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:8,[\\s\\S]*?#EXT-X-DISCONTINUITY"
+      ]
+    },
+    {
+      "name": "lz",
+      "hosts": [
+        "vip.lz",
+        "hd.lz",
+        "v.cdnlz1",
+        "v.cdnlz"
+      ],
+      "regex": [
+        "18.5333"
+      ]
+    },
+    {
+      "name": "非凡",
+      "hosts": [
+        "vip.ffzy",
+        "hd.ffzy"
+      ],
+      "regex": [
+        "25.0666"
+      ]
+    },
+    {
+      "name": "hs",
+      "hosts": [
+        "huoshan.com"
+      ],
+      "regex": [
+        "item_id="
+      ]
+    },
+    {
+      "name": "dy",
+      "hosts": [
+        "douyin.com"
+      ],
+      "regex": [
+        "is_play_url="
+      ]
+    },
+    {
+      "name": "nm",
+      "hosts": [
+        "toutiaovod.com"
+      ],
+      "regex": [
+        "video/tos/cn"
+      ]
+    },
+    {
+      "name": "cl",
+      "hosts": [
+        "magnet"
+      ],
+      "regex": [
+        "最 新",
+        "直 播",
+        "更 新"
+      ]
+    }
+  ],
+  "lives": []
+}

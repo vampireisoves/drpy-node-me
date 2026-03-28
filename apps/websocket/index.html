@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket控制台-drpyS</title>
+    <link href="/public/libs/font-awesome/6.4.0/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --info-color: #06b6d4;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #475569;
+            --terminal-bg: #0d1117;
+            --terminal-text: #c9d1d9;
+            --terminal-border: #30363d;
+            --glass-bg: rgba(30, 41, 59, 0.8);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-primary);
+            height: 100vh;
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 15px 0;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .control-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--shadow-lg);
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-panel {
+            background: var(--terminal-bg);
+            border: 1px solid var(--terminal-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-connected .status-dot {
+            background: var(--success-color);
+        }
+
+        .status-disconnected .status-dot {
+            background: var(--error-color);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            background: var(--secondary-color);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #059669;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: #d97706;
+        }
+
+        .btn-error {
+            background: var(--error-color);
+        }
+
+        .btn-error:hover:not(:disabled) {
+            background: #dc2626;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-with-button .input-field {
+            flex: 1;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--secondary-color);
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--success-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 6px 0;
+        }
+
+        .terminal-header {
+            background: var(--bg-secondary);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--terminal-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .terminal-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .terminal-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .filter-bar {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--terminal-border);
+            background: var(--bg-secondary);
+            flex-shrink: 0;
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .filter-chip.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .terminal-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .log-entry {
+            padding: 8px 20px;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.3);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: background-color 0.1s ease;
+        }
+
+        .log-entry:hover {
+            background: rgba(48, 54, 61, 0.3);
+        }
+
+        .log-timestamp {
+            color: var(--text-muted);
+            font-size: 11px;
+            min-width: 80px;
+            font-weight: 500;
+        }
+
+        .log-type {
+            min-width: 60px;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .log-type.system {
+            color: var(--warning-color);
+        }
+
+        .log-type.sent {
+            color: var(--info-color);
+        }
+
+        .log-type.received {
+            color: var(--success-color);
+        }
+
+        .log-type.error {
+            color: var(--error-color);
+        }
+
+        .log-content {
+            flex: 1;
+            color: var(--terminal-text);
+            word-break: break-word;
+        }
+
+        .log-json {
+            background: rgba(48, 54, 61, 0.5);
+            border-radius: 4px;
+            padding: 8px;
+            margin-top: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+
+        /* 日志模式样式 */
+        .log-entry.log-mode {
+            padding: 4px 20px;
+            display: block;
+            border-bottom: none;
+        }
+
+        .log-entry.log-mode:hover {
+            background: rgba(48, 54, 61, 0.2);
+        }
+
+        .log-line {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--terminal-text);
+            word-break: break-word;
+            padding: 2px 0;
+        }
+
+        .log-line.system {
+            color: var(--warning-color);
+        }
+
+        .log-line.sent {
+            color: var(--info-color);
+        }
+
+        .log-line.received {
+            color: var(--success-color);
+        }
+
+        .log-line.error {
+            color: var(--error-color);
+        }
+
+        /* 日志行中的时间戳高亮 */
+        .log-line:hover {
+            background: rgba(48, 54, 61, 0.1);
+            border-radius: 2px;
+        }
+
+        /* 日志前缀样式 */
+        .log-prefix {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-right: 8px;
+        }
+
+        .log-timestamp-tag {
+            background: rgba(107, 114, 128, 0.2);
+            color: var(--text-muted);
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        .log-type-tag {
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            text-transform: uppercase;
+        }
+
+        .log-type-tag.system {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+        }
+
+        .log-type-tag.sent {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--info-color);
+        }
+
+        .log-type-tag.received {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success-color);
+        }
+
+        .log-type-tag.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error-color);
+        }
+
+        .log-message {
+            color: var(--terminal-text);
+            flex: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .control-panel {
+                order: 2;
+                max-height: 40vh;
+            }
+
+            .terminal-panel {
+                order: 1;
+                flex: 1;
+                min-height: 50vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+            }
+
+            .container {
+                padding: 12px;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .header {
+                padding: 10px 0;
+                margin-bottom: 12px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .main-grid {
+                flex: none;
+                height: auto;
+            }
+
+            .control-panel {
+                max-height: none;
+            }
+
+            .terminal-panel {
+                min-height: 60vh;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-chips {
+                justify-content: center;
+            }
+
+            .terminal-header {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+
+            .terminal-controls {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .input-with-button {
+                flex-direction: column;
+            }
+
+            .setting-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .log-entry {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .log-timestamp,
+            .log-type {
+                min-width: auto;
+            }
+        }
+
+        /* 滚动条样式 */
+        .terminal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terminal-content::-webkit-scrollbar-track {
+            background: var(--terminal-bg);
+        }
+
+        .terminal-content::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .terminal-content::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* 动画效果 */
+        .log-entry {
+            animation: slideIn 0.2s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .status-card {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-plug"></i> WebSocket 专业测试控制台</h1>
+        <p>实时连接监控与消息调试工具</p>
+    </div>
+
+    <div class="main-grid">
+        <div class="control-panel">
+            <div class="section-title">
+                <i class="fas fa-cog"></i>
+                连接控制
+            </div>
+
+            <div class="status-card" id="statusCard">
+                <div class="status-indicator" id="statusIndicator">
+                    <div class="status-dot"></div>
+                    <span id="statusText">未连接</span>
+                </div>
+                <div id="clientInfo" style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary);"></div>
+            </div>
+
+            <div class="controls-grid">
+                <button class="btn btn-success" id="connectBtn" onclick="connect()">
+                    <i class="fas fa-play"></i> 连接
+                </button>
+                <button class="btn btn-error" id="disconnectBtn" onclick="disconnect()" disabled>
+                    <i class="fas fa-stop"></i> 断开
+                </button>
+                <button class="btn btn-warning" id="pingBtn" onclick="sendPing()" disabled>
+                    <i class="fas fa-heartbeat"></i> Ping
+                </button>
+                <button class="btn" onclick="clearLogs()">
+                    <i class="fas fa-trash"></i> 清空
+                </button>
+            </div>
+
+            <div class="input-group">
+                <label for="messageInput">发送消息</label>
+                <div class="input-with-button">
+                    <input type="text" id="messageInput" class="input-field"
+                           placeholder="输入JSON消息或文本..." onkeypress="handleKeyPress(event)">
+                    <button class="btn" id="sendButton" onclick="sendMessage()" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 18px;">
+                <i class="fas fa-sliders-h"></i>
+                设置
+            </div>
+
+            <div class="setting-row">
+                <label>自动重连</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="autoReconnectToggle" checked onchange="toggleAutoReconnect()">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="input-group">
+                <label for="reconnectDelay">重连延迟 (秒)</label>
+                <input type="number" id="reconnectDelay" class="input-field" value="1" min="1" max="30">
+            </div>
+
+            <div class="input-group">
+                <label for="maxReconnectAttempts">最大重连次数</label>
+                <input type="number" id="maxReconnectAttempts" class="input-field" value="5" min="1" max="20">
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="messageCount">0</div>
+                    <div class="stat-label">消息总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="reconnectCount">0</div>
+                    <div class="stat-label">重连次数</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="terminal-panel">
+            <div class="terminal-header">
+                <div class="terminal-title">
+                    <i class="fas fa-terminal"></i>
+                    实时日志控制台
+                </div>
+                <div class="terminal-controls">
+                    <button class="terminal-btn" onclick="toggleHeartbeatVisibility()">
+                        <i class="fas fa-heartbeat" id="heartbeatIcon"></i>
+                        <span id="heartbeatText">显示心跳</span>
+                    </button>
+                    <button class="terminal-btn" onclick="toggleDisplayMode()">
+                        <i class="fas fa-list-ul" id="displayModeIcon"></i>
+                        <span id="displayModeText">日志模式</span>
+                    </button>
+                    <button class="terminal-btn" onclick="toggleAutoScroll()">
+                        <i class="fas fa-arrow-down" id="autoScrollIcon"></i>
+                        自动滚动
+                    </button>
+                    <button class="terminal-btn" onclick="exportLogs()">
+                        <i class="fas fa-download"></i>
+                        导出
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-chips">
+                    <div class="filter-chip active" data-type="all" onclick="filterLogs('all')">
+                        <i class="fas fa-list"></i> 全部
+                    </div>
+                    <div class="filter-chip" data-type="system" onclick="filterLogs('system')">
+                        <i class="fas fa-cog"></i> 系统
+                    </div>
+                    <div class="filter-chip" data-type="sent" onclick="filterLogs('sent')">
+                        <i class="fas fa-arrow-up"></i> 发送
+                    </div>
+                    <div class="filter-chip" data-type="received" onclick="filterLogs('received')">
+                        <i class="fas fa-arrow-down"></i> 接收
+                    </div>
+                    <div class="filter-chip" data-type="error" onclick="filterLogs('error')">
+                        <i class="fas fa-exclamation-triangle"></i> 错误
+                    </div>
+                </div>
+            </div>
+
+            <div class="terminal-content" id="terminalContent">
+                <!-- 日志条目将在这里动态添加 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 全局变量
+    let ws = null;
+    let messageCount = 0;
+    let reconnectCount = 0;
+    let clientId = null;
+    let heartbeatInterval = null;
+    let reconnectAttempts = 0;
+    let autoReconnectEnabled = true;
+    let autoScrollEnabled = true;
+    let currentFilter = 'all';
+    let logs = [];
+    let displayMode = 'log'; // 'raw' 或 'log'
+    let heartbeatVisible = false;
+
+    // 初始化
+    window.onload = function () {
+        addLog('系统已初始化，准备就绪', 'system');
+        updateStats();
+
+        // 页面加载完成后自动连接
+        setTimeout(() => {
+            addLog('自动连接中...', 'system');
+            connect();
+        }, 500); // 延迟500ms确保页面完全加载
+    };
+
+    // 连接状态更新
+    function updateConnectionStatus(connected, clientId = null) {
+        const statusCard = document.getElementById('statusCard');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const clientInfo = document.getElementById('clientInfo');
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const pingBtn = document.getElementById('pingBtn');
+        const sendButton = document.getElementById('sendButton');
+
+        if (connected) {
+            statusCard.className = 'status-card status-connected';
+            statusText.textContent = '已连接';
+            clientInfo.textContent = clientId ? `客户端ID: ${clientId}` : '';
+            connectBtn.disabled = true;
+            disconnectBtn.disabled = false;
+            pingBtn.disabled = false;
+            sendButton.disabled = false;
+        } else {
+            statusCard.className = 'status-card status-disconnected';
+            statusText.textContent = '未连接';
+            clientInfo.textContent = '';
+            connectBtn.disabled = false;
+            disconnectBtn.disabled = true;
+            pingBtn.disabled = true;
+            sendButton.disabled = true;
+        }
+    }
+
+    // 添加日志
+    function addLog(content, type = 'system', data = null) {
+        const timestamp = new Date().toLocaleTimeString('zh-CN', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            fractionalSecondDigits: 3
+        });
+
+        const logEntry = {
+            id: Date.now() + Math.random(),
+            timestamp,
+            type,
+            content,
+            data
+        };
+
+        logs.push(logEntry);
+        messageCount++;
+
+        // 限制日志数量
+        if (logs.length > 1000) {
+            logs.shift();
+        }
+
+        // 优化：直接追加DOM而不是重绘
+        if (shouldShowLog(logEntry)) {
+            const terminalContent = document.getElementById('terminalContent');
+            const logElement = createLogElement(logEntry);
+            terminalContent.appendChild(logElement);
+            
+            // 保持DOM数量合理
+            if (terminalContent.children.length > 1000) {
+                terminalContent.removeChild(terminalContent.firstChild);
+            }
+
+            if (autoScrollEnabled) {
+                terminalContent.scrollTop = terminalContent.scrollHeight;
+            }
+        }
+        
+        updateStats();
+    }
+
+    // 渲染日志
+    function renderLogs() {
+        const terminalContent = document.getElementById('terminalContent');
+        terminalContent.innerHTML = '';
+
+        const fragment = document.createDocumentFragment();
+        const filteredLogs = logs.filter(shouldShowLog);
+
+        filteredLogs.forEach(log => {
+            fragment.appendChild(createLogElement(log));
+        });
+
+        terminalContent.appendChild(fragment);
+
+        if (autoScrollEnabled) {
+            terminalContent.scrollTop = terminalContent.scrollHeight;
+        }
+    }
+
+    // 创建日志元素
+    function createLogElement(log) {
+        const logElement = document.createElement('div');
+
+        if (displayMode === 'log') {
+            // 日志模式：单行显示
+            logElement.className = 'log-entry log-mode';
+            const logLine = formatAsLogLine(log);
+
+            // 解析日志行，分离前缀和内容
+            const logMatch = logLine.match(/^(\[.*?\])\s*(\[.*?\])\s*(.*)$/);
+            if (logMatch) {
+                const [, timestamp, logType, content] = logMatch;
+                logElement.innerHTML = `
+                        <div class="log-line ${log.type}">
+                            <span class="log-prefix">
+                                <span class="log-timestamp-tag">${timestamp}</span>
+                                <span class="log-type-tag ${log.type}">${logType}</span>
+                            </span>
+                            <span class="log-message">${content}</span>
+                        </div>
+                    `;
+            } else {
+                // 如果无法解析，使用原始格式
+                logElement.innerHTML = `<div class="log-line ${log.type}">${logLine}</div>`;
+            }
+        } else {
+            // 原始数据模式：原有的显示方式
+            logElement.className = 'log-entry';
+
+            let contentHtml = log.content;
+            if (log.data) {
+                try {
+                    const jsonStr = JSON.stringify(log.data, null, 2);
+                    contentHtml += `<div class="log-json">${jsonStr}</div>`;
+                } catch (e) {
+                    contentHtml += `<div class="log-json">${log.data}</div>`;
+                }
+            }
+
+            logElement.innerHTML = `
+                    <div class="log-timestamp">${log.timestamp}</div>
+                    <div class="log-type ${log.type}">${log.type}</div>
+                    <div class="log-content">${contentHtml}</div>
+                `;
+        }
+        return logElement;
+    }
+
+    // 判断日志是否应该显示
+    function shouldShowLog(log) {
+        if (currentFilter !== 'all' && log.type !== currentFilter) return false;
+        if (!heartbeatVisible && isHeartbeat(log)) return false;
+        return true;
+    }
+
+    // 判断是否是心跳包
+    function isHeartbeat(log) {
+        if (!log.data) return false;
+        
+        // 直接心跳类型
+        if (log.data.type === 'heartbeat') return true;
+        
+        // ECHO类型中包含心跳
+        if (log.data.type === 'echo') {
+             let content = log.data.originalMessage || log.data.message || log.data.data;
+             // 尝试解析字符串内容
+             if (typeof content === 'string') {
+                 try { 
+                     // 简单判断字符串是否包含心跳特征，避免解析开销
+                     if (content.includes('"type":"heartbeat"')) return true;
+                     const parsed = JSON.parse(content);
+                     if (parsed && parsed.type === 'heartbeat') return true;
+                 } catch(e) {}
+             }
+             // 如果是对象
+             if (content && typeof content === 'object' && content.type === 'heartbeat') {
+                 return true;
+             }
+        }
+        return false;
+    }
+
+    // 切换心跳显示
+    function toggleHeartbeatVisibility() {
+        heartbeatVisible = !heartbeatVisible;
+        const icon = document.getElementById('heartbeatIcon');
+        const text = document.getElementById('heartbeatText');
+        
+        if (heartbeatVisible) {
+            icon.className = 'fas fa-heart-broken';
+            text.textContent = '隐藏心跳';
+        } else {
+            icon.className = 'fas fa-heartbeat';
+            text.textContent = '显示心跳';
+        }
+        
+        renderLogs();
+        addLog(`心跳显示已${heartbeatVisible ? '启用' : '禁用'}`, 'system');
+    }
+
+    // 过滤日志
+    function filterLogs(type) {
+        currentFilter = type;
+
+        // 更新过滤器按钮状态
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.classList.remove('active');
+        });
+        document.querySelector(`[data-type="${type}"]`).classList.add('active');
+
+        renderLogs();
+    }
+
+    // 切换自动滚动
+    function toggleAutoScroll() {
+        autoScrollEnabled = !autoScrollEnabled;
+        const icon = document.getElementById('autoScrollIcon');
+        icon.className = autoScrollEnabled ? 'fas fa-arrow-down' : 'fas fa-pause';
+
+        if (autoScrollEnabled) {
+            const terminalContent = document.getElementById('terminalContent');
+            terminalContent.scrollTop = terminalContent.scrollHeight;
+        }
+    }
+
+    // 切换自动重连
+    function toggleAutoReconnect() {
+        autoReconnectEnabled = document.getElementById('autoReconnectToggle').checked;
+        addLog(`自动重连已${autoReconnectEnabled ? '启用' : '禁用'}`, 'system');
+    }
+
+    // 更新统计信息
+    function updateStats() {
+        document.getElementById('messageCount').textContent = messageCount;
+        document.getElementById('reconnectCount').textContent = reconnectCount;
+    }
+
+    // 开始心跳
+    function startHeartbeat() {
+        if (heartbeatInterval) {
+            clearInterval(heartbeatInterval);
+        }
+
+        heartbeatInterval = setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                const heartbeatMsg = {
+                    type: 'heartbeat',
+                    timestamp: Date.now()
+                };
+                ws.send(JSON.stringify(heartbeatMsg));
+                addLog('发送心跳包', 'sent', heartbeatMsg);
+            }
+        }, 25000);
+    }
+
+    // 停止心跳
+    function stopHeartbeat() {
+        if (heartbeatInterval) {
+            clearInterval(heartbeatInterval);
+            heartbeatInterval = null;
+        }
+    }
+
+    // 连接WebSocket
+    function connect(isReconnect = false) {
+        try {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws`;
+
+            if (!isReconnect) {
+                addLog(`正在连接到: ${wsUrl}`, 'system');
+            } else {
+                addLog(`正在重连 (${reconnectAttempts + 1}/${document.getElementById('maxReconnectAttempts').value})`, 'system');
+            }
+
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = function (event) {
+                addLog('WebSocket 连接已建立', 'system');
+                reconnectAttempts = 0;
+                if (isReconnect) {
+                    reconnectCount++;
+                }
+                startHeartbeat();
+                updateConnectionStatus(true, clientId);
+                updateStats();
+            };
+
+            ws.onmessage = function (event) {
+                try {
+                    const data = JSON.parse(event.data);
+
+                    if (data.type === 'welcome' && data.clientId) {
+                        clientId = data.clientId;
+                        updateConnectionStatus(true, clientId);
+                    }
+
+                    addLog('收到消息', 'received', data);
+                } catch (e) {
+                    addLog('收到原始消息', 'received', event.data);
+                }
+            };
+
+            ws.onclose = function (event) {
+                addLog(`连接已关闭 (代码: ${event.code}, 原因: ${event.reason || '未知'})`, 'system');
+                stopHeartbeat();
+                updateConnectionStatus(false);
+                clientId = null;
+                ws = null;
+
+                // 自动重连逻辑
+                const maxAttempts = parseInt(document.getElementById('maxReconnectAttempts').value);
+                if (autoReconnectEnabled && event.code !== 1000 && reconnectAttempts < maxAttempts) {
+                    reconnectAttempts++;
+                    const delay = parseInt(document.getElementById('reconnectDelay').value) * 1000 * Math.pow(2, reconnectAttempts - 1);
+                    addLog(`${delay / 1000}秒后尝试重连...`, 'system');
+                    setTimeout(() => {
+                        if (!ws && autoReconnectEnabled) {
+                            connect(true);
+                        }
+                    }, delay);
+                } else if (reconnectAttempts >= maxAttempts) {
+                    addLog('已达到最大重连次数，请手动重连', 'error');
+                }
+            };
+
+            ws.onerror = function (error) {
+                addLog('WebSocket 连接错误', 'error', error.toString());
+                updateConnectionStatus(false);
+            };
+
+        } catch (error) {
+            addLog('连接失败', 'error', error.message);
+        }
+    }
+
+    // 断开连接
+    function disconnect() {
+        if (ws) {
+            reconnectAttempts = 999; // 阻止自动重连
+            stopHeartbeat();
+            ws.close(1000, 'User disconnected');
+            ws = null;
+            clientId = null;
+            addLog('手动断开连接', 'system');
+        }
+    }
+
+    // 发送Ping
+    function sendPing() {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            const message = {
+                type: 'ping',
+                timestamp: Date.now()
+            };
+            ws.send(JSON.stringify(message));
+            addLog('发送 Ping', 'sent', message);
+        }
+    }
+
+    // 发送消息
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const messageText = input.value.trim();
+
+        if (messageText && ws && ws.readyState === WebSocket.OPEN) {
+            try {
+                // 尝试解析为JSON
+                let message;
+                if (messageText.startsWith('{') || messageText.startsWith('[')) {
+                    message = JSON.parse(messageText);
+                } else {
+                    message = {
+                        type: 'echo',
+                        data: messageText,
+                        timestamp: Date.now()
+                    };
+                }
+
+                ws.send(JSON.stringify(message));
+                addLog('发送消息', 'sent', message);
+                input.value = '';
+            } catch (e) {
+                addLog('消息格式错误', 'error', e.message);
+            }
+        }
+    }
+
+    // 处理回车键
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    // 清空日志
+    function clearLogs() {
+        logs = [];
+        messageCount = 0;
+        renderLogs();
+        updateStats();
+        addLog('日志已清空', 'system');
+    }
+
+    // 切换显示模式
+    function toggleDisplayMode() {
+        displayMode = displayMode === 'raw' ? 'log' : 'raw';
+        const displayModeText = document.getElementById('displayModeText');
+        const displayModeIcon = document.getElementById('displayModeIcon');
+
+        if (displayMode === 'log') {
+            displayModeText.textContent = '日志模式';
+            displayModeIcon.className = 'fas fa-list-ul';
+        } else {
+            displayModeText.textContent = '原始数据';
+            displayModeIcon.className = 'fas fa-eye';
+        }
+
+        renderLogs();
+        addLog(`切换到${displayMode === 'log' ? '日志' : '原始数据'}模式`, 'system');
+    }
+
+    // 将JSON数据转换为日志格式
+    function formatAsLogLine(logEntry) {
+        const timestamp = logEntry.timestamp;
+        let content = logEntry.content;
+
+        // 如果有data字段，尝试解析并格式化
+        if (logEntry.data) {
+            try {
+                const data = typeof logEntry.data === 'string' ? JSON.parse(logEntry.data) : logEntry.data;
+
+                // 检查是否是标准的日志格式
+                if (data.type && data.level && data.timestamp && data.content) {
+                    const logLevel = data.level.toUpperCase();
+                    const logTimestamp = data.timestamp;
+                    const logContent = data.content;
+                    return `[${logTimestamp}] [${logLevel}] ${logContent}`;
+                }
+
+                // 检查是否是心跳或其他系统消息
+                if (data.type === 'heartbeat') {
+                    return `[${timestamp}] [HEARTBEAT] ${data.timestamp || 'ping'}`;
+                }
+
+                // 检查是否是echo消息
+                if (data.type === 'echo') {
+                    let echoContent = '';
+                    if (data.originalMessage) {
+                        if (typeof data.originalMessage === 'object') {
+                            echoContent = JSON.stringify(data.originalMessage);
+                        } else {
+                            echoContent = data.originalMessage;
+                        }
+                    } else if (data.message) {
+                        echoContent = typeof data.message === 'object' ? JSON.stringify(data.message) : data.message;
+                    } else {
+                        echoContent = JSON.stringify(data);
+                    }
+                    return `[${timestamp}] [ECHO] ${echoContent}`;
+                }
+
+                // 优先处理originalMessage字段
+                if (data.originalMessage) {
+                    return `[${timestamp}] [${logEntry.type.toUpperCase()}] ${data.originalMessage}`;
+                }
+
+                // 其他类型的消息，尝试提取有用信息
+                if (data.message) {
+                    return `[${timestamp}] [${logEntry.type.toUpperCase()}] ${data.message}`;
+                }
+
+                // 检查content字段
+                if (data.content) {
+                    return `[${timestamp}] [${logEntry.type.toUpperCase()}] ${data.content}`;
+                }
+
+                // 如果有clientId，显示客户端信息
+                if (data.clientId) {
+                    return `[${timestamp}] [${logEntry.type.toUpperCase()}] Client: ${data.clientId}`;
+                }
+
+                // 默认情况下，显示JSON的简化版本
+                const keys = Object.keys(data);
+                if (keys.length > 0) {
+                    const summary = keys.slice(0, 3).map(key => `${key}: ${data[key]}`).join(', ');
+                    return `[${timestamp}] [${logEntry.type.toUpperCase()}] ${summary}${keys.length > 3 ? '...' : ''}`;
+                }
+            } catch (e) {
+                // JSON解析失败，使用原始内容
+            }
+        }
+
+        // 没有data或解析失败，使用原始内容
+        return `[${timestamp}] [${logEntry.type.toUpperCase()}] ${content}`;
+    }
+
+    // 导出日志
+    function exportLogs() {
+        const logText = logs.map(log => {
+            let line = `[${log.timestamp}] [${log.type.toUpperCase()}] ${log.content}`;
+            if (log.data) {
+                line += `\n${JSON.stringify(log.data, null, 2)}`;
+            }
+            return line;
+        }).join('\n');
+
+        const blob = new Blob([logText], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `websocket-logs-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        addLog('日志已导出', 'system');
+    }
+</script>
+</body>
+</html>

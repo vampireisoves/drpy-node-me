@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片存储演示 - drpy-node</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="text"]:focus, input[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .preview {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .image-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .image-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .image-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .image-info {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .image-info strong {
+            color: #333;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .api-info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .api-info h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+        
+        .api-endpoint {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            border-left: 4px solid #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ 图片存储演示</h1>
+        
+        <div class="api-info">
+            <h3>📋 API接口说明</h3>
+            <div class="api-endpoint"><strong>POST</strong> /image/upload - 上传图片</div>
+            <div class="api-endpoint"><strong>GET</strong> /image/:imageId - 获取图片</div>
+            <div class="api-endpoint"><strong>GET</strong> /image/list - 获取图片列表</div>
+            <div class="api-endpoint"><strong>DELETE</strong> /image/:imageId - 删除图片</div>
+            <div class="api-endpoint"><strong>GET</strong> /image/memory - 内存使用情况</div>
+            <div class="api-endpoint"><strong>POST</strong> /image/cleanup - 清理过期图片</div>
+        </div>
+        
+        <!-- 上传图片 -->
+        <div class="section">
+            <h2>📤 上传图片</h2>
+            <div class="form-group">
+                <label for="imageId">图片ID:</label>
+                <input type="text" id="imageId" placeholder="输入唯一的图片ID，如: my-image-001">
+            </div>
+            <div class="form-group">
+                <label for="imageFile">选择图片:</label>
+                <input type="file" id="imageFile" accept="image/*">
+            </div>
+            <button onclick="uploadImage()">上传图片</button>
+            <div class="preview" id="uploadPreview"></div>
+            <div class="result" id="uploadResult"></div>
+        </div>
+        
+        <!-- 获取图片 -->
+        <div class="section">
+            <h2>🔍 获取图片</h2>
+            <div class="form-group">
+                <label for="getImageId">图片ID:</label>
+                <input type="text" id="getImageId" placeholder="输入要获取的图片ID">
+            </div>
+            <button onclick="getImage()">获取图片</button>
+            <button onclick="getImageInfo()">获取图片信息</button>
+            <div class="preview" id="getPreview"></div>
+            <div class="result" id="getResult"></div>
+        </div>
+        
+        <!-- 图片列表 -->
+        <div class="section">
+            <h2>📋 图片列表</h2>
+            <button onclick="getImageList()">刷新列表</button>
+            <button onclick="getMemoryUsage()">内存使用情况</button>
+            <button onclick="cleanupImages()">清理过期图片</button>
+            <div class="stats" id="memoryStats"></div>
+            <div class="image-list" id="imageList"></div>
+            <div class="result" id="listResult"></div>
+        </div>
+    </div>
+    
+    <script>
+        // 上传图片
+        async function uploadImage() {
+            const imageId = document.getElementById('imageId').value.trim();
+            const fileInput = document.getElementById('imageFile');
+            const file = fileInput.files[0];
+            
+            if (!imageId) {
+                showResult('uploadResult', '请输入图片ID', 'error');
+                return;
+            }
+            
+            if (!file) {
+                showResult('uploadResult', '请选择图片文件', 'error');
+                return;
+            }
+            
+            try {
+                showLoading('uploadResult');
+                
+                // 转换为base64
+                const base64Data = await fileToBase64(file);
+                
+                // 显示预览
+                document.getElementById('uploadPreview').innerHTML = 
+                    `<img src="${base64Data}" alt="预览图片">`;
+                
+                // 上传到服务器
+                const response = await fetch('/image/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        imageId: imageId,
+                        base64Data: base64Data
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult('uploadResult', 
+                        `上传成功！\n图片ID: ${result.data.imageId}\n访问URL: ${result.data.imageUrl}\n图片大小: ${(result.data.size / 1024).toFixed(2)} KB\nMIME类型: ${result.data.mimeType}`, 
+                        'success'
+                    );
+                    // 清空输入
+                    document.getElementById('imageId').value = '';
+                    fileInput.value = '';
+                } else {
+                    showResult('uploadResult', `上传失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult('uploadResult', `上传失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // 获取图片
+        async function getImage() {
+            const imageId = document.getElementById('getImageId').value.trim();
+            
+            if (!imageId) {
+                showResult('getResult', '请输入图片ID', 'error');
+                return;
+            }
+            
+            try {
+                showLoading('getResult');
+                
+                const imageUrl = `/image/${imageId}`;
+                
+                // 检查图片是否存在
+                const response = await fetch(imageUrl);
+                
+                if (response.ok) {
+                    document.getElementById('getPreview').innerHTML = 
+                        `<img src="${imageUrl}" alt="图片: ${imageId}">`;
+                    showResult('getResult', `图片获取成功！\n访问URL: ${imageUrl}`, 'success');
+                } else {
+                    const errorData = await response.json();
+                    showResult('getResult', `获取失败: ${errorData.message}`, 'error');
+                    document.getElementById('getPreview').innerHTML = '';
+                }
+                
+            } catch (error) {
+                showResult('getResult', `获取失败: ${error.message}`, 'error');
+                document.getElementById('getPreview').innerHTML = '';
+            }
+        }
+        
+        // 获取图片信息
+        async function getImageInfo() {
+            const imageId = document.getElementById('getImageId').value.trim();
+            
+            if (!imageId) {
+                showResult('getResult', '请输入图片ID', 'error');
+                return;
+            }
+            
+            try {
+                showLoading('getResult');
+                
+                // 通过图片列表API获取特定图片信息
+                const response = await fetch('/image/list');
+                const result = await response.json();
+                
+                if (result.success) {
+                    const targetImage = result.data.images.find(img => img.imageId === imageId);
+                    
+                    if (targetImage) {
+                        showResult('getResult', 
+                            `图片信息：\n` +
+                            `ID: ${targetImage.imageId}\n` +
+                            `大小: ${(targetImage.size / 1024).toFixed(2)} KB\n` +
+                            `MIME类型: ${targetImage.mimeType}\n` +
+                            `上传时间: ${new Date(targetImage.timestamp).toLocaleString()}\n` +
+                            `访问URL: ${targetImage.imageUrl}`, 
+                            'success'
+                        );
+                        
+                        // 显示图片预览
+                        document.getElementById('getPreview').innerHTML = 
+                            `<img src="${targetImage.imageUrl}" alt="图片: ${imageId}">`;
+                    } else {
+                        showResult('getResult', `未找到图片ID为 "${imageId}" 的图片`, 'error');
+                        document.getElementById('getPreview').innerHTML = '';
+                    }
+                } else {
+                    showResult('getResult', `获取图片信息失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult('getResult', `获取图片信息失败: ${error.message}`, 'error');
+                document.getElementById('getPreview').innerHTML = '';
+            }
+        }
+        
+        // 获取图片列表
+        async function getImageList() {
+            try {
+                showLoading('listResult');
+                
+                const response = await fetch('/image/list');
+                const result = await response.json();
+                
+                if (result.success) {
+                    const imageListDiv = document.getElementById('imageList');
+                    
+                    if (result.data.images.length === 0) {
+                        imageListDiv.innerHTML = '<p style="text-align: center; color: #666;">暂无图片</p>';
+                    } else {
+                        imageListDiv.innerHTML = result.data.images.map(img => `
+                            <div class="image-item">
+                                <img src="${img.imageUrl}" alt="${img.imageId}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJh+WKoOi9veWksei0pTwvdGV4dD48L3N2Zz4='">
+                                <div class="image-info">
+                                    <div><strong>ID:</strong> ${img.imageId}</div>
+                                    <div><strong>大小:</strong> ${(img.size / 1024).toFixed(2)} KB</div>
+                                    <div><strong>类型:</strong> ${img.mimeType}</div>
+                                    <div><strong>时间:</strong> ${new Date(img.timestamp).toLocaleString()}</div>
+                                    <button onclick="deleteImage('${img.imageId}')" style="margin-top: 10px; background: #dc3545;">删除</button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                    
+                    showResult('listResult', `获取成功，共 ${result.data.total} 张图片`, 'success');
+                } else {
+                    showResult('listResult', `获取失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult('listResult', `获取失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // 获取内存使用情况
+        async function getMemoryUsage() {
+            try {
+                const response = await fetch('/image/memory');
+                const result = await response.json();
+                
+                if (result.success) {
+                    const statsDiv = document.getElementById('memoryStats');
+                    statsDiv.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-number">${result.data.imageCount}</div>
+                            <div class="stat-label">图片数量</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${result.data.totalSizeMB}</div>
+                            <div class="stat-label">总大小 (MB)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${(result.data.totalSize / 1024).toFixed(0)}</div>
+                            <div class="stat-label">总大小 (KB)</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('获取内存使用情况失败:', error);
+            }
+        }
+        
+        // 删除图片
+        async function deleteImage(imageId) {
+            if (!confirm(`确定要删除图片 "${imageId}" 吗？`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/image/${imageId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult('listResult', `图片 "${imageId}" 删除成功`, 'success');
+                    // 刷新列表
+                    getImageList();
+                    getMemoryUsage();
+                } else {
+                    showResult('listResult', `删除失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult('listResult', `删除失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // 清理过期图片
+        async function cleanupImages() {
+            const maxAge = prompt('请输入过期时间（毫秒），默认24小时:', '86400000');
+            
+            if (maxAge === null) return;
+            
+            try {
+                showLoading('listResult');
+                
+                const response = await fetch('/image/cleanup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        maxAge: parseInt(maxAge) || 86400000
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult('listResult', result.message, 'success');
+                    // 刷新列表
+                    getImageList();
+                    getMemoryUsage();
+                } else {
+                    showResult('listResult', `清理失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult('listResult', `清理失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // 工具函数
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+        }
+        
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '处理中<span class="loading"></span>';
+            element.className = 'result';
+        }
+        
+        // 页面加载时获取图片列表和内存使用情况
+        window.addEventListener('load', () => {
+            getImageList();
+            getMemoryUsage();
+        });
+    </script>
+</body>
+</html>

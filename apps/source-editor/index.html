@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>专业JSON/接口处理工具 - 增强编辑器全屏功能</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                        },
+                        dark: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-gradient {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+        }
+
+        .footer-gradient {
+            background: linear-gradient(90deg, rgba(30, 64, 175, 0.8), rgba(59, 130, 246, 0.8));
+        }
+
+        .tech-button {
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+            color: white;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .tech-button:hover {
+            background: linear-gradient(to right, #7c3aed, #4f46e5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            color: white;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #2563eb, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .tech-input, .tech-select {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(74, 85, 104, 0.5);
+            color: #e2e8f0;
+            padding: 0.75rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .tech-input:focus, .tech-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .tech-checkbox:checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .editor-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .editor-tab.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .file-drop-area {
+            border: 2px dashed rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .file-drop-area:hover, .file-drop-area.dragover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 12px;
+            background: rgba(30, 41, 59, 0.95);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.4s ease;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.toast-success {
+            border-left-color: #10b981;
+        }
+
+        .toast.toast-error {
+            border-left-color: #ef4444;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+            margin: 1rem 0;
+        }
+
+        .security-overlay {
+            display: none;
+        }
+
+        .security-honeypot {
+            display: none;
+        }
+
+        .tech-title {
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+            position: relative;
+        }
+
+        .tech-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #3b82f6, transparent);
+            border-radius: 50%;
+        }
+
+        .priority-item {
+            transition: all 0.3s ease;
+        }
+
+        .priority-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .priority-btn {
+            transition: all 0.2s ease;
+        }
+
+        .priority-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .priority-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #clearEditorBtn.clearing {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* 新增的鼠标特效样式 */
+        #mouseCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* 新增导航栏样式 */
+        .top-navbar {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-item {
+            padding: 0.5rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 50px;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: #fff;
+            border-radius: 3px;
+        }
+
+        .nav-icon {
+            margin-right: 8px;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-item {
+                padding: 0.4rem 1rem;
+                margin: 0.3rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-item.active::after {
+                bottom: -6px;
+                height: 2px;
+            }
+        }
+
+        /* 调整标题位置 */
+        .header-gradient {
+            padding-top: 1.5rem;
+        }
+
+        /* 全屏模式样式 */
+        .fullscreen-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            background: #0f172a;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .mobile-fullscreen-btn {
+                display: block;
+            }
+
+            .desktop-fullscreen-btn {
+                display: none;
+            }
+
+            .editor-container .ace_editor {
+                font-size: 14px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-fullscreen-btn {
+                display: none;
+            }
+
+            .desktop-fullscreen-btn {
+                display: block;
+            }
+        }
+
+        .mobile-fullscreen-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(74, 85, 104, 0.5);
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-fullscreen-btn:hover {
+            background: rgba(30, 41, 59, 1);
+            border-color: #3b82f6;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.0/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.0/mode-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.0/theme-dracula.min.js"></script>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- 鼠标特效画布 -->
+<canvas id="mouseCanvas"></canvas>
+
+<!-- 安全防护蜜罐 -->
+<div class="security-honeypot" id="securityHoneypot">
+    <input type="hidden" id="honeypotField" name="honeypot" value=""/>
+</div>
+
+<!-- 安全警告弹层 -->
+<div
+        class="security-overlay fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden"
+        id="securityOverlay"
+>
+    <div class="glass-card p-8 max-w-md w-full">
+        <div class="text-center">
+            <div class="text-yellow-400 text-4xl mb-4">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="text-xl font-bold text-white mb-2">
+                安全防护系统已激活
+            </div>
+            <div class="text-gray-300 mb-4">
+                <p>检测到非法访问行为，页面操作已被阻止</p>
+                <p>请关闭开发者工具并刷新页面继续使用</p>
+            </div>
+            <p class="text-sm text-gray-400">
+                错误代码: SEC-<span id="errorCode">0x0000</span>
+            </p>
+        </div>
+    </div>
+    <div id="closeSecurityOverlay">X</div>
+    <div id="securityShield">X</div>
+</div>
+
+<!-- Toast通知 -->
+<div id="toast" class="toast"></div>
+
+<!-- 页头 -->
+<header class="header-gradient text-white shadow-xl">
+    <div class="container mx-auto px-4 py-10 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 tech-title">
+            DrpyS接口JSON/文本处理工具
+        </h1>
+        <p class="text-blue-200 max-w-3xl mx-auto text-lg">
+            DrpyS源配置编辑器 - 强大数据处理工具，支持JSON排序、清理和美化操作
+        </p>
+    </div>
+</header>  <!--
+<div class="top-navbar">
+        <div class="nav-container">
+            <a href="./" class="nav-item active">
+                <i class="fas fa-sort-amount-down-alt nav-icon"></i>接口排序
+            </a>
+            <a href="./jx" class="nav-item">
+                <i class="fas fa-code nav-icon"></i>接口解析
+            </a>
+            <a href="./dq" class="nav-item">
+                <i class="fas fa-list nav-icon"></i>接口大全
+            </a>
+            <a href="./qt" class="nav-item">
+                <i class="fas fa-ellipsis-h nav-icon"></i>其他
+            </a>
+        </div>
+    </div> -->
+<!-- 主应用区 -->
+<section class="container mx-auto px-4 py-8 flex-grow w-full">
+    <!-- 卡片1: 编辑器 -->
+    <div class="glass-card p-3">
+        <!-- 编辑器标题和操作 -->
+        <div class="flex flex-wrap justify-between items-center mb-5 gap-3">
+            <h2 class="text-2xl font-bold">
+                <i class="fas fa-code text-blue-400 mr-2"></i>DrpyS源配置编辑器
+            </h2>
+            <div class="flex flex-wrap gap-2">
+                <button id="formatBtn" class="tech-button px-4 py-2 rounded-lg">
+                    <i class="fas fa-indent mr-2"></i>格式化JSON
+                </button>
+                <button
+                        id="validateBtn"
+                        class="tech-button px-4 py-2 rounded-lg"
+                >
+                    <i class="fas fa-check-circle mr-2"></i>验证JSON
+                </button>
+                <button
+                        id="compressBtn"
+                        class="tech-button px-4 py-2 rounded-lg"
+                >
+                    <i class="fas fa-compress mr-2"></i>压缩JSON
+                </button>
+                <button
+                        id="clearEditorBtn"
+                        class="tech-button px-4 py-2 rounded-lg"
+                >
+                    <i class="fas fa-trash mr-2"></i>清空输入
+                </button>
+            </div>
+        </div>
+
+        <!-- 编辑器标签切换 -->
+        <div class="editor-tabs flex mb-5 bg-gray-800 rounded-lg p-1">
+            <div class="editor-tab active" data-tab="input">输入编辑器</div>
+            <div class="editor-tab" data-tab="output">输出结果</div>
+        </div>
+
+        <!-- 编辑器容器 -->
+        <div
+                class="editor-container rounded-lg overflow-hidden"
+                id="editorContainer"
+        >
+            <!-- 修改后的高度示例 -->
+            <div id="inputEditor" class="h-96"></div>
+            <!-- h-96 = 24rem(384px) -->
+            <div id="outputEditor" class="h-96 hidden"></div>
+        </div>
+
+        <!-- 状态栏 -->
+        <div
+                class="flex justify-between items-center mt-4 text-sm text-gray-400"
+        >
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center">
+                    <i class="fas fa-align-left text-blue-400 mr-1"></i>
+                    <span id="lineCount">0</span> 行
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-font text-blue-400 mr-1"></i>
+                    <span id="charCount">0</span> 字符
+                </div>
+            </div>
+            <div id="processingIndicator" class="hidden items-center">
+                <i class="fas fa-spinner fa-spin text-blue-400 mr-2"></i>
+                处理中...
+            </div>
+            <!-- 新增移动端全屏按钮 -->
+            <div>
+                <button
+                        id="enterFullscreenMobile"
+                        class="mobile-fullscreen-btn"
+                        title="全屏编辑"
+                >
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 分隔线 -->
+        <div class="footer-divider"></div>
+        <!-- 输出操作按钮 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button
+                    id="copyBtn"
+                    class="tech-button py-2.5 text-gray-200 rounded-lg"
+            >
+                <i class="fas fa-copy mr-2"></i>复制内容
+            </button>
+            <button
+                    id="downloadBtn"
+                    class="tech-button py-2.5 text-gray-200 rounded-lg"
+            >
+                <i class="fas fa-download mr-2"></i>下载文件
+            </button>
+            <button
+                    id="newProcessBtn"
+                    class="tech-button py-2.5 text-gray-200 rounded-lg"
+            >
+                <i class="fas fa-redo mr-2"></i>处理新文件
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+        <!-- 左侧面板 -->
+        <div class="lg:col-span-2 flex flex-col gap-8">
+            <!-- 文件上传卡片 -->
+            <div class="glass-card p-3">
+                <h2 class="text-xl font-bold text-gray-200 mb-4 flex items-center">
+                    <i class="fas fa-file-upload text-blue-400 mr-2"></i>文件上传
+                </h2>
+                <div
+                        class="file-drop-area flex flex-col items-center justify-center p-3 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer transition-all"
+                        id="fileDropArea"
+                >
+                    <input type="file" id="file" name="file" class="hidden"/>
+                    <i
+                            class="fas fa-cloud-upload-alt text-4xl text-blue-400 mb-4"
+                    ></i>
+                    <p class="text-center font-medium text-gray-200 text-lg">
+                        拖放文件或点击上传
+                    </p>
+                    <p class="text-sm text-gray-400 mt-2">支持 JSON/TXT 格式</p>
+                </div>
+                <div id="fileInfo" class="hidden mt-3">
+                    <div class="flex items-center">
+                        <i class="fas fa-file text-blue-400 mr-2"></i>
+                        <span
+                                id="fileNameDisplay"
+                                class="font-medium text-gray-200 truncate"
+                        ></span>
+                    </div>
+                </div>
+                <button
+                        type="button"
+                        id="clearFile"
+                        class="mt-3 w-full py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm transition-colors tech-button hidden"
+                >
+                    <i class="fas fa-times mr-2"></i>清除文件
+                </button>
+            </div>
+
+
+            <!-- 卡片2: 操作按钮 -->
+            <div class="glass-card p-3">
+                <div class="grid grid-cols-2 gap-4">
+                    <button
+                            id="processBtn"
+                            class="btn-primary py-2.5 text-white rounded-lg font-medium"
+                    >
+                        <i class="fas fa-cogs mr-2"></i>处理数据
+                    </button>
+                    <button
+                            id="resetForm"
+                            class="tech-button py-2.5 rounded-lg font-medium"
+                    >
+                        <i class="fas fa-redo mr-2"></i>重置选项
+                    </button>
+                </div>
+
+                <div class="flex items-center mt-4">
+                    <input
+                            type="checkbox"
+                            name="autoDownload"
+                            id="autoDownload"
+                            value="1"
+                            class="tech-checkbox rounded"
+                    />
+                    <label for="autoDownload" class="ml-3 text-gray-300"
+                    >处理后自动下载</label
+                    >
+                </div>
+            </div>
+            <!-- 卡片3: 排序选项 -->
+            <div class="glass-card p-3">
+                <h2 class="text-xl font-bold text-gray-200 mb-4">排序选项</h2>
+
+                <!-- 默认排序方式 -->
+                <div class="mb-6">
+                    <label class="block text-gray-200 font-medium mb-3"
+                    >默认排序方式</label
+                    >
+                    <select
+                            name="nameSortType"
+                            class="tech-select w-full tech-input py-2 px-3 rounded-lg"
+                    >
+                        <option value="none" selected>初始顺序</option>
+                        <!-- 新增选项 -->
+                        <option value="chinese">中文排序</option>
+                        <option value="abc">字母排序</option>
+                        <option value="number">数字排序</option>
+                    </select>
+                </div>
+
+                <!-- 关键词排序 -->
+                <div class="mb-6">
+                    <div
+                            class="priority-sort-option flex justify-between items-center mb-3"
+                    >
+                        <label class="flex items-center">
+                            <input
+                                    type="checkbox"
+                                    id="enablePrioritySort"
+                                    name="enablePrioritySort"
+                                    class="tech-checkbox rounded"
+                            />
+                            <span class="ml-3 text-gray-300">启用关键词排序</span>
+                        </label>
+                        <button
+                                type="button"
+                                id="addPriority"
+                                class="tech-button px-3 py-1 rounded-lg text-sm"
+                        >
+                            <i class="fas fa-plus mr-1"></i>添加规则
+                        </button>
+                    </div>
+
+                    <!-- 排序优先级列表 -->
+                    <div id="priorityList" class="space-y-3">
+                        <div
+                                class="priority-item flex items-center p-3 bg-gray-800 border border-gray-700 rounded-lg"
+                        >
+                            <input type="hidden" name="sortPriority[]" value="APP"/>
+                            <span class="flex-grow text-gray-200">"APP"</span>
+                            <div class="priority-actions flex gap-2">
+                                <button
+                                        type="button"
+                                        class="priority-btn move-up disabled px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="上移"
+                                >
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button
+                                        type="button"
+                                        class="priority-btn move-down px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="下移"
+                                >
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                                <button
+                                        type="button"
+                                        class="priority-btn remove-priority-btn px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="删除"
+                                >
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                                class="priority-item flex items-center p-3 bg-gray-800 border border-gray-700 rounded-lg"
+                        >
+                            <input type="hidden" name="sortPriority[]" value="4K"/>
+                            <span class="flex-grow text-gray-200">"4K"</span>
+                            <div class="priority-actions flex gap-2">
+                                <button
+                                        type="button"
+                                        class="priority-btn move-up px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="上移"
+                                >
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button
+                                        type="button"
+                                        class="priority-btn move-down px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="下移"
+                                >
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                                <button
+                                        type="button"
+                                        class="priority-btn remove-priority-btn px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="删除"
+                                >
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                                class="priority-item flex items-center p-3 bg-gray-800 border border-gray-700 rounded-lg"
+                        >
+                            <input type="hidden" name="sortPriority[]" value="动漫"/>
+                            <span class="flex-grow text-gray-200">"动漫"</span>
+                            <div class="priority-actions flex gap-2">
+                                <button
+                                        type="button"
+                                        class="priority-btn move-up px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="上移"
+                                >
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button
+                                        type="button"
+                                        class="priority-btn move-down px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="下移"
+                                >
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                                <button
+                                        type="button"
+                                        class="priority-btn remove-priority-btn px-3 py-1 bg-gray-700 rounded text-sm tech-button"
+                                        title="删除"
+                                >
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 右侧面板 -->
+        <div class="lg:col-span-3 flex flex-col gap-3">
+
+            <!-- 卡片4: 文本处理 -->
+            <div class="glass-card p-3">
+                <h2 class="text-xl font-bold text-gray-200 mb-4">NAME文本处理</h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="flex items-center">
+                            <input
+                                    type="checkbox"
+                                    name="removeSpecialChars"
+                                    class="tech-checkbox rounded"
+                            />
+                            <span class="ml-3 text-gray-300"
+                            >移除特殊字符、空格和表情符号</span
+                            >
+                        </label>
+                        <p class="text-xs text-gray-500 ml-7 mt-1">
+                            只保留汉字、数字和英文字母
+                        </p>
+                    </div>
+                    <div>
+                        <label class="flex items-center">
+                            <input
+                                    type="checkbox"
+                                    name="removeCustomChars"
+                                    class="tech-checkbox rounded"
+                            />
+                            <span class="ml-3 text-gray-300">移除自定义文字/符号</span>
+                        </label>
+                        <div class="mt-2">
+                            <input
+                                    type="text"
+                                    name="customChars"
+                                    value=""
+                                    class="tech-input w-full py-2 px-3 rounded-lg"
+                                    placeholder="输入要移除的文字或符号（多个用 / 分隔）"
+                            />
+                            <p class="text-xs text-gray-500 ml-1 mt-1">
+                                例如: ★/测试/【】等（多个用 / 分隔）
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="flex items-center">
+                            <input
+                                    type="checkbox"
+                                    name="addPrefixSuffix"
+                                    class="tech-checkbox rounded"
+                            />
+                            <span class="ml-3 text-gray-300"
+                            >在name前后添加字符/符号/表情</span
+                            >
+                        </label>
+                        <div class="grid grid-cols-2 gap-3 mt-2">
+                            <input
+                                    type="text"
+                                    name="prefix"
+                                    value=""
+                                    class="tech-input py-2 px-3 rounded-lg"
+                                    placeholder="前缀"
+                            />
+                            <input
+                                    type="text"
+                                    name="suffix"
+                                    value=""
+                                    class="tech-input py-2 px-3 rounded-lg"
+                                    placeholder="后缀"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- 增强的字符添加选项 -->
+                    <div class="space-y-4 mt-5">
+                        <label class="flex items-center">
+                            <input
+                                    type="checkbox"
+                                    name="addBetweenCnEn"
+                                    class="tech-checkbox rounded"
+                            />
+                            <span class="ml-3 text-gray-300">中文与英文之间添加字符</span>
+                        </label>
+
+                        <input
+                                type="text"
+                                name="betweenCnEn"
+                                value=""
+                                class="tech-input w-full py-2 px-3 rounded-lg"
+                                placeholder="例如: |"
+                        />
+
+                        <label class="flex items-center">
+                            <input
+                                    type="checkbox"
+                                    name="addBetweenCnNum"
+                                    class="tech-checkbox rounded"
+                            />
+                            <span class="ml-3 text-gray-300">中文与数字之间添加字符</span>
+                        </label>
+
+                        <input
+                                type="text"
+                                name="betweenCnNum"
+                                value=""
+                                class="tech-input w-full py-2 px-3 rounded-lg"
+                                placeholder="例如: |"
+                        />
+
+                        <label class="flex items-center">
+                            <input
+                                    type="checkbox"
+                                    name="addBetweenEnNum"
+                                    class="tech-checkbox rounded"
+                            />
+                            <span class="ml-3 text-gray-300">英文与数字之间添加字符</span>
+                        </label>
+
+                        <input
+                                type="text"
+                                name="betweenEnNum"
+                                value=""
+                                class="tech-input w-full py-2 px-3 rounded-lg"
+                                placeholder="例如: |"
+                        />
+                    </div>
+                </div>
+            </div>
+            <!-- 使用说明卡片 -->
+            <div class="glass-card p-5">
+                <h2 class="text-xl font-bold text-gray-200 mb-4 flex items-center">
+                    <i class="fas fa-info-circle text-blue-400 mr-2"></i>使用说明
+                </h2>
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                <span
+                        class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 flex-shrink-0"
+                >1</span
+                >
+                        <p>
+                  <span class="font-bold text-blue-300">输入内容：</span
+                  >在编辑器粘贴JSON/TXT内容或上传文件
+                        </p>
+                    </div>
+                    <div class="flex items-start">
+                <span
+                        class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 flex-shrink-0"
+                >2</span
+                >
+                        <p>
+                  <span class="font-bold text-blue-300">编辑操作：</span
+                  >使用编辑器上方按钮格式化、压缩或验证JSON
+                        </p>
+                    </div>
+                    <div class="flex items-start">
+                <span
+                        class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 flex-shrink-0"
+                >3</span
+                >
+                        <p>
+                  <span class="font-bold text-blue-300">处理设置：</span
+                  >配置排序规则、文本清理等选项
+                        </p>
+                    </div>
+                    <div class="flex items-start">
+                <span
+                        class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 flex-shrink-0"
+                >4</span
+                >
+                        <p>
+                  <span class="font-bold text-blue-300">处理数据：</span
+                  >应用处理规则并查看结果
+                        </p>
+                    </div>
+                    <div class="flex items-start">
+                <span
+                        class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 flex-shrink-0"
+                >5</span
+                >
+                        <p>
+                  <span class="font-bold text-blue-300">输出结果：</span
+                  >复制、下载或保存处理后的内容
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 功能说明卡片 -->
+    <div class="glass-card p-3">
+        <h2 class="text-xl font-bold text-gray-200 mb-4 flex items-center">
+            <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>功能说明
+        </h2>
+        <div class="space-y-4">
+            <div class="flex items-start">
+                <div
+                        class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center mr-3 flex-shrink-0"
+                >
+                    <i class="fas fa-sort-amount-down text-white text-sm"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-200">JSON处理</h3>
+                    <p class="text-sm text-gray-400">
+                        支持对JSON数据中的"sites"数组进行排序、清理和美化操作
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div
+                        class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center mr-3 flex-shrink-0"
+                >
+                    <i class="fas fa-sort-alpha-down text-white text-sm"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-200">排序功能</h3>
+                    <p class="text-sm text-gray-400">
+                        支持关键词排序（按优先级分组）和默认排序（中文/字母/数字排序）两种方式
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div
+                        class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center mr-3 flex-shrink-0"
+                >
+                    <i class="fas fa-broom text-white text-sm"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-200">文本清理</h3>
+                    <p class="text-sm text-gray-400">
+                        移除特殊字符、空格和表情符号，只保留汉字、数字和英文字母
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div
+                        class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center mr-3 flex-shrink-0"
+                >
+                    <i class="fas fa-text-height text-white text-sm"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-200">格式增强</h3>
+                    <p class="text-sm text-gray-400">
+                        支持在中文/数字与英文之间添加字符，以及为名称添加前缀和后缀
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 页脚版权 -->
+<footer class="footer-gradient mt-auto py-10">
+    <div class="container mx-auto px-4">
+        <!-- 页脚内容网格 -->
+
+        <div class="text-blue-200 max-w-3xl mx-auto text-lg">
+            <div class="mb-4 md:mb-0 text-center">
+                <p class="text-gray-400 text-sm">
+                    © 2025 DrpyS源配置专业JSON处理工具 | BY 克劳德AI
+                </p>
+                <p class="text-gray-500 text-xs mt-1">
+                    版本 3.0 | 基于ACE编辑器开发 | DrpyS插件
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+
+<script>  // 更新导航栏激活状态
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname;
+    const navItems = document.querySelectorAll('.nav-item');
+
+    navItems.forEach(item => {
+        const itemPath = item.getAttribute('href');
+        // 简单路径匹配
+        if (currentPath.endsWith(itemPath.replace('./', ''))) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+});
+// === 移动端全屏功能实现 ===
+const enterFullscreenBtn = document.getElementById('enterFullscreenMobile');
+const editorContainer = document.getElementById('editorContainer');
+const inputEditorElement = document.getElementById('inputEditor');
+const outputEditorElement = document.getElementById('outputEditor');
+let isFullscreen = false;
+let originalEditorHeight = '';
+
+// 进入全屏模式
+function enterFullscreenMode() {
+    // 保存原始状态
+    originalEditorHeight = inputEditorElement.style.height;
+
+    // 创建全屏容器
+    const fullscreenContainer = document.createElement('div');
+    fullscreenContainer.id = 'fullscreen-editor';
+    fullscreenContainer.className = 'fullscreen-mode';
+
+    // 创建全屏头部
+    const editorHeader = document.createElement('div');
+    editorHeader.className = 'editor-header';
+    editorHeader.innerHTML = `
+            <h3 class="text-xl font-bold text-gray-200">全屏编辑模式</h3>
+            <button id="exitFullscreenBtn" class="tech-button px-4 py-2 rounded-lg">
+                <i class="fas fa-compress mr-2"></i>退出全屏
+            </button>
+        `;
+
+    // 创建编辑器容器
+    const editorWrapper = document.createElement('div');
+    editorWrapper.className = 'flex-grow relative';
+    editorWrapper.appendChild(inputEditorElement.cloneNode(true));
+    editorWrapper.appendChild(outputEditorElement.cloneNode(true));
+
+    // 添加到全屏容器
+    fullscreenContainer.appendChild(editorHeader);
+    fullscreenContainer.appendChild(editorWrapper);
+
+    // 添加到页面
+    document.body.appendChild(fullscreenContainer);
+
+    // 初始化全屏编辑器
+    const fullscreenInputEditor = ace.edit(editorWrapper.querySelector('#inputEditor'));
+    fullscreenInputEditor.setTheme("ace/theme/dracula");
+    fullscreenInputEditor.session.setMode("ace/mode/json");
+    fullscreenInputEditor.setValue(inputEditor.getValue());
+    fullscreenInputEditor.setOptions({
+        fontSize: "16px",
+        highlightActiveLine: true,
+        showGutter: true,
+        showPrintMargin: false,
+        autoScrollEditorIntoView: true
+    });
+
+    const fullscreenOutputEditor = ace.edit(editorWrapper.querySelector('#outputEditor'));
+    fullscreenOutputEditor.setTheme("ace/theme/dracula");
+    fullscreenOutputEditor.session.setMode("ace/mode/json");
+    fullscreenOutputEditor.setValue(outputEditor.getValue());
+    fullscreenOutputEditor.setOptions({
+        fontSize: "16px",
+        highlightActiveLine: true,
+        showGutter: true,
+        showPrintMargin: false,
+        readOnly: true,
+        highlightSelectedWord: true
+    });
+
+    // 设置高度为100%
+    fullscreenInputEditor.container.style.height = "calc(100vh - 120px)";
+    fullscreenOutputEditor.container.style.height = "calc(100vh - 120px)";
+    fullscreenInputEditor.resize();
+    fullscreenOutputEditor.resize();
+
+    // 隐藏原始编辑器
+    editorContainer.style.display = 'none';
+
+    // 添加退出全屏事件
+    document.getElementById('exitFullscreenBtn').addEventListener('click', exitFullscreenMode);
+
+    isFullscreen = true;
+
+    // 切换到输入编辑器
+    document.querySelectorAll('.editor-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelector('.editor-tab[data-tab="input"]').classList.add('active');
+    fullscreenInputEditor.container.classList.remove('hidden');
+    fullscreenOutputEditor.container.classList.add('hidden');
+
+    // 更新状态栏行数和字符计数
+    updateEditorStats(fullscreenInputEditor);
+
+    showToast('已进入全屏编辑模式', 'success');
+}
+
+// 退出全屏模式
+function exitFullscreenMode() {
+    // 恢复原始编辑器内容
+    const fullscreenInputEditor = ace.edit(document.querySelector('#fullscreen-editor #inputEditor'));
+    inputEditor.setValue(fullscreenInputEditor.getValue());
+
+    const fullscreenOutputEditor = ace.edit(document.querySelector('#fullscreen-editor #outputEditor'));
+    outputEditor.setValue(fullscreenOutputEditor.getValue());
+
+    // 移除全屏容器
+    document.getElementById('fullscreen-editor').remove();
+
+    // 恢复原始编辑器显示
+    editorContainer.style.display = 'block';
+    inputEditor.resize();
+    outputEditor.resize();
+
+    isFullscreen = false;
+
+    showToast('已退出全屏模式', 'success');
+}
+
+// 添加全屏按钮事件
+enterFullscreenBtn.addEventListener('click', enterFullscreenMode);
+
+// === 鼠标特效实现 ===
+const canvas = document.getElementById('mouseCanvas');
+const ctx = canvas.getContext('2d');
+// 设置canvas大小为窗口大小
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// 粒子数组
+const particles = [];
+// 点击效果数组
+const clicks = [];
+
+// 粒子类
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * 3 - 1.5;
+        this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        this.alpha = 1;
+        this.life = 100;
+    }
+
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life -= 2;
+        this.alpha = this.life / 100;
+    }
+
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
+// 点击效果类
+class ClickEffect {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = 5;
+        this.maxSize = Math.random() * 80 + 20;
+        this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        this.alpha = 1;
+    }
+
+    update() {
+        this.size += 1;
+        this.alpha -= 0.02;
+        return this.alpha > 0;
+    }
+
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+    }
+}
+
+// 处理鼠标移动
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    // 创建新粒子
+    for (let i = 0; i < 3; i++) {
+        particles.push(new Particle(mouseX, mouseY));
+    }
+});
+
+// 处理鼠标点击
+document.addEventListener('click', e => {
+    for (let i = 0; i < 15; i++) {
+        clicks.push(new ClickEffect(e.clientX, e.clientY));
+    }
+});
+
+// 动画循环
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 更新并绘制粒子
+    for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+
+        if (particles[i].life <= 0) {
+            particles.splice(i, 1);
+            i--;
+        }
+    }
+
+    // 更新并绘制点击效果
+    for (let i = 0; i < clicks.length; i++) {
+        if (!clicks[i].update()) {
+            clicks.splice(i, 1);
+            i--;
+        } else {
+            clicks[i].draw();
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
+// 窗口大小调整时更新canvas
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+// 启动动画
+animate();
+
+// === 原有应用代码 ===
+// 显示Toast通知
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast';
+
+    if (type === 'success') {
+        toast.classList.add('toast-success');
+    } else {
+        toast.classList.add('toast-error');
+    }
+
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.className = 'toast';
+        }, 300);
+    }, 3000);
+}
+
+// 清除上传的文件
+function clearUploadedFile() {
+    fileInput.value = '';
+    fileInfo.classList.add('hidden');
+    clearFileBtn.classList.add('hidden');
+}
+
+// 清除编辑器内容和文件
+function clearEditorContentAndFile() {
+    // 添加清除动画效果
+    const clearBtn = document.getElementById('clearEditorBtn');
+    clearBtn.classList.add('clearing');
+    clearBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>清除中...';
+
+    setTimeout(() => {
+        // 创建选择对话框
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
+        modal.innerHTML = `
+                <div class="glass-card p-3 max-w-md w-full">
+                    <div class="text-center">
+                        <div class="text-blue-400 text-4xl mb-4">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                        <div class="text-xl font-bold text-white mb-4">清空输入选项</div>
+                        <div class="text-gray-300 mb-6">
+                            <p>请选择您想要执行的操作：</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="reimportBtn" class="tech-button py-2.5 text-gray-200 rounded-lg">
+                                <i class="fas fa-redo mr-2"></i>上传文件
+                            </button>
+                            <button id="clearAllBtn" class="tech-button py-2.5 text-gray-200 rounded-lg">
+                                <i class="fas fa-trash mr-2"></i>清除文件
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        document.body.appendChild(modal);
+
+        // 恢复按钮状态
+        clearBtn.innerHTML = '<i class="fas fa-trash mr-2"></i>清空输入';
+        clearBtn.classList.remove('clearing');
+
+        // 添加事件监听器
+        document.getElementById('reimportBtn').addEventListener('click', function () {
+            // 清除编辑器内容
+            inputEditor.setValue('');
+            updateEditorStats();
+
+            // 重新触发文件选择
+            fileInput.click();
+
+            // 移除对话框
+            modal.remove();
+        });
+
+        document.getElementById('clearAllBtn').addEventListener('click', function () {
+            // 清除编辑器内容
+            inputEditor.setValue('');
+            updateEditorStats();
+
+            // 清除上传的文件
+            clearUploadedFile();
+
+            // 切换到输入标签页
+            switchToInputTab();
+
+            showToast('已清除所有输入内容和上传的文件', 'success');
+
+            // 移除对话框
+            modal.remove();
+        });
+    }, 500);
+}
+
+// 切换到输入编辑器标签页
+function switchToInputTab() {
+    // 更新标签状态
+    document.querySelectorAll('.editor-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelector('.editor-tab[data-tab="input"]').classList.add('active');
+
+    // 显示输入编辑器，隐藏输出编辑器
+    document.getElementById('inputEditor').classList.remove('hidden');
+    document.getElementById('outputEditor').classList.add('hidden');
+
+    // 调整输入编辑器大小
+    setTimeout(() => inputEditor.resize(), 100);
+}
+
+// 初始化编辑器
+function initEditors() {
+    const inputEditor = ace.edit("inputEditor");
+    inputEditor.setTheme("ace/theme/dracula");
+    inputEditor.session.setMode("ace/mode/json");
+    inputEditor.setOptions({
+        fontSize: "15px",
+        highlightActiveLine: true,
+        showGutter: true,
+        showPrintMargin: false,
+        autoScrollEditorIntoView: true
+    });
+
+    const outputEditor = ace.edit("outputEditor");
+    outputEditor.setTheme("ace/theme/dracula");
+    outputEditor.session.setMode("ace/mode/json");
+    outputEditor.setOptions({
+        fontSize: "15px",
+        highlightActiveLine: true,
+        showGutter: true,
+        showPrintMargin: false,
+        readOnly: true,
+        highlightSelectedWord: true
+    });
+
+    // 设置初始内容
+    inputEditor.setValue(JSON.stringify({
+        "sites": [
+            {"name": "APP测试站点", "key": "app-test"},
+            {"name": "4K电影资源", "key": "4k-movies"},
+            {"name": "动漫之家", "key": "dmzj"},
+            {"name": "短剧大全", "key": "short-drama"},
+            {"name": "弹幕视频网", "key": "danmu"}
+        ]
+    }, null, 2));
+    inputEditor.clearSelection();
+
+    // 重要：在编辑器初始化后调用resize
+    setTimeout(() => {
+        inputEditor.resize();
+        outputEditor.resize();
+    }, 100);
+
+    return {inputEditor, outputEditor};
+}
+
+// 调用初始化
+const {inputEditor, outputEditor} = initEditors();
+
+// 更新行数和字符计数
+function updateEditorStats(editor = inputEditor) {
+    const content = editor.getValue();
+    const lines = editor.session.getLength();
+    document.getElementById('lineCount').textContent = lines;
+    document.getElementById('charCount').textContent = content.length;
+}
+
+// 初始更新统计
+updateEditorStats();
+
+// 监听输入编辑器变化
+inputEditor.session.on('change', () => updateEditorStats());
+
+// 文件上传处理
+const fileInput = document.getElementById('file');
+const fileDropArea = document.getElementById('fileDropArea');
+const fileInfo = document.getElementById('fileInfo');
+const fileNameDisplay = document.getElementById('fileNameDisplay');
+const clearFileBtn = document.getElementById('clearFile');
+
+fileDropArea.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', function (e) {
+    if (this.files.length === 0) return;
+
+    const file = this.files[0];
+    const reader = new FileReader();
+
+    fileNameDisplay.textContent = file.name;
+    fileInfo.classList.remove('hidden');
+    clearFileBtn.classList.remove('hidden');
+
+    reader.onload = function (e) {
+        inputEditor.setValue(e.target.result);
+        updateEditorStats();
+        showToast('文件已成功加载', 'success');
+        // 新增：切换到输入编辑器标签
+        switchToInputTab();
+    };
+
+    reader.readAsText(file);
+});
+
+clearFileBtn.addEventListener('click', function () {
+    fileInput.value = '';
+    fileInfo.classList.add('hidden');
+    this.classList.add('hidden');
+    showToast('已清除上传的文件', 'success');
+    // 新增：切换到输入编辑器标签
+    switchToInputTab();
+});
+
+// 添加拖放功能
+fileDropArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileDropArea.classList.add('dragover');
+});
+
+fileDropArea.addEventListener('dragleave', () => {
+    fileDropArea.classList.remove('dragover');
+});
+
+fileDropArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileDropArea.classList.remove('dragover');
+
+    if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        const file = e.dataTransfer.files[0];
+
+        if (file.type === 'application/json' || file.type === 'text/plain' ||
+            file.name.endsWith('.json') || file.name.endsWith('.txt')) {
+            fileNameDisplay.textContent = file.name;
+            fileInfo.classList.remove('hidden');
+            clearFileBtn.classList.remove('hidden');
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                inputEditor.setValue(e.target.result);
+                updateEditorStats();
+                showToast('文件已成功加载', 'success');
+                // 新增：切换到输入编辑器标签
+                switchToInputTab();
+            };
+            reader.readAsText(file);
+        } else {
+            showToast('请上传JSON或TXT格式的文件', 'error');
+        }
+    }
+});
+
+
+// 格式化按钮功能
+document.getElementById('formatBtn').addEventListener('click', function () {
+    try {
+        const content = inputEditor.getValue();
+        const parsed = JSON.parse(content);
+        const formatted = JSON.stringify(parsed, null, 2);
+
+        // 设置到输出编辑器
+        outputEditor.setValue(formatted);
+
+        // 切换到输出标签页
+        document.querySelectorAll('.editor-tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelector('.editor-tab[data-tab="output"]').classList.add('active');
+        document.getElementById('inputEditor').classList.add('hidden');
+        document.getElementById('outputEditor').classList.remove('hidden');
+
+        // 调整输出编辑器大小
+        setTimeout(() => outputEditor.resize(), 100);
+        showToast('JSON已成功格式化', 'success');
+    } catch (error) {
+        showToast('JSON格式错误: ' + error.message, 'error');
+    }
+});
+
+// 验证按钮功能
+document.getElementById('validateBtn').addEventListener('click', function () {
+    try {
+        const content = inputEditor.getValue();
+
+        // 空内容检查
+        if (!content.trim()) {
+            showToast('编辑器内容为空', 'error');
+            return;
+        }
+
+        try {
+            JSON.parse(content);
+            // 验证成功时显示成功提示
+            showToast('✅ JSON格式有效', 'success');
+        } catch (error) {
+            // 更健壮的错误处理
+            let errorMsg = `JSON格式错误: ${error.message.split('\n')[0]}`;
+            let line = 1;
+            let col = 1;
+
+            // 尝试提取错误位置
+            const positionMatch = error.message.match(/position\s+(\d+)/i);
+            if (positionMatch) {
+                const position = parseInt(positionMatch[1]);
+                const lines = content.substring(0, position).split('\n');
+
+                if (lines.length > 0) {
+                    line = lines.length;
+                    col = lines[lines.length - 1].length + 1; // 当前行位置
+                }
+
+                errorMsg += ` (第 ${line} 行, 第 ${col} 列)`;
+
+                // 高亮错误行
+                inputEditor.gotoLine(line, Math.max(0, col - 1), true);
+                inputEditor.focus();
+            }
+
+            // 确保错误提示一定会显示
+            showToast(errorMsg, 'error');
+        }
+    } catch (e) {
+        // 兜底错误处理
+        showToast('验证过程发生意外错误', 'error');
+        console.error(e);
+    }
+});
+
+// 压缩按钮功能
+document.getElementById('compressBtn').addEventListener('click', function () {
+    try {
+        const content = inputEditor.getValue();
+        const parsed = JSON.parse(content);
+        const compressed = JSON.stringify(parsed);
+
+        // 设置到输出编辑器
+        outputEditor.setValue(compressed);
+
+        // 切换到输出标签页
+        document.querySelectorAll('.editor-tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelector('.editor-tab[data-tab="output"]').classList.add('active');
+        document.getElementById('inputEditor').classList.add('hidden');
+        document.getElementById('outputEditor').classList.remove('hidden');
+
+        // 调整输出编辑器大小
+        setTimeout(() => outputEditor.resize(), 100);
+        showToast('JSON已成功压缩', 'success');
+    } catch (error) {
+        showToast('JSON格式错误: ' + error.message, 'error');
+    }
+});
+
+
+// 清空编辑器按钮
+document.getElementById('clearEditorBtn').addEventListener('click', clearEditorContentAndFile);
+
+// 复制按钮功能
+document.getElementById('copyBtn').addEventListener('click', function () {
+    const content = outputEditor.getValue();
+    if (!content.trim()) {
+        showToast('输出内容为空，无法复制', 'error');
+        return;
+    }
+
+    navigator.clipboard.writeText(content).then(() => {
+        showToast('内容已复制到剪贴板', 'success');
+    }).catch(err => {
+        showToast('复制失败: ' + err, 'error');
+    });
+});
+
+
+// 下载按钮功能
+document.getElementById('downloadBtn').addEventListener('click', function () {
+    const content = outputEditor.getValue();
+    if (!content.trim()) {
+        showToast('输出内容为空，无法下载', 'error');
+        return;
+    }
+
+    const blob = new Blob([content], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'processed-data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('文件已开始下载', 'success');
+});
+
+// 新处理按钮
+document.getElementById('newProcessBtn').addEventListener('click', function () {
+    // 切换到输入标签页
+    switchToInputTab();
+    showToast('已切换到输入编辑器', 'success');
+});
+
+// 标签页切换功能
+document.querySelectorAll('.editor-tab').forEach(tab => {
+    tab.addEventListener('click', function () {
+        const tabName = this.getAttribute('data-tab');
+
+        // 更新标签状态
+        document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+
+        // 显示对应编辑器
+        document.getElementById('inputEditor').classList.toggle('hidden', tabName !== 'input');
+        document.getElementById('outputEditor').classList.toggle('hidden', tabName !== 'output');
+
+        // 调整编辑器大小
+        if (tabName === 'input') {
+            setTimeout(() => inputEditor.resize(), 100);
+        } else {
+            setTimeout(() => outputEditor.resize(), 100);
+        }
+    });
+});
+
+// 优先级排序功能
+function prioritySort(sites) {
+    // 获取优先级关键词列表
+    const priorityList = Array.from(
+        document.querySelectorAll('input[name="sortPriority[]"]')
+    ).map(input => input.value);
+
+    // 按照关键词分组
+    const grouped = {};
+    priorityList.forEach(keyword => {
+        grouped[keyword] = sites.filter(site =>
+            site.name.includes(keyword)
+        );
+    });
+
+    // 添加未匹配的站点
+    grouped['other'] = sites.filter(site =>
+        !priorityList.some(keyword => site.name.includes(keyword))
+    );
+
+    // 创建新的排序数组
+    const sortedSites = [];
+
+    // 1. 按关键词顺序添加组别
+    priorityList.forEach(keyword => {
+        if (grouped[keyword].length > 0) {
+            // 2. 每个组别内按字母A-Z排序
+            grouped[keyword].sort((a, b) => a.name.localeCompare(b.name, 'en'));
+            sortedSites.push(...grouped[keyword]);
+        }
+    });
+
+    // 3. 未匹配的站点按字母A-Z排序
+    grouped['other'].sort((a, b) => a.name.localeCompare(b.name, 'en'));
+    sortedSites.push(...grouped['other']);
+
+    return sortedSites;
+}
+
+// 处理数据按钮功能
+document.getElementById('processBtn').addEventListener('click', function () {
+    const content = inputEditor.getValue();
+    if (!content.trim()) {
+        showToast('编辑器内容为空，请填写或上传文件', 'error');
+        return;
+    }
+
+    // 显示处理中状态
+    document.getElementById('processingIndicator').classList.remove('hidden');
+
+    // 模拟处理延迟
+    setTimeout(() => {
+        try {
+            // 获取表单选项
+            const enablePrioritySort = document.getElementById('enablePrioritySort').checked;
+            const removeSpecialChars = document.querySelector('input[name="removeSpecialChars"]').checked;
+            const removeCustomChars = document.querySelector('input[name="removeCustomChars"]').checked;
+            const customCharsInput = document.querySelector('input[name="customChars"]').value;
+            const addPrefixSuffix = document.querySelector('input[name="addPrefixSuffix"]').checked;
+            const prefix = document.querySelector('input[name="prefix"]').value;
+            const suffix = document.querySelector('input[name="suffix"]').value;
+            const addBetweenCnEn = document.querySelector('input[name="addBetweenCnEn"]').checked;
+            const betweenCnEn = document.querySelector('input[name="betweenCnEn"]').value;
+            const addBetweenCnNum = document.querySelector('input[name="addBetweenCnNum"]').checked;
+            const betweenCnNum = document.querySelector('input[name="betweenCnNum"]').value;
+            const addBetweenEnNum = document.querySelector('input[name="addBetweenEnNum"]').checked;
+            const betweenEnNum = document.querySelector('input[name="betweenEnNum"]').value;
+
+            const data = JSON.parse(content);
+
+
+            // 处理sites数组
+            if (data.sites) {
+                // 文本处理
+                if (removeSpecialChars) {
+                    data.sites.forEach(site => {
+                        // 移除特殊字符、空格和表情符号，只保留汉字、数字和英文字母
+                        site.name = site.name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '');
+                    });
+                }
+
+                // 移除自定义字符
+                if (removeCustomChars && customCharsInput.trim()) {
+                    // 使用正则表达式分割输入，支持 / 和空格分隔
+                    const customChars = customCharsInput.split(/[\/\s]+/).filter(char => char.trim() !== '');
+
+                    // 添加检查：如果没有有效的自定义字符，显示错误提示
+                    if (customChars.length === 0) {
+                        showToast('请输入有效的自定义字符（多个用 / 分隔）', 'error');
+                        document.getElementById('processingIndicator').classList.add('hidden');
+                        return;
+                    }
+
+                    data.sites.forEach(site => {
+                        customChars.forEach(char => {
+                            // 创建正则表达式，注意转义特殊字符
+                            const escapedChar = char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                            const regex = new RegExp(escapedChar, 'g');
+                            site.name = site.name.replace(regex, '');
+                        });
+                    });
+                }
+
+                if (addPrefixSuffix) {
+                    data.sites.forEach(site => {
+                        site.name = prefix + site.name + suffix;
+                    });
+                }
+
+                // 添加字符在中文与英文之间
+                if (addBetweenCnEn && betweenCnEn) {
+                    data.sites.forEach(site => {
+                        site.name = site.name.replace(/([\u4e00-\u9fa5])([a-zA-Z])/g, `$1${betweenCnEn}$2`)
+                            .replace(/([a-zA-Z])([\u4e00-\u9fa5])/g, `$1${betweenCnEn}$2`);
+                    });
+                }
+
+                // 添加字符在中文与数字之间
+                if (addBetweenCnNum && betweenCnNum) {
+                    data.sites.forEach(site => {
+                        site.name = site.name.replace(/([\u4e00-\u9fa5])([0-9])/g, `$1${betweenCnNum}$2`)
+                            .replace(/([0-9])([\u4e00-\u9fa5])/g, `$1${betweenCnNum}$2`);
+                    });
+                }
+
+                // 添加字符在英文与数字之间
+                if (addBetweenEnNum && betweenEnNum) {
+                    data.sites.forEach(site => {
+                        site.name = site.name.replace(/([a-zA-Z])([0-9])/g, `$1${betweenEnNum}$2`)
+                            .replace(/([0-9])([a-zA-Z])/g, `$1${betweenEnNum}$2`);
+                    });
+                }
+
+                // 排序处理
+                if (enablePrioritySort) {
+                    // 使用关键词排序
+                    data.sites = prioritySort(data.sites);
+                } else {
+                    // 使用默认排序
+                    const sortType = document.querySelector('select[name="nameSortType"]').value;
+                    if (sortType === 'none') {
+                    } else if (sortType === 'chinese') {
+                        data.sites.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+                    } else if (sortType === 'abc') {
+                        data.sites.sort((a, b) => a.name.localeCompare(b.name, 'en'));
+                    } else if (sortType === 'number') {
+                        data.sites.sort((a, b) => {
+                            const numA = a.name.match(/\d+/g) ? parseInt(a.name.match(/\d+/g).join('')) : NaN;
+                            const numB = b.name.match(/\d+/g) ? parseInt(b.name.match(/\d+/g).join('')) : NaN;
+                            if (!isNaN(numA) && !isNaN(numB)) {
+                                return numA - numB;
+                            } else {
+                                return a.name.localeCompare(b.name);
+                            }
+                        });
+                    }
+                }
+            }
+
+            // 设置处理后的结果
+            const result = JSON.stringify(data, null, 2);
+            outputEditor.setValue(result);
+
+            // 切换到输出标签页
+            document.querySelectorAll('.editor-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector('.editor-tab[data-tab="output"]').classList.add('active');
+            document.getElementById('inputEditor').classList.add('hidden');
+            document.getElementById('outputEditor').classList.remove('hidden');
+
+            // 调整输出编辑器大小
+            setTimeout(() => outputEditor.resize(), 100);
+
+            // 隐藏处理中状态
+            document.getElementById('processingIndicator').classList.add('hidden');
+            showToast('数据处理已完成', 'success');
+
+            // 自动下载
+            if (document.getElementById('autoDownload').checked) {
+                const blob = new Blob([result], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'processed-data.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        } catch (error) {
+            // 隐藏处理中状态
+            document.getElementById('processingIndicator').classList.add('hidden');
+            showToast('处理错误: ' + error.message, 'error');
+        }
+    }, 1500);
+});
+
+// 重置按钮
+document.getElementById('resetForm').addEventListener('click', function () {
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    document.querySelectorAll('input[type="text"]').forEach(input => {
+        input.value = '';
+    });
+
+    document.querySelector('select[name="nameSortType"]').value = 'none'; // 设为默认值
+    showToast('所有选项已重置', 'success');
+});
+
+// 优先级排序管理
+document.getElementById('addPriority').addEventListener('click', function () {
+    const keyword = prompt('请输入优先级关键词:');
+    if (keyword) {
+        const priorityItem = document.createElement('div');
+        priorityItem.className = 'priority-item flex items-center p-3 bg-gray-800 border border-gray-700 rounded-lg';
+        priorityItem.innerHTML = `
+                <input type="hidden" name="sortPriority[]" value="${keyword}">
+                <span class="flex-grow text-gray-200">"${keyword}"</span>
+                <div class="priority-actions flex gap-2">
+                    <button type="button" class="priority-btn move-up px-3 py-1 bg-gray-700 rounded text-sm tech-button" title="上移">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button type="button" class="priority-btn move-down px-3 py-1 bg-gray-700 rounded text-sm tech-button" title="下移">
+                        <i class="fas fa-arrow-down"></i>
+                    </button>
+                    <button type="button" class="priority-btn remove-priority-btn px-3 py-1 bg-gray-700 rounded text-sm tech-button" title="删除">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+        document.getElementById('priorityList').appendChild(priorityItem);
+        initPriorityButtons();
+        showToast(`已添加关键词: ${keyword}`, 'success');
+    }
+});
+
+// 初始化优先级按钮事件
+function initPriorityButtons() {
+    document.querySelectorAll('.priority-btn').forEach(button => {
+        button.removeEventListener('click', handlePriorityButtonClick);
+        button.addEventListener('click', handlePriorityButtonClick);
+    });
+}
+
+function handlePriorityButtonClick() {
+    const item = this.closest('.priority-item');
+    const list = item.parentNode;
+
+    if (this.classList.contains('move-up')) {
+        if (item.previousElementSibling) {
+            list.insertBefore(item, item.previousElementSibling);
+        }
+    } else if (this.classList.contains('move-down')) {
+        if (item.nextElementSibling) {
+            list.insertBefore(item.nextElementSibling, item);
+        }
+    } else if (this.classList.contains('remove-priority-btn')) {
+        item.remove();
+        showToast('已移除优先级规则', 'success');
+    }
+}
+
+// 初始初始化优先级按钮
+initPriorityButtons();
+// 安全防护功能实现
+document.addEventListener('DOMContentLoaded', function () {
+    const enable_f12 = 1;
+    if (enable_f12) {
+        return
+    }
+    const securityOverlay = document.getElementById('securityOverlay');
+    const errorCodeElement = document.getElementById('errorCode');
+    const securityShield = document.getElementById('securityShield');
+    const closeBtn = document.getElementById('closeSecurityOverlay');
+
+    // 生成随机错误代码
+    function generateErrorCode() {
+        const hexValues = '0123456789ABCDEF';
+        let code = '0x';
+        for (let i = 0; i < 4; i++) {
+            code += hexValues[Math.floor(Math.random() * 16)];
+        }
+        return code;
+    }
+
+    // 1. 禁用右键菜单
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+        showSecurityAlert('右键菜单已被禁用');
+    });
+
+    // 2. 禁用开发者工具快捷键
+    document.addEventListener('keydown', function (e) {
+        // F12
+        if (e.keyCode === 123) {
+            e.preventDefault();
+            showSecurityAlert('F12 快捷键已被禁用');
+        }
+
+        // Ctrl+Shift+I
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+            e.preventDefault();
+            showSecurityAlert('Ctrl+Shift+I 快捷键已被禁用');
+        }
+
+        // Ctrl+Shift+J
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+            e.preventDefault();
+            showSecurityAlert('Ctrl+Shift+J 快捷键已被禁用');
+        }
+
+        // Ctrl+U
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
+            showSecurityAlert('查看源代码功能已被禁用');
+        }
+    });
+
+    // 3. 检测开发者工具打开状态
+    let consoleOpened = false;
+
+    function detectDevTools() {
+        const threshold = 160;
+        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+
+        if ((widthThreshold || heightThreshold) && !consoleOpened) {
+            consoleOpened = true;
+            showSecurityAlert('检测到开发者工具已打开');
+        }
+    }
+
+    // 4. 防止控制台被清空
+    const originalConsoleClear = console.clear;
+    console.clear = function () {
+        showSecurityAlert('控制台清空操作已被阻止');
+        // 可以选择不执行清空操作
+        // 或者执行原始操作但显示警告
+        originalConsoleClear.apply(console, arguments);
+    };
+
+    // 显示安全警告
+    function showSecurityAlert(reason) {
+        errorCodeElement.textContent = generateErrorCode();
+        securityOverlay.classList.add('active');
+
+        // 记录安全事件
+        console.warn(`安全事件: ${reason} | 错误代码: ${errorCodeElement.textContent}`);
+    }
+
+    // 关闭安全警告
+    closeBtn.addEventListener('click', function () {
+        securityOverlay.classList.remove('active');
+    });
+
+    // 安全盾牌点击事件
+    securityShield.addEventListener('click', function () {
+        showSecurityAlert('手动激活安全防护');
+    });
+
+    // 定期检测开发者工具
+    setInterval(detectDevTools, 1000);
+
+    // 初始检测
+    detectDevTools();
+});
+</script>
+</body>
+</html>

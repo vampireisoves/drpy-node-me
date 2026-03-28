@@ -1,0 +1,7 @@
+26.0
+
+!B!Python install manager was successfully updated to 26.0.!W!
+
+This update adds global shortcuts for installed scripts such as !G!pip.exe!W!.
+Use !G!py install --refresh!W! to update all shortcuts.
+!Y!This will be needed after installing new scripts, as it is not run automatically.!W!

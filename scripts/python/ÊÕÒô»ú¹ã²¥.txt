@@ -1,0 +1,12 @@
+筛选广播🔉,#genre#
+CRI环球资讯广播,http://sk.cri.cn/905.m3u8
+凤凰卫视咨讯台音频,http://playtv-live.ifeng.com/live/06OLEEWQKN4_audio.m3u8
+自由亚洲,https://rfa-ingest.akamaized.net/hls/live/2040699/RFA_AUDIO_LIVE1/master.m3u8
+中央新闻台13音频,https://piccpndali.v.myalicdn.com/audio/cctv13_2.m3u8
+中央4套音频,https://piccpndali.v.myalicdn.com/audio/cctv4_2.m3u8
+中央5套音频,https://piccpndali.v.myalicdn.com/audio/cctv5_2.m3u8
+ccrv-9记录音频,https://piccpndali.v.myalicdn.com/audio/cctv9_2.m3u8
+国际新闻,https://lhttp.qtfm.cn/live/20500172/64k.mp3
+全澳华语之声,http://46.4.40.246:8059/stream
+星岛中文新闻,http://nap.casthost.net:8759/;?icy=http
+

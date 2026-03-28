@@ -1,0 +1,24 @@
+{
+                "主页url": "https://kdie.cc/",
+                "嗅探词": ".m3u8#/video/tos/#.mp4#flv",
+                "线路数组": "<a data-toggle=\"tab\"&&/a>",
+                "线路标题": ">&&<",
+                "搜索url": "https://kdie.cc/search/?wd={wd}",
+                "分类url": "https://kdie.cc/type-{cateId}/",
+                "分类": "电影$dianying#电视剧$dianshiju#动漫$dongman#综艺$zongyi",
+                "搜索模式": "1",
+                "播放列表": "<li&&</li",
+                "播放数组": "class=\"juji-con&&</ul",
+                "播放标题": ">&&</a",
+                "播放链接": "href=\"&&\"",
+                "跳转播放链接": "<iframe*src=\"/p.html?url=&&\"",
+                "parse": {
+                    "play_parse": [
+                        {
+                            "type": "regex",
+                            "pattern": "url=(.*)",
+                            "url": "$1"
+                        }
+                    ]
+                }
+            }

@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能小说阅读器</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --sidebar-width: 300px;
+            --header-height: 60px;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a9eff;
+            --primary-dark: #3182ce;
+            --secondary-color: #2d3748;
+            --background-color: #1a202c;
+            --text-color: #e2e8f0;
+            --border-color: #4a5568;
+            --sidebar-bg: #2d3748;
+            --content-bg: #2d3748;
+            --shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        [data-theme="dark"] .app-header {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+        }
+        
+        [data-theme="dark"] .sidebar-header {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+        }
+        
+        [data-theme="dark"] .upload-area {
+            background: var(--content-bg);
+            border-color: var(--primary-color);
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .upload-area:hover {
+            background-color: #374151;
+            border-color: var(--primary-dark);
+        }
+        
+        [data-theme="dark"] .chapter-item:hover {
+            background: #374151;
+        }
+        
+        [data-theme="dark"] .chapter-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        [data-theme="dark"] .error-message {
+            background: #2d1b1b;
+            color: #feb2b2;
+            border-left-color: #f56565;
+        }
+        
+        /* 深色模式 - 侧边栏头部适配 */
+        [data-theme="dark"] .sidebar-header {
+            background: var(--content-bg);
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .book-title {
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .book-stats {
+            color: #a0aec0;
+        }
+        
+        [data-theme="dark"] .storage-info {
+            background: var(--content-bg);
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .storage-text {
+            color: #a0aec0;
+        }
+        
+        /* 深色模式 - 章节列表适配 */
+        [data-theme="dark"] .chapter-list {
+            background: var(--content-bg);
+        }
+        
+        [data-theme="dark"] .chapter-item {
+            border-bottom-color: #4a5568;
+            color: var(--text-color);
+            background: var(--content-bg);
+        }
+        
+        [data-theme="dark"] .chapter-item:hover {
+            background: #374151;
+        }
+        
+        [data-theme="dark"] .chapter-number {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+        
+        /* 深色模式 - 阅读器工具栏适配 */
+        [data-theme="dark"] .reader-toolbar {
+            background: var(--content-bg);
+            border-bottom-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .sidebar-toggle {
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .sidebar-toggle:hover {
+            background: #374151;
+        }
+        
+        [data-theme="dark"] .font-btn {
+            background: var(--content-bg);
+            border-color: var(--border-color);
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .font-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        [data-theme="dark"] .font-size-display {
+            color: #a0aec0;
+        }
+        
+        /* 深色模式 - 内容区域适配 */
+        [data-theme="dark"] .reader-content {
+            background: var(--content-bg);
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .content-title {
+            color: var(--text-color);
+            border-bottom-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .content-text {
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .content-paragraph {
+            color: var(--text-color);
+        }
+        
+        /* 深色模式 - 存储管理面板适配 */
+        [data-theme="dark"] .storage-panel {
+            background: var(--content-bg);
+        }
+        
+        [data-theme="dark"] .panel-header {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            border-bottom-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .book-item {
+            background: var(--content-bg);
+            border-color: var(--border-color);
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .book-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        [data-theme="dark"] .book-item-title {
+            color: var(--text-color);
+        }
+        
+        [data-theme="dark"] .book-item-info {
+            color: #a0aec0;
+        }
+        
+        [data-theme="dark"] .book-item-size {
+            color: #718096;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 头部样式 */
+        .app-header {
+            height: var(--header-height);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .theme-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            margin-top: var(--header-height);
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
+        
+        /* 上传区域 */
+        .upload-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        
+        /* 当只有上传区域显示时的全局居中样式 */
+        .upload-section.upload-only {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 1000 !important;
+            background: var(--background-color) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            flex: none !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
+        }
+        
+        /* 确保upload-only状态下的upload-area也居中 */
+        .upload-section.upload-only .upload-area {
+            margin: auto !important;
+        }
+        
+        .upload-area {
+            background: white;
+            border: 2px dashed var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-dark);
+            background-color: #f8fafc;
+            transform: translateY(-2px);
+        }
+        
+        .upload-area.active {
+            border-color: #2ecc71;
+            background-color: #eafaf1;
+        }
+        
+        .upload-icon {
+            font-size: 64px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .upload-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .upload-desc {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* 侧边栏样式 */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: var(--header-height);
+            left: -var(--sidebar-width);
+            bottom: 0;
+            transition: var(--transition);
+            z-index: 900;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar.open {
+            left: 0;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+        }
+        
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+        }
+        
+        .book-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            word-break: break-word;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .book-stats {
+            font-size: 14px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* 存储管理样式 */
+        .storage-info {
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .storage-usage {
+            margin-bottom: 10px;
+        }
+        
+        .storage-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .storage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #FFC107, #FF5722);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .storage-text {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-small:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+        
+        /* 书籍管理面板 */
+        .storage-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        .books-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .book-item {
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            background: white;
+            transition: var(--transition);
+        }
+        
+        .book-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        
+        .book-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .book-item-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-color);
+            flex: 1;
+            margin-right: 10px;
+            word-break: break-word;
+        }
+        
+        .book-item-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-tiny {
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .btn-load {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-load:hover {
+            background: #0056b3;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        
+        .book-item-info {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .book-item-size {
+            font-size: 11px;
+            color: #999;
+        }
+        
+        .chapter-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        
+        .chapter-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chapter-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .chapter-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .chapter-number {
+            font-size: 12px;
+            background: #e9ecef;
+            color: #666;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .chapter-item.active .chapter-number {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .chapter-title {
+            flex: 1;
+            font-size: 14px;
+            word-break: break-word;
+        }
+        
+        /* 阅读器内容区域 */
+        .reader-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+        
+        .reader-container.with-sidebar {
+            margin-left: var(--sidebar-width);
+        }
+        
+        .reader-toolbar {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .sidebar-toggle:hover {
+            background: var(--background-color);
+        }
+        
+        .chapter-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .font-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .font-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 6px 10px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .font-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .font-size-display {
+            font-size: 14px;
+            color: #666;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .reader-content {
+            flex: 1;
+            padding: 40px 40px 100px 40px; /* 增加底部边距为100px，为固定导航条留出空间 */
+            background: white;
+            overflow-y: auto;
+            font-size: 18px;
+            line-height: 1.8;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .content-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--secondary-color);
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            word-break: break-word;
+        }
+        
+        .content-text {
+            text-indent: 2em;
+            margin-bottom: 1.5em;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .content-paragraph {
+            line-height: 1.8;
+            margin: 0 0 1em 0;
+            text-indent: 2em;
+            color: var(--text-color);
+            text-align: justify;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        
+        .paragraph-break {
+            height: 0.5em;
+            margin: 0.5em 0;
+        }
+        
+        /* 处理中状态 */
+        .processing {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            z-index: 1100;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            background: #ffeaea;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 20px;
+            display: none;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        /* 遮罩层 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 800;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* 应用动画 */
+        .upload-section {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .reader-container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .sidebar.open {
+            animation: slideInLeft 0.3s ease-out;
+        }
+        
+        .content-text {
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .chapter-item:hover {
+            animation: pulse 0.3s ease-in-out;
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* 改进的滚动条样式 */
+        .reader-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .reader-content::-webkit-scrollbar-track {
+            background: var(--background-color);
+            border-radius: 4px;
+        }
+        
+        .reader-content::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .reader-content::-webkit-scrollbar-thumb:hover {
+            background: var(--text-color);
+        }
+        
+        .chapter-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chapter-list::-webkit-scrollbar-track {
+            background: var(--background-color);
+            border-radius: 3px;
+        }
+        
+        .chapter-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        
+        /* 改进的焦点样式 */
+        .btn:focus,
+        .font-btn:focus,
+        .sidebar-toggle:focus,
+        .theme-toggle:focus,
+        .chapter-item:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+        
+        /* 改进的选择样式 */
+        ::selection {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* 固定底部导航条 */
+        .fixed-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .nav-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            min-width: 80px;
+            justify-content: center;
+        }
+        
+        .nav-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+        
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .nav-icon {
+            font-size: 12px;
+        }
+        
+        .chapter-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-color);
+            min-width: 100px;
+        }
+        
+        .current-chapter {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .total-chapters {
+            color: #666;
+            font-size: 11px;
+        }
+        
+        /* 暗色主题下的固定导航条 */
+        [data-theme="dark"] .fixed-nav {
+            background: rgba(45, 45, 45, 0.95);
+            border-top-color: #555;
+        }
+        
+        [data-theme="dark"] .chapter-info {
+            color: #e0e0e0;
+        }
+        
+        [data-theme="dark"] .total-chapters {
+            color: #aaa;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 100vw;
+                --header-height: 56px;
+            }
+            
+            .app-header {
+                padding: 0 15px;
+                height: var(--header-height);
+            }
+            
+            .app-title {
+                font-size: 18px;
+            }
+            
+            .header-controls {
+                gap: 10px;
+            }
+            
+            .theme-toggle {
+                padding: 6px;
+                font-size: 18px;
+            }
+            
+            .upload-area {
+                padding: 40px 20px;
+                margin: 20px;
+            }
+            
+            .upload-icon {
+                font-size: 48px;
+            }
+            
+            .upload-title {
+                font-size: 20px;
+            }
+            
+            .sidebar {
+                width: 100vw;
+                left: -100vw;
+            }
+            
+            .reader-container.with-sidebar {
+                margin-left: 0;
+            }
+            
+            .reader-toolbar {
+                flex-wrap: wrap;
+                padding: 10px 15px;
+                gap: 8px;
+            }
+            
+            .toolbar-left,
+            .toolbar-right {
+                flex: 1;
+                min-width: 200px;
+                justify-content: space-between;
+            }
+            
+            .btn {
+                padding: 8px 12px;
+                font-size: 14px;
+                min-height: 44px; /* 触摸友好的最小高度 */
+            }
+            
+            .font-btn {
+                min-width: 44px;
+                min-height: 44px;
+                font-size: 16px;
+            }
+            
+            .reader-content {
+                padding: 20px 15px 120px 15px; /* 移动端增加更多底部边距 */
+                font-size: 16px;
+                line-height: 1.8;
+            }
+            
+            /* 移动端固定导航条调整 */
+            .fixed-nav {
+                padding: 15px 20px;
+            }
+            
+            .nav-btn {
+                padding: 12px 16px;
+                font-size: 16px;
+                min-height: 48px; /* 触摸友好的高度 */
+                min-width: 90px;
+            }
+            
+            .chapter-info {
+                min-width: 120px;
+                font-size: 14px;
+            }
+            
+            .content-title {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            
+            .content-paragraph {
+                font-size: 16px;
+                line-height: 1.8;
+                margin-bottom: 1.2em;
+            }
+            
+            /* 移动端侧边栏优化 */
+            .sidebar-header {
+                padding: 15px;
+            }
+            
+            .chapter-item {
+                padding: 15px 20px;
+                font-size: 16px;
+                min-height: 50px;
+                display: flex;
+                align-items: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .upload-area {
+                padding: 30px 15px;
+            }
+            
+            .reader-content {
+                padding: 15px 15px 130px 15px; /* 小屏幕需要更多底部边距 */
+            }
+            
+            .content-title {
+                font-size: 20px;
+            }
+            
+            .content-text {
+                font-size: 14px;
+                line-height: 1.7;
+            }
+        }
+        
+        /* 高分辨率屏幕优化 */
+        @media (min-width: 1200px) {
+            .reader-content {
+                max-width: 900px;
+                padding: 60px;
+            }
+            
+            .content-text {
+                font-size: 20px;
+                line-height: 1.9;
+            }
+        }
+        
+        /* 打印样式 */
+        @media print {
+            .app-header,
+            .sidebar,
+            .overlay,
+            .reader-toolbar {
+                display: none !important;
+            }
+            
+            .reader-container {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .reader-content {
+                padding: 0 !important;
+                overflow: visible !important;
+                max-width: none !important;
+            }
+            
+            .content-text {
+                color: black !important;
+                font-size: 12pt !important;
+                line-height: 1.5 !important;
+                margin-bottom: 0.5em !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 头部 -->
+        <header class="app-header">
+            <div class="app-title">📚 智能小说阅读器</div>
+            <div class="header-controls">
+                <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 上传区域 -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📚</div>
+                    <h2 class="upload-title">上传小说文件</h2>
+                    <p class="upload-desc">拖放TXT小说文件到此处或点击上传<br>支持20MB以内的TXT文件</p>
+                    <input type="file" id="fileInput" class="file-input" accept=".txt">
+                    <button class="btn" id="uploadBtn">选择文件</button>
+                </div>
+            </section>
+
+            <!-- 侧边栏 -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <div class="book-title" id="bookTitle">小说标题</div>
+                    <div class="book-stats" id="bookStats">共0章，约0千字</div>
+                    
+                    <!-- 存储管理 -->
+                    <div class="storage-info" id="storageInfo">
+                        <div class="storage-usage">
+                            <div class="storage-bar">
+                                <div class="storage-fill" id="storageFill"></div>
+                            </div>
+                            <div class="storage-text" id="storageText">存储: 0MB / 100MB</div>
+                        </div>
+                        <button class="btn btn-small" id="storageManageBtn">管理书籍</button>
+                        <button class="btn btn-small" id="uploadNewBtn">上传新书</button>
+                    </div>
+                </div>
+                
+                <!-- 书籍管理面板 -->
+                <div class="storage-panel" id="storagePanel" style="display: none;">
+                    <div class="panel-header">
+                        <h3>已保存的书籍</h3>
+                        <button class="btn btn-small" id="closePanelBtn">返回</button>
+                    </div>
+                    <div class="books-list" id="booksList">
+                        <!-- 书籍列表将在这里动态生成 -->
+                    </div>
+                </div>
+                
+                <div class="chapter-list" id="chapterList">
+                    <!-- 章节列表将在这里动态生成 -->
+                </div>
+            </aside>
+
+            <!-- 阅读器 -->
+            <section class="reader-container" id="readerContainer">
+                <div class="reader-toolbar">
+                    <div class="toolbar-left">
+                        <button class="sidebar-toggle" id="sidebarToggle" title="显示/隐藏目录">📋</button>
+                    </div>
+                    <div class="toolbar-right">
+                        <div class="font-controls">
+                            <button class="font-btn" id="fontSizeDown" title="减小字体">A-</button>
+                            <span class="font-size-display" id="fontSizeDisplay">18px</span>
+                            <button class="font-btn" id="fontSizeUp" title="增大字体">A+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="reader-content" id="readerContent">
+                    <h1 class="content-title" id="contentTitle">欢迎使用智能小说阅读器</h1>
+                    <div id="contentText">
+                        <div class="content-paragraph">点击左上角的 📋 按钮可以打开/关闭侧边栏</div>
+                        <div class="content-paragraph">在侧边栏中可以上传TXT文件开始阅读</div>
+                        <div class="content-paragraph">支持章节导航、主题切换、字体大小调节等功能</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 固定底部导航条 -->
+        <div class="fixed-nav" id="fixedNav">
+            <button class="nav-btn" id="fixedPrevBtn" title="上一章">
+                <span class="nav-icon">◀</span>
+                <span class="nav-text">上一章</span>
+            </button>
+            <div class="chapter-info" id="chapterInfo">
+                <span class="current-chapter">第1章</span>
+                <span class="total-chapters">/ 共10章</span>
+            </div>
+            <button class="nav-btn" id="fixedNextBtn" title="下一章">
+                <span class="nav-text">下一章</span>
+                <span class="nav-icon">▶</span>
+            </button>
+        </div>
+
+        <!-- 遮罩层 -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- 处理中状态 -->
+        <div class="processing" id="processing">
+            <div class="spinner"></div>
+            <p>正在处理文件，请稍候...</p>
+        </div>
+
+        <!-- 错误消息 -->
+        <div class="error-message" id="errorMessage"></div>
+    </div>
+
+    <script>
+        class NovelReader {
+            constructor() {
+                this.novelData = {
+                    title: '',
+                    chapters: [],
+                    currentChapter: 0
+                };
+                
+                this.currentBookId = null;
+                
+                this.settings = {
+                    fontSize: 18,
+                    theme: 'light',
+                    sidebarOpen: false
+                };
+                
+                // 存储管理
+                this.storage = {
+                    maxSize: 100 * 1024 * 1024, // 100MB
+                    keyPrefix: 'novelReader_',
+                    booksKey: 'novelReader_books',
+                    progressKey: 'novelReader_progress',
+                    settingsKey: 'novelReader_settings'
+                };
+                
+                this.initElements();
+                this.initEventListeners();
+                this.loadSettings();
+                this.loadStoredBooks();
+                
+                // 设置全局引用，供HTML中的onclick使用
+                window.novelReader = this;
+                
+                // 初始化存储显示
+                this.updateStorageDisplay();
+            }
+            
+            initElements() {
+                // 获取DOM元素
+                this.uploadSection = document.getElementById('uploadSection');
+                this.uploadArea = document.getElementById('uploadArea');
+                this.fileInput = document.getElementById('fileInput');
+                this.uploadBtn = document.getElementById('uploadBtn');
+                this.processing = document.getElementById('processing');
+                this.errorMessage = document.getElementById('errorMessage');
+                
+                this.sidebar = document.getElementById('sidebar');
+                this.overlay = document.getElementById('overlay');
+                this.sidebarToggle = document.getElementById('sidebarToggle');
+                this.bookTitle = document.getElementById('bookTitle');
+                this.bookStats = document.getElementById('bookStats');
+                this.chapterList = document.getElementById('chapterList');
+                
+                this.readerContainer = document.getElementById('readerContainer');
+                this.readerContent = document.getElementById('readerContent');
+                this.contentTitle = document.getElementById('contentTitle');
+                this.contentText = document.getElementById('contentText');
+                
+                // 固定导航条元素
+                this.fixedNav = document.getElementById('fixedNav');
+                this.fixedPrevBtn = document.getElementById('fixedPrevBtn');
+                this.fixedNextBtn = document.getElementById('fixedNextBtn');
+                this.chapterInfo = document.getElementById('chapterInfo');
+                
+                this.themeToggle = document.getElementById('themeToggle');
+                this.fontSizeUp = document.getElementById('fontSizeUp');
+                this.fontSizeDown = document.getElementById('fontSizeDown');
+                this.fontSizeDisplay = document.getElementById('fontSizeDisplay');
+                
+                // 设置初始状态：隐藏不应该在没有小说时显示的元素
+                this.setInitialState();
+                
+                // 存储管理相关元素
+                this.storageInfo = document.getElementById('storageInfo');
+                this.storageFill = document.getElementById('storageFill');
+                this.storageText = document.getElementById('storageText');
+                this.storageManageBtn = document.getElementById('storageManageBtn');
+                this.uploadNewBtn = document.getElementById('uploadNewBtn');
+                this.storagePanel = document.getElementById('storagePanel');
+                this.closePanelBtn = document.getElementById('closePanelBtn');
+                this.booksList = document.getElementById('booksList');
+            }
+            
+            setInitialState() {
+                // 在没有小说内容时，隐藏不应该显示的元素
+                this.sidebar.style.display = 'none';
+                this.readerContainer.style.display = 'none';
+                this.fixedNav.style.display = 'none';
+                
+                // 确保上传区域是显示的并添加全局居中样式
+                this.uploadSection.style.display = 'block';
+                this.uploadSection.classList.add('upload-only');
+            }
+            
+            initEventListeners() {
+                // 上传相关事件
+                this.uploadBtn.addEventListener('click', () => this.fileInput.click());
+                this.fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length) {
+                        this.handleFile(e.target.files[0]);
+                    }
+                });
+                
+                // 拖放功能
+                this.uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    this.uploadArea.classList.add('active');
+                });
+                
+                this.uploadArea.addEventListener('dragleave', () => {
+                    this.uploadArea.classList.remove('active');
+                });
+                
+                this.uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    this.uploadArea.classList.remove('active');
+                    if (e.dataTransfer.files.length) {
+                        this.handleFile(e.dataTransfer.files[0]);
+                    }
+                });
+                
+                // 侧边栏相关事件
+                this.sidebarToggle.addEventListener('click', () => this.toggleSidebar());
+                this.overlay.addEventListener('click', () => this.closeSidebar());
+                
+                // 固定导航条事件
+                this.fixedPrevBtn.addEventListener('click', () => this.previousChapter());
+                this.fixedNextBtn.addEventListener('click', () => this.nextChapter());
+                
+                // 主题切换
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+                
+                // 字体大小调节
+                this.fontSizeUp.addEventListener('click', () => this.adjustFontSize(2));
+                this.fontSizeDown.addEventListener('click', () => this.adjustFontSize(-2));
+                
+                // 键盘快捷键
+                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+                
+                // 存储管理事件
+                this.storageManageBtn.addEventListener('click', () => this.showStoragePanel());
+                this.uploadNewBtn.addEventListener('click', () => this.returnToUpload());
+                this.closePanelBtn.addEventListener('click', () => this.hideStoragePanel());
+                
+                // 触摸手势和翻页功能
+                this.initTouchGestures();
+                this.initScrollPaging();
+                
+                // 窗口大小变化监听器
+                window.addEventListener('resize', () => this.handleResize());
+            }
+            
+            handleFile(file) {
+                // 验证文件
+                if (!file.name.toLowerCase().endsWith('.txt')) {
+                    this.showError('请上传TXT格式的文件');
+                    return;
+                }
+                
+                if (file.size > 20 * 1024 * 1024) {
+                    this.showError('文件大小不能超过20MB');
+                    return;
+                }
+                
+                // 显示处理状态
+                this.processing.style.display = 'block';
+                this.errorMessage.style.display = 'none';
+                
+                // 读取文件
+                const reader = new FileReader();
+                reader.onload = (e) => this.processNovel(e.target.result, file.name);
+                reader.onerror = () => {
+                    this.showError('文件读取失败，请重试');
+                    this.processing.style.display = 'none';
+                };
+                reader.readAsText(file, 'UTF-8');
+            }
+            
+            processNovel(content, fileName) {
+                try {
+                    // 设置书名
+                    this.novelData.title = fileName.replace('.txt', '');
+                    this.bookTitle.textContent = this.novelData.title;
+                    
+                    // 识别章节
+                    this.novelData.chapters = this.identifyChapters(content);
+                    
+                    // 保存到本地存储
+                    const bookId = this.saveBookToStorage(this.novelData);
+                    if (bookId) {
+                        this.currentBookId = bookId;
+                        console.log('书籍已自动保存到本地存储');
+                    }
+                    
+                    // 更新UI
+                    this.updateChapterList();
+                    this.updateStats();
+                    this.showChapter(0);
+                    
+                    // 显示阅读器
+                    this.uploadSection.style.display = 'none';
+                    this.uploadSection.classList.remove('upload-only');
+                    this.processing.style.display = 'none';
+                    this.readerContainer.style.display = 'block';
+                    
+                    // 显示固定导航条
+                    this.fixedNav.style.display = 'flex';
+                    
+                    // 自动打开侧边栏
+                    this.openSidebar();
+                    
+                } catch (error) {
+                    console.error('处理小说时出错:', error);
+                    this.showError('处理小说时出错: ' + error.message);
+                    this.processing.style.display = 'none';
+                }
+            }
+            
+            identifyChapters(content) {
+                // 改进的章节识别算法
+                const chapterPatterns = [
+                    /^第[零一二三四五六七八九十百千万\d]+[章节回]/,
+                    /^第[零一二三四五六七八九十百千万\d]+章/,
+                    /^第[零一二三四五六七八九十百千万\d]+回/,
+                    /^[上下卷]?第?[零一二三四五六七八九十百千万\d]+[章节回]/,
+                    /^[上下卷]?第?[零一二三四五六七八九十百千万\d]+章/,
+                    /^[零一二三四五六七八九十百千万\d]+[、\.\s]/,
+                    /^\d+[、\.\s]/,
+                    /^[第]?[\s]*[零一二三四五六七八九十百千万\d]+[\s]*[章节回]/
+                ];
+                
+                const chapters = [];
+                const lines = content.split('\n');
+                const potentialChapters = [];
+                
+                // 查找章节标题
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line.length === 0 || line.length > 50) continue; // 跳过空行和过长的行
+                    
+                    for (const pattern of chapterPatterns) {
+                        if (pattern.test(line)) {
+                            potentialChapters.push({
+                                index: i,
+                                title: line
+                            });
+                            break;
+                        }
+                    }
+                }
+                
+                // 如果没有找到章节，按固定长度分割
+                if (potentialChapters.length === 0) {
+                    const chunkSize = Math.ceil(lines.length / Math.max(1, Math.floor(lines.length / 100)));
+                    for (let i = 0; i < lines.length; i += chunkSize) {
+                        const chapterLines = lines.slice(i, i + chunkSize);
+                        const chapterContent = chapterLines.join('\n').trim();
+                        if (chapterContent) {
+                            chapters.push({
+                                title: `第${chapters.length + 1}部分`,
+                                content: chapterContent
+                            });
+                        }
+                    }
+                    return chapters;
+                }
+                
+                // 根据章节位置分割内容
+                for (let i = 0; i < potentialChapters.length; i++) {
+                    const chapterStart = potentialChapters[i].index;
+                    const chapterEnd = (i < potentialChapters.length - 1) 
+                        ? potentialChapters[i + 1].index 
+                        : lines.length;
+                    
+                    const chapterLines = lines.slice(chapterStart, chapterEnd);
+                    const chapterContent = chapterLines.join('\n').trim();
+                    
+                    if (chapterContent) {
+                        chapters.push({
+                            title: potentialChapters[i].title,
+                            content: chapterContent
+                        });
+                    }
+                }
+                
+                return chapters;
+            }
+            
+            updateChapterList() {
+                this.chapterList.innerHTML = '';
+                
+                this.novelData.chapters.forEach((chapter, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'chapter-item';
+                    item.innerHTML = `
+                        <span class="chapter-number">${index + 1}</span>
+                        <span class="chapter-title">${chapter.title}</span>
+                    `;
+                    item.addEventListener('click', () => {
+                        this.showChapter(index);
+                        if (window.innerWidth <= 768) {
+                            this.closeSidebar();
+                        }
+                    });
+                    this.chapterList.appendChild(item);
+                });
+            }
+            
+            updateStats() {
+                const totalChapters = this.novelData.chapters.length;
+                const totalChars = this.novelData.chapters.reduce((sum, chapter) => 
+                    sum + chapter.content.length, 0);
+                
+                this.bookStats.textContent = `共${totalChapters}章，约${Math.round(totalChars / 1000)}千字`;
+            }
+            
+            showChapter(index) {
+                if (index < 0 || index >= this.novelData.chapters.length) {
+                    return;
+                }
+                
+                this.novelData.currentChapter = index;
+                const chapter = this.novelData.chapters[index];
+                
+                // 更新活动章节
+                document.querySelectorAll('.chapter-item').forEach((item, i) => {
+                    item.classList.toggle('active', i === index);
+                });
+                
+                // 更新内容
+                this.contentTitle.textContent = chapter.title;
+                this.contentText.innerHTML = this.formatChapterContent(chapter.content);
+                
+                // 更新固定导航条按钮状态和章节信息
+                this.fixedPrevBtn.disabled = index === 0;
+                this.fixedNextBtn.disabled = index === this.novelData.chapters.length - 1;
+                
+                // 更新章节信息显示
+                const currentChapterSpan = this.chapterInfo.querySelector('.current-chapter');
+                const totalChaptersSpan = this.chapterInfo.querySelector('.total-chapters');
+                if (currentChapterSpan && totalChaptersSpan) {
+                    currentChapterSpan.textContent = `第${index + 1}章`;
+                    totalChaptersSpan.textContent = `/ 共${this.novelData.chapters.length}章`;
+                }
+                
+                // 滚动到顶部 - 使用setTimeout确保DOM更新完成
+                setTimeout(() => {
+                    this.readerContent.scrollTop = 0;
+                }, 10);
+                
+                // 保存阅读进度到设置
+                this.saveSettings();
+                
+                // 保存阅读进度到本地存储
+                if (this.currentBookId) {
+                    this.saveReadingProgress(this.currentBookId, index, 0);
+                }
+            }
+            
+            formatChapterContent(content) {
+                // 先处理连续的空行，将多个连续空行合并为一个
+                const normalizedContent = content.replace(/\n\s*\n\s*\n/g, '\n\n');
+                const paragraphs = normalizedContent.split('\n');
+                let formattedHTML = '';
+                
+                paragraphs.forEach(para => {
+                    const trimmed = para.trim();
+                    if (trimmed === '') {
+                        // 空行作为段落间距
+                        formattedHTML += `<div class="paragraph-break"></div>`;
+                    } else {
+                        // 非空行作为段落内容
+                        formattedHTML += `<p class="content-paragraph">${trimmed}</p>`;
+                    }
+                });
+                
+                return formattedHTML;
+            }
+            
+            previousChapter() {
+                if (this.novelData.currentChapter > 0) {
+                    this.showChapter(this.novelData.currentChapter - 1);
+                }
+            }
+            
+            nextChapter() {
+                if (this.novelData.currentChapter < this.novelData.chapters.length - 1) {
+                    this.showChapter(this.novelData.currentChapter + 1);
+                }
+            }
+            
+            toggleSidebar() {
+                if (this.settings.sidebarOpen) {
+                    this.closeSidebar();
+                } else {
+                    this.openSidebar();
+                }
+            }
+            
+            openSidebar() {
+                this.settings.sidebarOpen = true;
+                this.sidebar.style.display = 'block'; // 确保侧边栏可见
+                this.sidebar.classList.add('open');
+                this.overlay.classList.add('show');
+                if (window.innerWidth > 768) {
+                    this.readerContainer.classList.add('with-sidebar');
+                }
+                this.saveSettings();
+            }
+            
+            closeSidebar() {
+                this.settings.sidebarOpen = false;
+                this.sidebar.classList.remove('open');
+                this.overlay.classList.remove('show');
+                this.readerContainer.classList.remove('with-sidebar');
+                this.saveSettings();
+            }
+            
+            handleResize() {
+                // 在PC模式和移动端之间切换时，重新评估侧边栏状态
+                if (window.innerWidth <= 768) {
+                    // 移动端：如果侧边栏是打开的，保持打开状态
+                    if (this.settings.sidebarOpen) {
+                        this.openSidebar();
+                    }
+                } else {
+                    // PC模式：移除with-sidebar类，让用户可以手动控制
+                    if (this.settings.sidebarOpen) {
+                        this.readerContainer.classList.add('with-sidebar');
+                    } else {
+                        this.readerContainer.classList.remove('with-sidebar');
+                    }
+                }
+            }
+            
+            toggleTheme() {
+                this.settings.theme = this.settings.theme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', this.settings.theme);
+                this.themeToggle.textContent = this.settings.theme === 'light' ? '🌙' : '☀️';
+                this.saveSettings();
+            }
+            
+            adjustFontSize(delta) {
+                this.settings.fontSize = Math.max(12, Math.min(32, this.settings.fontSize + delta));
+                this.readerContent.style.fontSize = this.settings.fontSize + 'px';
+                this.fontSizeDisplay.textContent = this.settings.fontSize + 'px';
+                this.saveSettings();
+            }
+            
+            initTouchGestures() {
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let touchEndX = 0;
+                let touchEndY = 0;
+                
+                this.readerContent.addEventListener('touchstart', (e) => {
+                    if (!this.novelData || !this.currentBookId) return;
+                    touchStartX = e.changedTouches[0].screenX;
+                    touchStartY = e.changedTouches[0].screenY;
+                }, { passive: true });
+                
+                this.readerContent.addEventListener('touchend', (e) => {
+                    if (!this.novelData || !this.currentBookId) return;
+                    touchEndX = e.changedTouches[0].screenX;
+                    touchEndY = e.changedTouches[0].screenY;
+                    this.handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
+                }, { passive: true });
+            }
+            
+            handleSwipe(startX, startY, endX, endY) {
+                const deltaX = endX - startX;
+                const deltaY = endY - startY;
+                const minSwipeDistance = 50;
+                
+                // 确保水平滑动距离大于垂直滑动距离
+                if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+                    if (deltaX > 0) {
+                        // 向右滑动 - 上一章
+                        this.previousChapter();
+                    } else {
+                        // 向左滑动 - 下一章
+                        this.nextChapter();
+                    }
+                }
+            }
+            
+            initScrollPaging() {
+                console.log('初始化滚动翻页功能');
+                console.log('readerContent元素:', this.readerContent);
+                
+                if (!this.readerContent) {
+                    console.error('readerContent元素未找到！');
+                    return;
+                }
+                
+                let scrollTimeout;
+                let lastScrollTop = 0;
+                let isAutoScrolling = false;
+                
+                this.readerContent.addEventListener('scroll', (e) => {
+                    console.log('滚动事件触发');
+                    
+                    if (!this.novelData || !this.currentBookId || isAutoScrolling) {
+                        console.log('滚动被忽略:', { 
+                            hasNovelData: !!this.novelData,
+                            hasCurrentBookId: !!this.currentBookId,
+                            isAutoScrolling 
+                        });
+                        return;
+                    }
+                    
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        const currentScrollTop = this.readerContent.scrollTop;
+                        const scrollHeight = this.readerContent.scrollHeight;
+                        const clientHeight = this.readerContent.clientHeight;
+                        const bottomThreshold = 20;
+                        const topThreshold = 20;
+                        
+                        const isAtBottom = currentScrollTop + clientHeight >= scrollHeight - bottomThreshold;
+                        const isAtTop = currentScrollTop <= topThreshold;
+                        
+                        console.log('滚动检测详情:', {
+                            currentScrollTop: Math.round(currentScrollTop),
+                            scrollHeight: Math.round(scrollHeight),
+                            clientHeight: Math.round(clientHeight),
+                            bottomDistance: Math.round(scrollHeight - (currentScrollTop + clientHeight)),
+                            isAtBottom,
+                            isAtTop,
+                            hasNextChapter: this.novelData.currentChapter < this.novelData.chapters.length - 1,
+                            hasPrevChapter: this.novelData.currentChapter > 0,
+                            currentChapter: this.novelData.currentChapter,
+                            totalChapters: this.novelData.chapters.length
+                        });
+                        
+                        // 滚动到底部时自动翻到下一章
+                        if (isAtBottom && this.novelData.currentChapter < this.novelData.chapters.length - 1) {
+                            console.log('🔄 触发下一章翻页');
+                            isAutoScrolling = true;
+                            setTimeout(() => {
+                                this.nextChapter();
+                                setTimeout(() => {
+                                    isAutoScrolling = false;
+                                }, 100);
+                            }, 500);
+                        }
+                        // 滚动到顶部时自动翻到上一章
+                        else if (isAtTop && lastScrollTop > currentScrollTop && this.novelData.currentChapter > 0) {
+                            console.log('🔄 触发上一章翻页');
+                            isAutoScrolling = true;
+                            setTimeout(() => {
+                                this.previousChapter();
+                                // 滚动到新章节的底部
+                                setTimeout(() => {
+                                    this.readerContent.scrollTop = this.readerContent.scrollHeight - this.readerContent.clientHeight;
+                                    setTimeout(() => {
+                                        isAutoScrolling = false;
+                                    }, 100);
+                                }, 100);
+                            }, 500);
+                        }
+                        
+                        lastScrollTop = currentScrollTop;
+                        
+                        // 保存阅读进度（滚动位置）
+                        if (this.currentBookId) {
+                            this.saveReadingProgress(this.currentBookId, this.novelData.currentChapter, currentScrollTop);
+                        }
+                    }, 150);
+                }, { passive: true });
+                
+                console.log('滚动翻页事件监听器已添加');
+            }
+            
+            handleKeyboard(e) {
+                if (!this.novelData || !this.currentBookId) return;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        this.previousChapter();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        this.nextChapter();
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        this.readerContent.scrollBy(0, -200);
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        this.readerContent.scrollBy(0, 200);
+                        break;
+                    case 'PageUp':
+                        e.preventDefault();
+                        this.readerContent.scrollBy(0, -this.readerContent.clientHeight * 0.8);
+                        break;
+                    case 'PageDown':
+                        e.preventDefault();
+                        this.readerContent.scrollBy(0, this.readerContent.clientHeight * 0.8);
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        this.readerContent.scrollTop = 0;
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        this.readerContent.scrollTop = this.readerContent.scrollHeight;
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        this.closeSidebar();
+                        break;
+                    case 't':
+                        if (e.ctrlKey) {
+                            e.preventDefault();
+                            this.toggleTheme();
+                        }
+                        break;
+                    case 'm':
+                        if (e.ctrlKey) {
+                            e.preventDefault();
+                            this.toggleSidebar();
+                        }
+                        break;
+                }
+            }
+            
+            showError(message) {
+                this.errorMessage.textContent = message;
+                this.errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    this.errorMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            saveSettings() {
+                localStorage.setItem('novelReaderSettings', JSON.stringify({
+                    ...this.settings,
+                    currentChapter: this.novelData.currentChapter
+                }));
+            }
+            
+            loadSettings() {
+                try {
+                    const saved = localStorage.getItem('novelReaderSettings');
+                    if (saved) {
+                        const settings = JSON.parse(saved);
+                        this.settings = { ...this.settings, ...settings };
+                        
+                        // 应用设置
+                        document.documentElement.setAttribute('data-theme', this.settings.theme);
+                        this.themeToggle.textContent = this.settings.theme === 'light' ? '🌙' : '☀️';
+                        this.readerContent.style.fontSize = this.settings.fontSize + 'px';
+                        this.fontSizeDisplay.textContent = this.settings.fontSize + 'px';
+                    }
+                    
+                    // 根据屏幕宽度设置侧边栏初始状态
+                    // 在PC模式下（宽度大于768px），侧边栏默认关闭，让用户可以手动控制
+                    if (window.innerWidth > 768) {
+                        this.settings.sidebarOpen = false;
+                        this.closeSidebar();
+                    } else {
+                        // 移动端保持原有逻辑
+                        if (this.settings.sidebarOpen) {
+                            this.openSidebar();
+                        } else {
+                            this.closeSidebar();
+                        }
+                    }
+                } catch (error) {
+                    console.warn('加载设置失败:', error);
+                }
+            }
+            
+            // ===== 存储管理方法 =====
+            
+            // 获取存储使用情况
+            getStorageUsage() {
+                let totalSize = 0;
+                const books = this.getStoredBooks();
+                
+                for (let key in localStorage) {
+                    if (key.startsWith(this.storage.keyPrefix)) {
+                        totalSize += localStorage.getItem(key).length * 2; // UTF-16编码，每字符2字节
+                    }
+                }
+                
+                return {
+                    used: totalSize,
+                    max: this.storage.maxSize,
+                    available: this.storage.maxSize - totalSize,
+                    percentage: Math.round((totalSize / this.storage.maxSize) * 100),
+                    booksCount: books.length
+                };
+            }
+            
+            // 检查存储空间是否足够
+            checkStorageSpace(dataSize) {
+                const usage = this.getStorageUsage();
+                return usage.available >= dataSize;
+            }
+            
+            // 保存小说到本地存储
+            saveBookToStorage(bookData) {
+                try {
+                    const bookId = this.generateBookId(bookData.title);
+                    const bookKey = this.storage.keyPrefix + 'book_' + bookId;
+                    const bookJson = JSON.stringify(bookData);
+                    const bookSize = bookJson.length * 2;
+                    
+                    // 检查存储空间
+                    if (!this.checkStorageSpace(bookSize)) {
+                        throw new Error('存储空间不足，请清理一些书籍后重试');
+                    }
+                    
+                    // 保存书籍数据
+                    localStorage.setItem(bookKey, bookJson);
+                    
+                    // 更新书籍列表
+                    const books = this.getStoredBooks();
+                    const existingIndex = books.findIndex(book => book.id === bookId);
+                    const bookInfo = {
+                        id: bookId,
+                        title: bookData.title,
+                        chapters: bookData.chapters.length,
+                        size: bookSize,
+                        savedAt: new Date().toISOString(),
+                        lastRead: new Date().toISOString()
+                    };
+                    
+                    if (existingIndex >= 0) {
+                        books[existingIndex] = bookInfo;
+                    } else {
+                        books.push(bookInfo);
+                    }
+                    
+                    localStorage.setItem(this.storage.booksKey, JSON.stringify(books));
+                    
+                    console.log('书籍保存成功:', bookData.title);
+                    this.updateStorageDisplay();
+                    return bookId;
+                    
+                } catch (error) {
+                    console.error('保存书籍失败:', error);
+                    this.showError('保存失败: ' + error.message);
+                    return null;
+                }
+            }
+            
+            // 从本地存储加载小说
+            loadBookFromStorage(bookId) {
+                try {
+                    const bookKey = this.storage.keyPrefix + 'book_' + bookId;
+                    const bookJson = localStorage.getItem(bookKey);
+                    
+                    if (!bookJson) {
+                        throw new Error('书籍不存在');
+                    }
+                    
+                    const bookData = JSON.parse(bookJson);
+                    
+                    // 更新最后阅读时间
+                    this.updateBookLastRead(bookId);
+                    
+                    return bookData;
+                } catch (error) {
+                    console.error('加载书籍失败:', error);
+                    this.showError('加载失败: ' + error.message);
+                    return null;
+                }
+            }
+            
+            // 获取已保存的书籍列表
+            getStoredBooks() {
+                try {
+                    const booksJson = localStorage.getItem(this.storage.booksKey);
+                    return booksJson ? JSON.parse(booksJson) : [];
+                } catch (error) {
+                    console.error('获取书籍列表失败:', error);
+                    return [];
+                }
+            }
+            
+            // 删除书籍
+            deleteBookFromStorage(bookId) {
+                try {
+                    const bookKey = this.storage.keyPrefix + 'book_' + bookId;
+                    localStorage.removeItem(bookKey);
+                    
+                    // 从书籍列表中移除
+                    const books = this.getStoredBooks();
+                    const filteredBooks = books.filter(book => book.id !== bookId);
+                    localStorage.setItem(this.storage.booksKey, JSON.stringify(filteredBooks));
+                    
+                    // 删除相关的阅读进度
+                    const progressKey = this.storage.progressKey + '_' + bookId;
+                    localStorage.removeItem(progressKey);
+                    
+                    console.log('书籍删除成功:', bookId);
+                    this.updateStorageDisplay();
+                    return true;
+                } catch (error) {
+                    console.error('删除书籍失败:', error);
+                    this.showError('删除失败: ' + error.message);
+                    return false;
+                }
+            }
+            
+            // 生成书籍ID
+            generateBookId(title) {
+                return btoa(encodeURIComponent(title)).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
+            }
+            
+            // 更新书籍最后阅读时间
+            updateBookLastRead(bookId) {
+                try {
+                    const books = this.getStoredBooks();
+                    const bookIndex = books.findIndex(book => book.id === bookId);
+                    if (bookIndex >= 0) {
+                        books[bookIndex].lastRead = new Date().toISOString();
+                        localStorage.setItem(this.storage.booksKey, JSON.stringify(books));
+                    }
+                } catch (error) {
+                    console.error('更新阅读时间失败:', error);
+                }
+            }
+            
+            // 保存阅读进度
+            saveReadingProgress(bookId, chapter, scrollPosition) {
+                try {
+                    const progressKey = this.storage.progressKey + '_' + bookId;
+                    const progress = {
+                        chapter: chapter,
+                        scrollPosition: scrollPosition,
+                        savedAt: new Date().toISOString()
+                    };
+                    localStorage.setItem(progressKey, JSON.stringify(progress));
+                } catch (error) {
+                    console.error('保存阅读进度失败:', error);
+                }
+            }
+            
+            // 加载阅读进度
+            loadReadingProgress(bookId) {
+                try {
+                    const progressKey = this.storage.progressKey + '_' + bookId;
+                    const progressJson = localStorage.getItem(progressKey);
+                    return progressJson ? JSON.parse(progressJson) : null;
+                } catch (error) {
+                    console.error('加载阅读进度失败:', error);
+                    return null;
+                }
+            }
+            
+            // 加载已保存的书籍（页面初始化时调用）
+            loadStoredBooks() {
+                const books = this.getStoredBooks();
+                if (books.length > 0) {
+                    console.log('发现已保存的书籍:', books.length, '本');
+                    
+                    // 自动恢复上次阅读的书籍
+                    const lastReadBook = books.reduce((latest, book) => {
+                        return new Date(book.lastRead) > new Date(latest.lastRead) ? book : latest;
+                    });
+                    
+                    if (lastReadBook && new Date(lastReadBook.lastRead) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+                        // 如果上次阅读时间在7天内，自动恢复
+                        console.log('自动恢复上次阅读的书籍:', lastReadBook.title);
+                        setTimeout(() => {
+                            this.loadStoredBook(lastReadBook.id);
+                        }, 100);
+                    }
+                }
+            }
+            
+            // 更新存储显示
+            updateStorageDisplay() {
+                const usage = this.getStorageUsage();
+                
+                // 更新存储条
+                this.storageFill.style.width = usage.percentage + '%';
+                
+                // 更新存储文本
+                const usedMB = Math.round(usage.used / (1024 * 1024) * 100) / 100;
+                const maxMB = Math.round(usage.max / (1024 * 1024));
+                this.storageText.textContent = `存储: ${usedMB}MB / ${maxMB}MB (${usage.booksCount}本书)`;
+                
+                console.log('存储使用情况:', usage);
+            }
+            
+            // 显示存储管理面板
+            showStoragePanel() {
+                this.storagePanel.style.display = 'flex';
+                this.chapterList.style.display = 'none';
+                this.renderBooksList();
+            }
+            
+            // 隐藏存储管理面板
+            hideStoragePanel() {
+                this.storagePanel.style.display = 'none';
+                this.chapterList.style.display = 'block';
+            }
+            
+            // 返回上传界面
+            returnToUpload() {
+                // 清除当前书籍数据
+                this.currentBook = null;
+                this.currentChapter = 0;
+                this.chapters = [];
+                
+                // 重置界面到初始状态
+                this.setInitialState();
+                
+                // 清空内容
+                this.bookTitle.textContent = '小说标题';
+                this.bookStats.textContent = '共0章，约0千字';
+                this.chapterList.innerHTML = '';
+                this.readerContent.innerHTML = '';
+                this.contentTitle.textContent = '';
+                this.contentText.textContent = '';
+                
+                // 关闭侧边栏
+                this.closeSidebar();
+            }
+            
+            // 渲染书籍列表
+            renderBooksList() {
+                const books = this.getStoredBooks();
+                
+                if (books.length === 0) {
+                    this.booksList.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <p>暂无保存的书籍</p>
+                            <p style="font-size: 12px;">上传小说文件后会自动保存到本地</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 按最后阅读时间排序
+                books.sort((a, b) => new Date(b.lastRead) - new Date(a.lastRead));
+                
+                this.booksList.innerHTML = books.map(book => {
+                    const sizeMB = Math.round(book.size / (1024 * 1024) * 100) / 100;
+                    const lastRead = new Date(book.lastRead).toLocaleDateString('zh-CN');
+                    
+                    return `
+                        <div class="book-item" data-book-id="${book.id}">
+                            <div class="book-item-header">
+                                <div class="book-item-title">${book.title}</div>
+                                <div class="book-item-actions">
+                                    <button class="btn-tiny btn-load" onclick="novelReader.loadStoredBook('${book.id}')">阅读</button>
+                                    <button class="btn-tiny btn-delete" onclick="novelReader.confirmDeleteBook('${book.id}', '${book.title}')">删除</button>
+                                </div>
+                            </div>
+                            <div class="book-item-info">
+                                <span>${book.chapters}章</span>
+                                <span>最后阅读: ${lastRead}</span>
+                            </div>
+                            <div class="book-item-size">${sizeMB}MB</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // 加载已保存的书籍
+            loadStoredBook(bookId) {
+                const bookData = this.loadBookFromStorage(bookId);
+                if (!bookData) {
+                    return;
+                }
+                
+                // 设置当前书籍数据
+                this.novelData = bookData;
+                this.currentBookId = bookId;
+                
+                // 更新UI
+                this.bookTitle.textContent = bookData.title;
+                this.updateChapterList();
+                this.updateStats();
+                
+                // 加载阅读进度
+                const progress = this.loadReadingProgress(bookId);
+                const startChapter = progress ? progress.chapter : 0;
+                this.showChapter(startChapter);
+                
+                // 如果有保存的滚动位置，恢复它
+                if (progress && progress.scrollPosition) {
+                    setTimeout(() => {
+                        this.readerContent.scrollTop = progress.scrollPosition;
+                    }, 100);
+                }
+                
+                // 显示阅读器
+                this.uploadSection.style.display = 'none';
+                this.uploadSection.classList.remove('upload-only');
+                this.readerContainer.style.display = 'block';
+                
+                // 显示固定导航条
+                this.fixedNav.style.display = 'flex';
+                
+                // 显示侧边栏
+                this.sidebar.style.display = 'block';
+                
+                // 隐藏存储面板
+                this.hideStoragePanel();
+                
+                console.log('已加载书籍:', bookData.title);
+            }
+            
+            // 确认删除书籍
+            confirmDeleteBook(bookId, title) {
+                if (confirm(`确定要删除《${title}》吗？此操作不可恢复。`)) {
+                    this.deleteBookFromStorage(bookId);
+                    this.renderBooksList();
+                }
+            }
+        }
+        
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            new NovelReader();
+        });
+    </script>
+</body>
+</html>

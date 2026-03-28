@@ -1,0 +1,11 @@
+{
+  "name": "cron-generator",
+  "pluginName": "定时任务表达式生成器",
+  "version": "0.0.1",
+  "description": "小白也能生成想要的定时任务表达式，任你掌控！",
+  "main": "index.html",
+  "logo": "",
+  "pluginType": "ui",
+  "author": "hjdhnx",
+  "dependencies": {}
+}

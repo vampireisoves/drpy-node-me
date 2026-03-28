@@ -1,0 +1,82 @@
+name: build-and-release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  NODE_VERSION: '22'  # 使用 Node.js 22 版本
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 需要写入权限来创建发布
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取所有历史记录
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install 7zip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y p7zip-full
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run packageJS script
+        run: npm run packageJS
+
+      - name: Run packageJS-green script
+        run: npm run packageJS-green
+
+      - name: Find generated 7z files
+        run: |
+          # 在上级目录查找生成的 7z 文件
+          cd ..
+          echo "Generated files:"
+          ls -la *.7z || echo "No 7z files found"
+          # 将文件列表保存到环境变量中
+          echo "FILES=$(ls *.7z 2>/dev/null | tr '\n' ' ')" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 切换到上级目录
+          cd ..
+          # 上传所有找到的 7z 文件
+          for file in $FILES; do
+            echo "Uploading $file..."
+            curl -s \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Content-Type: application/octet-stream" \
+              --data-binary @"$file" \
+              "${{ steps.create_release.outputs.upload_url }}?name=$file"
+            echo "Uploaded $file"
+          done
+
+      - name: Verify upload
+        run: |
+          echo "Uploaded files: $FILES"

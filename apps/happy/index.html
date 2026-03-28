@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Programmers' Day</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            color: #fff;
+            position: relative;
+        }
+
+        /* 动态背景层 */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes bgShift {
+            0%, 100% {
+                transform: translateX(0) translateY(0);
+            }
+            25% {
+                transform: translateX(-20px) translateY(-10px);
+            }
+            50% {
+                transform: translateX(20px) translateY(10px);
+            }
+            75% {
+                transform: translateX(-10px) translateY(20px);
+            }
+        }
+
+        canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        #bigText {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(32px, 8vw, 80px);
+            font-weight: 700;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            z-index: 2;
+            white-space: nowrap;
+            animation: gradientShift 3s ease-in-out infinite, textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes textGlow {
+            from {
+                filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));
+            }
+            to {
+                filter: drop-shadow(0 0 40px rgba(255, 107, 107, 0.8));
+            }
+        }
+
+        #subtitle {
+            position: fixed;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(14px, 3vw, 24px);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            z-index: 2;
+            animation: fadeInUp 2s ease-out 1s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* 撒花容器 */
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            animation: confetti-fall linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            #bigText {
+                font-size: clamp(24px, 10vw, 48px);
+            }
+
+            #subtitle {
+                font-size: clamp(12px, 4vw, 18px);
+                top: 65%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<canvas id="matrixCanvas"></canvas>
+<div id="confetti-container"></div>
+<div id="bigText">Happy Programmers' Day</div>
+<div id="subtitle">致敬每一位改变世界的代码诗人 🚀</div>
+
+<script>
+    /* 单词池 */
+    const words = [
+        "CODE", "DEBUG", "COMMIT", "PUSH",
+        "MERGE", "DEPLOY", "BUILD", "TEST",
+        "CAT VOD", "CAT PAW",
+        "DRPYS", "DRPY2", "HIPY", "EASYBOX", "ZYPLAYER", "DRPY HIKER", "HBOX"
+    ];
+
+    /* ---- 改进的背景数字雨 ---- */
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+    let w, h, fontSize = 14, columns, drops;
+
+    function resize() {
+        w = innerWidth;
+        h = innerHeight;
+        canvas.width = w;
+        canvas.height = h;
+        columns = Math.floor(w / fontSize);
+        drops = Array(columns).fill(1);
+    }
+
+    resize();
+    addEventListener("resize", resize);
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0,0,0,0.05)";
+        ctx.fillRect(0, 0, w, h);
+        ctx.font = fontSize + "px 'Courier New', monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+            let x = i * fontSize, y = drops[i] * fontSize;
+            let text = Math.floor(Math.random() * 10);
+
+            // 渐变色数字雨
+            let alpha = Math.random() * 0.8 + 0.2;
+            let hue = (Date.now() * 0.01 + i * 10) % 360;
+            ctx.fillStyle = `hsla(${hue}, 70%, 60%, ${alpha})`;
+            ctx.fillText(text, x, y);
+
+            if (y > h && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+
+    /* ---- 改进的漂浮单词 ---- */
+    class FloatingWord {
+        constructor(text) {
+            this.text = text;
+            this.x = Math.random() * w;
+            this.y = -20;
+            this.speed = 0.2 + Math.random() * 0.3; // 减慢速度
+            this.rotation = 0;
+            this.rotationSpeed = (Math.random() - 0.5) * 0.01; // 减慢旋转
+            this.scale = 0.9 + Math.random() * 0.2; // 减小缩放变化
+            this.opacity = 0.7 + Math.random() * 0.3; // 提高透明度
+            this.color = [
+                "#00d4ff", "#ff6b6b", "#4ecdc4",
+                "#45b7d1", "#96ceb4", "#feca57"
+            ][Math.floor(Math.random() * 6)];
+        }
+
+        update() {
+            this.y += this.speed;
+            this.rotation += this.rotationSpeed;
+
+            if (this.y > h + 50) {
+                this.y = -20;
+                this.x = Math.random() * w;
+                this.text = words[Math.floor(Math.random() * words.length)];
+            }
+        }
+
+        draw(ctx) {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.rotation);
+            ctx.scale(this.scale, this.scale);
+            ctx.font = "bold 20px 'Segoe UI', sans-serif"; // 加粗字体，增大尺寸
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.opacity;
+            // 添加文字描边提高清晰度
+            ctx.strokeStyle = "rgba(0,0,0,0.3)";
+            ctx.lineWidth = 1;
+            ctx.strokeText(this.text, -ctx.measureText(this.text).width / 2, 0);
+            ctx.fillText(this.text, -ctx.measureText(this.text).width / 2, 0);
+            ctx.restore();
+        }
+    }
+
+    let floatingWords = [];
+    for (let i = 0; i < 12; i++) {
+        floatingWords.push(new FloatingWord(words[i % words.length]));
+    }
+
+    /* ---- 撒花特效 ---- */
+    class Confetti {
+        constructor() {
+            this.x = Math.random() * w;
+            this.y = -10;
+            this.vx = (Math.random() - 0.5) * 2; // 减慢水平速度
+            this.vy = Math.random() * 1.5 + 1; // 减慢下落速度
+            this.rotation = Math.random() * 360;
+            this.rotationSpeed = (Math.random() - 0.5) * 3; // 减慢旋转速度
+            this.size = Math.random() * 6 + 3; // 稍微减小尺寸
+            this.color = [
+                "#ff6b6b", "#4ecdc4", "#45b7d1",
+                "#feca57", "#ff9ff3", "#54a0ff"
+            ][Math.floor(Math.random() * 6)];
+            this.shape = Math.random() > 0.5 ? 'circle' : 'square';
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.rotation += this.rotationSpeed;
+            this.vy += 0.05; // 减小重力加速度
+
+            if (this.y > h + 20) {
+                this.reset();
+            }
+        }
+
+        reset() {
+            this.x = Math.random() * w;
+            this.y = -10;
+            this.vx = (Math.random() - 0.5) * 2;
+            this.vy = Math.random() * 1.5 + 1;
+        }
+
+        draw(ctx) {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.rotation * Math.PI / 180);
+            ctx.fillStyle = this.color;
+
+            if (this.shape === 'circle') {
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+            }
+
+            ctx.restore();
+        }
+    }
+
+    let confettiParticles = [];
+    for (let i = 0; i < 30; i++) { // 减少初始粒子数量
+        confettiParticles.push(new Confetti());
+    }
+
+    /* ---- 动画循环 ---- */
+    function animate() {
+        drawMatrix();
+
+        // 绘制漂浮单词
+        floatingWords.forEach(word => {
+            word.update();
+            word.draw(ctx);
+        });
+
+        // 绘制撒花
+        confettiParticles.forEach(particle => {
+            particle.update();
+            particle.draw(ctx);
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // 定期添加新的撒花
+    setInterval(() => {
+        for (let i = 0; i < 3; i++) { // 减少每次添加的数量
+            confettiParticles.push(new Confetti());
+        }
+        // 限制粒子数量
+        if (confettiParticles.length > 60) { // 减少最大粒子数
+            confettiParticles.splice(0, confettiParticles.length - 60);
+        }
+    }, 3000); // 增加间隔时间
+
+    // 鼠标点击增加撒花
+    document.addEventListener('click', (e) => {
+        for (let i = 0; i < 12; i++) { // 减少点击撒花数量
+            let confetti = new Confetti();
+            confetti.x = e.clientX + (Math.random() - 0.5) * 80;
+            confetti.y = e.clientY;
+            confetti.vx = (Math.random() - 0.5) * 4; // 减慢点击撒花速度
+            confetti.vy = Math.random() * -3 - 1;
+            confettiParticles.push(confetti);
+        }
+    });
+</script>
+</body>
+</html>

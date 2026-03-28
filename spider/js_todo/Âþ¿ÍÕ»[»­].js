@@ -1,0 +1,22 @@
+var rule = {
+    title: '漫客栈',
+    host: 'https://comic.mkzcdn.com',
+    url: '/fyclass/fypage.html',
+    searchUrl: '/search/wd/**/page/fypage.html',
+    searchable: 2,
+    quickSearch: 0,
+    headers: {
+        'User-Agent': 'MOBILE_UA',
+    },
+    timeout: 5000,
+    class_name: '电影&电视剧&综艺&动漫',
+    class_url: '1&2&3&4',
+    play_parse: true,
+    lazy: '',
+    limit: 6,
+    推荐: '.list;a&&title;img&&src;.desc&&Text;a&&href',
+    double: true,
+    一级: '.list;a&&title;img&&src;.desc&&Text;a&&href',
+    二级: '*',
+    搜索: '.list;a&&title;img&&src;.desc&&Text;a&&href',
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "name": "1万部电影",
+    "url": "./mv/1万部电影.txt",
+    "img": "./lives.jpg"
+  },
+  {
+    "name": "电影天堂",
+    "url": "./mv/电影天堂.txt",
+    "img": "./lives.jpg"
+  },
+  {
+    "name": "索尼电影",
+    "url": "./mv/索尼电影.txt",
+    "img": "./lives.jpg"
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "name": "四川联通-在线M3U",
+    "url": "https://d.kstore.dev/download/10717/scy.m3u",
+    "img": "./lives.jpg",
+    "headers": {
+      "User-Agent": null
+    }
+  },
+  {
+    "name": "四川联通-在线TXT",
+    "url": "https://d.kstore.dev/download/10717/scy.txt",
+    "img": "./lives.jpg",
+    "headers": {
+      "User-Agent": null
+    }
+  },
+  {
+    "name": "四川联通-本地M3U",
+    "url": "./tv/live_sc_unicom.m3u",
+    "img": "./lives.jpg",
+    "headers": {
+      "User-Agent": null
+    }
+  },
+  {
+    "name": "四川联通-本地TXT",
+    "url": "./tv/live_sc_unicom.txt",
+    "img": "./lives.jpg",
+    "headers": {
+      "User-Agent": null
+    }
+  }
+]

@@ -1,0 +1,56 @@
+// http://localhost:5757/parse/szy?url=https://v.qq.com/x/cover/mzc00200vkqr54u/v4100qp69zl.html
+const {getHtml} = $.require('./_lib.request.js');
+const host = 'https://ppl.sszzyy.com';
+const jx = {
+    header: {
+        'User-Agent': PC_UA,
+        'Referer': host,
+        'origin': host,
+    },
+};
+
+async function lazy(input, params) {
+    console.log('input:', input);
+    // 生成时间戳和密钥
+    const t = Math.floor(Date.now() / 1000);
+    const key = md5(`123456789${input}${t}`);
+    console.log('key:', key);
+    // 准备请求数据
+    // const postData = `url=${encodeURIComponent(input)}&time=${t}&key=${key}`;
+    const postData = qs.stringify({
+        'url': encodeURIComponent(input),
+        'time': t,
+        'key': key
+    });
+    console.log('postData:', postData);
+    let reqs = (await getHtml({
+        url: "https://ppl.sszzyy.com",
+        method: 'POST',
+        headers: jx.header,
+        data: postData,
+    })).data;
+    console.log(reqs);
+
+    // 解密 URL
+    const SECRET_KEY = 'ARTPLAYER2023217';
+    const IV = 'Artplayerapiban1';
+    let play_url = reqs.url;
+    return {
+        url: decrypt(play_url, SECRET_KEY, IV),
+        header: {
+            'origin': host,
+            'User-Agent': jx.header['User-Agent'],
+        }
+    }
+}
+
+function decrypt(text, aes_key, aes_iv) {
+    let key = CryptoJS.enc.Utf8.parse(aes_key),
+        iv = CryptoJS.enc.Utf8.parse(aes_iv),
+        decrypted = CryptoJS.AES.decrypt(text, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+    return decrypted.toString(CryptoJS.enc.Utf8);
+}

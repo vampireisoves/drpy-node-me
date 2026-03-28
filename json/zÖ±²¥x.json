@@ -1,0 +1,72 @@
+[
+    {
+        "name": "澳洲电视",
+        "url": "https://i.mjh.nz/au/all/raw.m3u8",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Referer": "https://i.mjh.nz/"
+        }
+    },
+    {
+        "name": "catvod",
+        "url": "https://live.catvod.com/tv.m3u",
+        "header": {
+            "User-Agent": "Goiptv/8.8.8",
+            "Referer": "https://live.catvod.com/"
+        }
+    },
+    {
+        "name": "gather",
+        "url": "https://tv.iill.top/m3u/Gather",
+        "header": {
+            "User-Agent": "okhttp/5.1.0"
+        }
+    },
+    {
+        "name": "网络直播",
+        "url": "https://m.iill.top/Live.m3u",
+        "header": {
+            "User-Agent": "okhttp/5.1.0",
+            "Referer": "https://m.iill.top/"
+        }
+    },
+    {
+        "name": "虎牙",
+        "url": "https://sub.ottiptv.cc/huyayqk.m3u",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Referer": "https://sub.ottiptv.cc/"
+        }
+    },
+    {
+        "name": "斗鱼",
+        "url": "https://sub.ottiptv.cc/douyuyqk.m3u",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Referer": "https://sub.ottiptv.cc/"
+        }
+    },
+    {
+        "name": "yy轮播",
+        "url": "https://sub.ottiptv.cc/yylunbo.m3u",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Referer": "https://sub.ottiptv.cc/"
+        }
+    },
+    {
+        "name": "哔哩哔哩",
+        "url": "https://sub.ottiptv.cc/bililive.m3u",
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Referer": "https://sub.ottiptv.cc/"
+        }
+    },
+    {
+        "name": "冰茶订阅",
+        "url": "https://fy.188766.xyz/?ip=&bconly=true&json=true",
+        "header": {
+            "User-Agent": "bingcha/1.1"
+        }
+    }
+]

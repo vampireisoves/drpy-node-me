@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>本机极速版 (JS流体版)</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flv.js@1.6.2/dist/flv.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ================= 动感流体 UI 样式定义 ================= */
+        :root {
+            --primary: #ff2a54;
+            --primary-glow: rgba(255, 42, 84, 0.6);
+            --card-bg: rgba(28, 29, 34, 0.6);
+            --text-main: #ffffff;
+            --text-sub: #a0a3b1;
+            --nav-height: 60px;
+        }
+        
+        [v-cloak] { display: none !important; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body { 
+            margin: 0; padding: 0; 
+            color: var(--text-main); 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            background: linear-gradient(-45deg, #0a0a0c, #1a0f14, #0f111a, #0a0a0c);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            padding-bottom: 20px; 
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 透明悬浮顶栏 */
+        .glass-nav {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 90;
+            background: linear-gradient(to bottom, rgba(10,10,12,0.9) 0%, rgba(10,10,12,0) 100%);
+            padding: 15px 15px 25px 15px;
+            transition: background 0.3s;
+        }
+        .glass-nav.scrolled {
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        /* 搜索容器 */
+        .search-container { display: flex; gap: 10px; }
+        .source-select { 
+            width: 28%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); 
+            color: #fff; border-radius: 12px; padding: 0 10px; font-weight: bold; font-size: 13px; backdrop-filter: blur(5px);
+        }
+        .search-input-wrapper {
+            flex: 1; display: flex; background: rgba(0,0,0,0.4); border-radius: 12px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); transition: border-color 0.3s;
+        }
+        .search-input-wrapper:focus-within { border-color: var(--primary); }
+        .search-input { flex: 1; background: transparent; border: none; padding: 10px 12px; color: #fff; font-size: 14px; }
+        .search-btn { background: transparent; color: var(--primary); border: none; padding: 0 15px; font-size: 16px; cursor: pointer; }
+
+        /* ================= 多样性组件 1：首屏焦点巨幕 ================= */
+        .hero-banner {
+            position: relative; width: 100%; height: 55vh; overflow: hidden; cursor: pointer;
+            border-radius: 0 0 30px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .hero-banner:active .hero-img { transform: scale(1.05); }
+        .hero-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+            background: linear-gradient(to top, rgba(10,10,12,1) 0%, rgba(10,10,12,0.8) 40%, transparent 100%);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 30px 20px;
+        }
+        .hero-tag { align-self: flex-start; background: var(--primary); color: #fff; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 12px; margin-bottom: 8px; box-shadow: 0 4px 10px var(--primary-glow); }
+        .hero-title { font-size: 28px; font-weight: 900; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.8); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .hero-remark { font-size: 13px; color: #ccc; margin-top: 8px; font-weight: 500; }
+
+        /* 悬浮分类胶囊 */
+        .nav-scroller { display: flex; overflow-x: auto; gap: 12px; padding: 15px 20px; margin-top: -25px; position: relative; z-index: 10; }
+        .nav-scroller::-webkit-scrollbar { display: none; }
+        .nav-item { 
+            white-space: nowrap; padding: 8px 20px; border-radius: 25px; font-size: 14px;
+            background: rgba(255,255,255,0.1); color: #fff; font-weight: 600; 
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .nav-item.active { background: var(--primary); border-color: transparent; box-shadow: 0 6px 20px var(--primary-glow); transform: translateY(-3px); }
+
+        /* 模块标题 */
+        .section-heading { font-size: 18px; font-weight: 800; padding: 10px 20px 0 20px; display: flex; align-items: center; }
+        .section-heading i { color: var(--primary); margin-right: 8px; font-size: 20px; }
+
+        /* ================= 多样性组件 2：横向滑动热播轴 ================= */
+        .h-scroll-container { display: flex; overflow-x: auto; gap: 15px; padding: 15px 20px; scroll-snap-type: x mandatory; }
+        .h-scroll-container::-webkit-scrollbar { display: none; }
+        .h-card { flex: 0 0 45vw; scroll-snap-align: start; cursor: pointer; transition: transform 0.3s; }
+        .h-card:active { transform: scale(0.95); }
+        .h-poster { width: 100%; aspect-ratio: 16/10; border-radius: 12px; overflow: hidden; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
+        .h-poster img { width: 100%; height: 100%; object-fit: cover; }
+        .h-remark { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .h-title { font-size: 14px; font-weight: 600; margin-top: 8px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* ================= 多样性组件 3：常规网格 ================= */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px 20px; }
+        .card { display: flex; flex-direction: column; cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .card:active { transform: scale(0.92); }
+        .poster { width: 100%; aspect-ratio: 3/4; border-radius: 12px; background: var(--card-bg); position: relative; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); }
+        .poster img { width: 100%; height: 100%; object-fit: cover; }
+        .remark { position: absolute; bottom: 6px; right: 6px; background: rgba(0,0,0,0.75); color: #fff; font-size: 10px; font-weight: bold; padding: 3px 6px; border-radius: 6px; backdrop-filter: blur(8px); }
+        .title { padding: 8px 2px; font-size: 13px; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
+
+        .status-msg { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; font-weight: bold; grid-column: 1/-1; letter-spacing: 1px; }
+
+        /* ================= 详情页纵深 UI ================= */
+        .detail-view { padding-bottom: 40px; min-height: 100vh; position: absolute; top: 0; left: 0; width: 100%; z-index: 200; background: var(--bg-dark); }
+        .detail-header { position: sticky; top: 0; z-index: 100; height: var(--nav-height); background: linear-gradient(to bottom, rgba(10, 10, 12, 0.95), rgba(10, 10, 12, 0.7)); backdrop-filter: blur(15px); display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .back-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 18px; width: 36px; height: 36px; border-radius: 50%; margin-right: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
+        .player-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: sticky; top: var(--nav-height); z-index: 90; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .player-wrapper.floating { position: fixed !important; bottom: 90px !important; right: 20px !important; width: 65vw !important; top: auto !important; z-index: 999; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.9); }
+
+        .info-section { padding: 20px 15px; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5)); }
+        .vod-title { font-size: 24px; font-weight: 800; margin: 0 0 10px 0; }
+        .vod-meta { font-size: 13px; color: var(--text-sub); margin-bottom: 20px; display: inline-block; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 6px; }
+        
+        .section-title { font-size: 16px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; }
+        .section-title i { margin-right: 8px; color: var(--primary); }
+        
+        .lines-container { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 15px; margin-bottom: 10px; }
+        .lines-container::-webkit-scrollbar { display: none; }
+        .line-btn { white-space: nowrap; padding: 10px 20px; border-radius: 12px; background: rgba(255,255,255,0.05); color: var(--text-sub); font-size: 14px; font-weight: bold; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
+        .line-btn.active { background: rgba(255,42,84,0.15); color: #fff; border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); }
+
+        .eps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; }
+        .ep-btn { background: rgba(255,255,255,0.05); color: #e0e0e0; text-align: center; padding: 12px 5px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: transform 0.2s; }
+        .ep-btn:active { transform: scale(0.9); }
+        .ep-btn.active { background: linear-gradient(135deg, #ff2a54, #ff0844); color: #fff; box-shadow: 0 4px 15px var(--primary-glow); }
+
+        .vod-desc { font-size: 14px; color: #ccc; line-height: 1.8; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; }
+
+        /* 页面切换纵深转场 */
+        .page-enter-active, .page-leave-active { transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .page-enter-from { opacity: 0; transform: translateY(50px) scale(0.95); }
+        .page-leave-to { opacity: 0; transform: translateY(-50px) scale(1.05); }
+    </style>
+</head>
+<body>
+
+<div id="app" v-cloak>
+    
+    <transition name="page">
+        <div v-show="currentView === 'list'" class="list-view">
+            
+            <div class="glass-nav" :class="{ 'scrolled': isScrolled }">
+                <div class="search-container">
+                    <select class="source-select" v-model="currentSite" @change="onSourceChange">
+                        <option v-if="sites.length === 0" value="">加载源...</option>
+                        <option v-for="site in sites" :key="site.key" :value="site.key">{{ site.name }}</option>
+                    </select>
+                    <div class="search-input-wrapper">
+                        <input type="text" class="search-input" v-model="wd" placeholder="探索海量影视..." @keyup.enter="doSearch">
+                        <button class="search-btn" @click="doSearch"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="vodList.length > 0">
+                
+                <div class="hero-banner" v-if="heroItem" @click="handleCardClick(heroItem)">
+                    <img class="hero-img" :src="heroItem.vod_pic" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
+                    <div class="hero-overlay">
+                        <div class="hero-tag">🔥 首屏独家呈现</div>
+                        <div class="hero-title">{{ heroItem.vod_name }}</div>
+                        <div class="hero-remark">{{ heroItem.vod_remarks || '高清正片' }}</div>
+                    </div>
+                </div>
+
+                <div class="nav-scroller" v-if="categories.length > 0">
+                    <div v-for="cat in categories" :key="cat.type_id" 
+                         class="nav-item" :class="{ active: t === cat.type_id }"
+                         @click="changeTab(cat.type_id)">
+                        {{ cat.type_name }}
+                    </div>
+                </div>
+
+                <template v-if="hotItems.length > 0">
+                    <div class="section-heading"><i class="fas fa-fire"></i> 正在热播</div>
+                    <div class="h-scroll-container">
+                        <div class="h-card" v-for="item in hotItems" :key="item.vod_id" @click="handleCardClick(item)">
+                            <div class="h-poster">
+                                <img :src="item.vod_pic" loading="lazy">
+                                <div class="h-remark" v-if="item.vod_remarks">{{ item.vod_remarks }}</div>
+                            </div>
+                            <div class="h-title">{{ item.vod_name }}</div>
+                        </div>
+                    </div>
+                </template>
+
+                <template v-if="gridItems.length > 0">
+                    <div class="section-heading"><i class="fas fa-compass"></i> 为你推荐</div>
+                    <div class="grid">
+                        <div v-for="item in gridItems" :key="item.vod_id" class="card" @click="handleCardClick(item)">
+                            <div class="poster">
+                                <img :src="item.vod_pic" loading="lazy">
+                                <div class="remark" v-if="item.vod_remarks">{{ item.vod_remarks }}</div>
+                            </div>
+                            <div class="title">{{ item.vod_name }}</div>
+                        </div>
+                    </div>
+                </template>
+                
+                <div v-if="isLoading && vodList.length > 0" class="status-msg" style="padding: 20px 0;">
+                    <i class="fas fa-circle-notch fa-spin" style="color: var(--primary); margin-right: 8px;"></i> 正在解析深层数据...
+                </div>
+
+                <div v-if="isFinish" class="status-msg">—— 已抵达宇宙边缘 ——</div>
+            </div>
+            
+            <div v-if="isLoading && vodList.length === 0" class="status-msg" style="margin-top: 150px;">
+                <i class="fas fa-circle-notch fa-spin" style="color: var(--primary); font-size: 24px; margin-bottom: 10px; display:block;"></i> 正在注入网络数据...
+            </div>
+            <div v-else-if="vodList.length === 0 && !isLoading" class="status-msg" style="margin-top: 150px;">
+                🛸 虚空之中，一无所获
+            </div>
+            
+        </div>
+    </transition>
+
+    <transition name="page">
+        <div v-if="currentView === 'detail'" class="detail-view">
+            
+            <div class="detail-header">
+                <button class="back-btn" @click="goBack"><i class="fas fa-arrow-left"></i></button>
+                <span style="font-weight: 800; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    {{ detailData.vod_name || '解析中...' }}
+                </span>
+            </div>
+
+            <div v-if="isFloating" style="width: 100%; aspect-ratio: 16/9; background: #000;"></div>
+
+            <div class="player-wrapper" :class="{ floating: isFloating }" id="player-box">
+                <div id="artplayer-app" style="width:100%; height:100%;" v-show="!isYoutube"></div>
+                <div id="youtube-app" style="width:100%; height:100%;" v-show="isYoutube"></div>
+            </div>
+
+            <div class="info-section">
+                <h1 class="vod-title">{{ detailData.vod_name }}</h1>
+                <div class="vod-meta">{{ formattedMeta }}</div>
+
+                <div class="section-title"><i class="fas fa-satellite-dish"></i> 信号源</div>
+                <div class="lines-container">
+                    <div v-for="(line, index) in playData" :key="index" 
+                         class="line-btn" :class="{ active: currentLine === index }"
+                         @click="changeLine(index)">
+                        {{ line.from }}
+                    </div>
+                </div>
+
+                <div class="section-title"><i class="fas fa-layer-group"></i> 矩阵序列</div>
+                <div class="eps-grid" v-if="currentLineEps.length > 0">
+                    <div v-for="(ep, index) in currentLineEps" :key="index"
+                         class="ep-btn" :class="{ active: currentEp === index }"
+                         @click="playVideo(ep.url, index)">
+                        {{ ep.name }}
+                    </div>
+                </div>
+                <div v-else class="status-msg" style="padding: 10px;">源信号微弱，无法解析</div>
+
+                <div class="section-title" style="margin-top: 15px;"><i class="fas fa-file-alt"></i> 档案数据</div>
+                <div class="vod-desc">{{ formattedDesc }}</div>
+            </div>
+        </div>
+    </transition>
+
+</div>
+
+<script>
+const { createApp } = Vue;
+
+const currentProtocol = window.location.protocol;
+const currentHost = window.location.hostname || '127.0.0.1';
+
+// 修改为 js.html 的 API 端口 8083
+const API_HOST = `${currentProtocol}//${currentHost}:8083/`;
+
+createApp({
+    data() {
+        return {
+            currentView: 'list', 
+            isServerConnected: false,
+            sites: [], currentSite: '', t: '', wd: '', pg: 1,
+            categories: [], vodList: [], isLoading: false, isFinish: false,
+            detailData: {}, playData: [], currentLine: 0, currentEp: 0,
+            art: null, isYoutube: false, isFloating: false,
+            isScrolled: false
+        }
+    },
+    computed: {
+        heroItem() { return this.vodList.length > 0 ? this.vodList[0] : null; },
+        hotItems() { return this.vodList.length > 1 ? this.vodList.slice(1, 6) : []; },
+        gridItems() { return this.vodList.length > 6 ? this.vodList.slice(6) : []; },
+        currentLineEps() { return this.playData[this.currentLine]?.eps || []; },
+        formattedMeta() {
+            if (!this.detailData) return '';
+            const arr = [this.detailData.vod_year, this.detailData.vod_area, this.detailData.vod_class].filter(Boolean);
+            return arr.length > 0 ? arr.join(' · ') : '暂无影片信息';
+        },
+        formattedDesc() {
+            if (!this.detailData || !this.detailData.vod_content) return '暂无简介';
+            return this.detailData.vod_content.toString().replace(/<[^>]+>/g, ""); 
+        }
+    },
+    mounted() {
+        this.init();
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    unmounted() {
+        window.removeEventListener('scroll', this.handleScroll);
+        if (this.art) this.art.destroy();
+    },
+    methods: {
+        async api(params) {
+            // 将 site 参数修改为 sp，适配 js 逻辑
+            const finalParams = { sp: this.currentSite, ...params };
+            Object.keys(finalParams).forEach(k => { if (!finalParams[k]) delete finalParams[k]; });
+            const qs = new URLSearchParams(finalParams).toString();
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000); 
+                const res = await fetch(`${API_HOST}?${qs}`, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                return await res.json();
+            } catch (e) { 
+                console.error('API请求失败/超时:', e);
+                return { code: 500, msg: '网络错误或超时' }; 
+            }
+        },
+        async init() {
+            fetch(API_HOST).then(() => this.isServerConnected = true).catch(() => this.isServerConnected = false);
+            try {
+                // 使用 js 的数据源逻辑，请求 jslist.txt
+                const targetUrl = 'http://127.0.0.1:9978/file/lz/js/jslist.txt';
+                const proxyUrl = `${API_HOST}?do=proxy&url=${encodeURIComponent(targetUrl)}`;
+                const res = await fetch(proxyUrl);
+                if (res.ok) {
+                    const text = await res.text();
+                    const sources = text.split(/\r?\n/).map(s => s.trim()).filter(s => s);
+                    if (sources.length > 0) {
+                        this.sites = sources.map(s => ({ key: s, name: s }));
+                        this.currentSite = this.sites[0].key;
+                    } else {
+                        this.sites = [{ key: '独播库', name: '独播库' }];
+                        this.currentSite = '独播库';
+                    }
+                }
+            } catch (e) { 
+                console.error('获取源失败', e); 
+                this.sites = [{ key: '独播库', name: '独播库' }];
+                this.currentSite = '独播库';
+            }
+            if(this.currentSite) {
+                await this.loadNav();
+                this.loadList(true);
+            }
+        },
+        async loadNav() {
+            const res = await this.api({});
+            if (res.class && res.class.length > 0) {
+                this.categories = res.class;
+                if (!this.t && !this.wd) { this.t = res.class[0].type_id; }
+            } else { this.categories = []; }
+        },
+        async loadList(reset = false) {
+            if (reset) { this.pg = 1; this.vodList = []; this.isFinish = false; }
+            if (this.isLoading || this.isFinish) return;
+            this.isLoading = true;
+            const res = await this.api({ t: this.t, wd: this.wd, pg: this.pg });
+            this.isLoading = false;
+            if (res.code === 500 || !res.list || res.list.length === 0) { this.isFinish = true; return; }
+            this.vodList.push(...res.list);
+        },
+        onSourceChange() {
+            this.t = ''; this.wd = ''; this.categories = [];
+            this.loadNav().then(() => { this.loadList(true); });
+        },
+        changeTab(id) { this.t = id; this.wd = ''; this.loadList(true); },
+        doSearch() { this.t = ''; this.loadList(true); },
+        handleScroll() {
+            const scrollY = window.scrollY;
+            this.isScrolled = scrollY > 50;
+            
+            if (this.currentView !== 'list' || this.isLoading || this.isFinish) return;
+            const bodyH = document.body.offsetHeight;
+            if ((scrollY + window.innerHeight) >= bodyH - 300) { this.pg++; this.loadList(false); }
+        },
+        handleCardClick(v) {
+            if (v.vod_tag === 'folder') {
+                this.t = v.vod_id; this.wd = ''; this.loadList(true);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else { this.showDetail(v.vod_id); }
+        },
+        async showDetail(id) {
+            this.currentView = 'detail'; this.isFloating = false; window.scrollTo(0, 0);
+            this.detailData = {}; this.playData = []; this.currentLine = 0; this.currentEp = 0;
+            if (this.art) { this.art.destroy(); this.art = null; }
+
+            const res = await this.api({ ids: id });
+            if (!res.list || res.list.length === 0) return;
+            const item = res.list[0];
+            item.vod_name = item.vod_name || item.name || '未知片名';
+            this.detailData = item;
+
+            const froms = (item.vod_play_from || '默认线路').split('$$$');
+            const urls = (item.vod_play_url || '').split('$$$');
+            this.playData = froms.map((f, i) => {
+                let uStr = urls[i] || '';
+                if (uStr.indexOf('$') === -1) { uStr = '正片$' + uStr; }
+                const epsList = [];
+                const parts = uStr.split('#');
+                parts.forEach(line => {
+                    if (!line.trim()) return; 
+                    const p = line.split('$');
+                    epsList.push({ name: p[0], url: p[1] || p[0] });
+                });
+                return { from: f, eps: epsList };
+            });
+
+            if (this.playData[0] && this.playData[0].eps[0]) {
+                this.$nextTick(() => { this.playVideo(this.playData[0].eps[0].url, 0); });
+            }
+        },
+        changeLine(index) {
+            this.currentLine = index;
+            if (this.currentLineEps.length > 0) { this.playVideo(this.currentLineEps[0].url, 0); }
+        },
+        async playVideo(url, index) {
+            this.currentEp = index;
+            
+            const ytRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const initialMatch = url.match(ytRegExp);
+            if (initialMatch && initialMatch[2].length === 11) {
+                this.initYouTube(initialMatch[2]);
+                return;
+            }
+
+            // 使用 sp 参数
+            const qs = new URLSearchParams({ sp: this.currentSite, play: url }).toString();
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                const res = await fetch(`${API_HOST}?${qs}`, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                const data = await res.json();
+                
+                let finalUrl = url; let headers = null;
+                if (data.url) finalUrl = data.url;
+                if (data.header) headers = data.header;
+                
+                this.preparePlayer(finalUrl, headers);
+            } catch(e) {
+                console.error('后端解析失败或超时，启用兜底代理:', e);
+                this.preparePlayer(url, null);
+            }
+        },
+        preparePlayer(url, headers) {
+            const ytRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const ytMatch = url.match(ytRegExp);
+            if (ytMatch && ytMatch[2].length === 11) { 
+                this.initYouTube(ytMatch[2]); 
+                return; 
+            }
+
+            // 统一使用 API_HOST 作为代理服务器
+            let proxyUrl = `${API_HOST}?do=proxy&url=${encodeURIComponent(url)}`;
+            if (headers) {
+                const jsonStr = JSON.stringify(headers);
+                const b64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (m, p1) => String.fromCharCode('0x' + p1)));
+                proxyUrl += `&h=${encodeURIComponent(b64)}`;
+            }
+
+            let videoType = 'auto';
+            const lowerUrl = url.toLowerCase();
+            if (lowerUrl.indexOf('.flv') !== -1) videoType = 'flv';
+            else if (lowerUrl.indexOf('.m3u8') !== -1) videoType = 'm3u8';
+            else if (lowerUrl.indexOf('.mp4') !== -1) videoType = 'mp4';
+
+            this.initArt(proxyUrl, videoType);
+        },
+        initYouTube(videoId) {
+            if (this.art) { this.art.destroy(); this.art = null; }
+            this.isYoutube = true;
+            document.getElementById('youtube-app').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        },
+        initArt(url, type) {
+            if (this.art) this.art.destroy();
+            this.isYoutube = false;
+            const _this = this;
+            this.art = new Artplayer({
+                container: '#artplayer-app', 
+                url: url, 
+                type: type || 'auto', 
+                autoplay: true, 
+                isLive: false,
+                setting: false, 
+                playbackRate: true, 
+                aspectRatio: true, 
+                fullscreen: true, 
+                fullscreenWeb: true, 
+                autoOrientation: true, 
+                pip: false, 
+                moreVideoAttr: { 'webkit-playsinline': true, 'playsinline': true },
+                customType: {
+                    m3u8: function (video, url) {
+                        if (Hls.isSupported()) {
+                            var hls = new Hls({
+                                pLoader: function(config) {
+                                    let loader = new Hls.DefaultConfig.loader(config);
+                                    this.abort = () => loader.abort();
+                                    this.destroy = () => loader.destroy();
+                                    this.load = (context, config, callbacks) => {
+                                        let onSuccess = callbacks.onSuccess;
+                                        callbacks.onSuccess = (response, stats, context) => {
+                                            if (response.data && typeof response.data === 'string') {
+                                                response.data = response.data.replace(/127\.0\.0\.1/g, window.location.hostname);
+                                            }
+                                            onSuccess(response, stats, context);
+                                        };
+                                        loader.load(context, config, callbacks);
+                                    };
+                                }
+                            }); 
+                            hls.loadSource(url); hls.attachMedia(video);
+                            _this.art.on('destroy', () => hls.destroy());
+                        } else { video.src = url; }
+                    },
+                    flv: function (video, url) {
+                        if (flvjs.isSupported()) {
+                            const flvPlayer = flvjs.createPlayer({ type: 'flv', url: url });
+                            flvPlayer.attachMediaElement(video); flvPlayer.load();
+                            _this.art.on('destroy', () => flvPlayer.destroy());
+                        }
+                    }
+                },
+                controls: [{
+                    position: 'right',
+                    html: '<div style="font-size:12px;background:var(--primary);color:#fff;padding:4px 8px;border-radius:12px;margin-left:5px;">小窗</div>',
+                    tooltip: '系统级画中画',
+                    click: function () {
+                        if (window.AppBridge && window.AppBridge.enterPiP) {
+                            window.AppBridge.enterPiP();
+                        } else if (_this.art) {
+                            _this.art.pip = !_this.art.pip;
+                        }
+                    }
+                }]
+            });
+            
+            this.art.on('error', () => { if (this.art) this.art.notice.show = '播放出错，请尝试切换线路'; });
+
+            this.art.on('video:ended', () => {
+                const nextEpIndex = _this.currentEp + 1; 
+                
+                if (_this.currentLineEps && nextEpIndex < _this.currentLineEps.length) {
+                    const nextEp = _this.currentLineEps[nextEpIndex];
+                    
+                    _this.art.notice.show = `即将播放下一集：${nextEp.name}`;
+                    
+                    setTimeout(() => {
+                        _this.playVideo(nextEp.url, nextEpIndex);
+                    }, 1500);
+                } else {
+                    _this.art.notice.show = '全部剧集已播放完毕';
+                }
+            });
+
+            this.art.on('ready', () => {
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.metadata = new MediaMetadata({
+                        title: _this.detailData.vod_name || '未知影片',
+                        artist: _this.detailData.vod_remarks || '本机极速版',
+                        artwork: [{ src: _this.detailData.vod_pic || '', sizes: '512x512', type: 'image/jpeg' }]
+                    });
+                    navigator.mediaSession.setActionHandler('play', () => { if(_this.art) _this.art.play(); });
+                    navigator.mediaSession.setActionHandler('pause', () => { if(_this.art) _this.art.pause(); });
+                }
+            });
+        },
+        goBack() {
+            if (this.art) { 
+                this.art.destroy(); 
+                this.art = null; 
+            }
+            const ytApp = document.getElementById('youtube-app');
+            if (ytApp) ytApp.innerHTML = '';
+            
+            this.currentView = 'list'; 
+            this.isFloating = false;
+        }
+    }
+}).mount('#app');
+</script>
+</body>
+</html>

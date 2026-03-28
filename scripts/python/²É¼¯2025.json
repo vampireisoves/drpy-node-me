@@ -1,0 +1,140 @@
+[
+  {
+    "name": "电影天堂资源",
+    "url": "http://caiji.dyttzyapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "黑木耳",
+    "url": "https://json.heimuer.xyz",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "如意资源",
+    "url": "http://cj.rycjapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "暴风资源",
+    "url": "https://bfzyapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "天涯资源",
+    "url": "https://tyyszy.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "非凡影视",
+    "url": "http://ffzy5.tv",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "360资源",
+    "url": "https://360zy.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "茅台资源",
+    "url": "https://caiji.maotaizy.cc",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "卧龙资源",
+    "url": "https://wolongzyw.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "极速资源",
+    "url": "https://jszyapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "豆瓣资源",
+    "url": "https://dbzy.tv",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "魔爪资源",
+    "url": "https://mozhuazy.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "魔都资源",
+    "url": "https://www.mdzyapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "最大资源",
+    "url": "https://api.zuidapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "樱花资源",
+    "url": "https://m3u8.apiyhzy.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "无尽资源",
+    "url": "https://api.wujinapi.me",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "旺旺短剧",
+    "url": "https://wwzy.tv",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "iKun资源",
+    "url": "https://ikunzyapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "量子资源站",
+    "url": "https://cj.lziapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "小猫咪资源",
+    "url": "https://zy.xmm.hk",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "iqiyi资源",
+    "url": "https://www.iqiyizyapi.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "华为吧资源",
+    "url": "https://cjhwba.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  },
+  {
+    "name": "百度云资源",
+    "url": "https://api.apibdzy.com",
+    "parse_url": "",
+    "cate_exclude": ""
+  }
+]

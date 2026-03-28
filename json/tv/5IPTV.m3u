@@ -1,0 +1,335 @@
+#EXTM3U
+#EXTINF:-1 group-title="央视",CCTV 1
+http://$api?p=gitv&id=G_CCTV-1-AVS-4K264.m3u8
+#EXTINF:-1 group-title="央视",CCTV 2
+http://$api?p=gitv&id=G_CCTV-2-HD-265-8M.m3u8
+#EXTINF:-1 group-title="央视",CCTV 3
+http://$api?p=gitv&id=G_CCTV-3-AVS-4K264.m3u8
+#EXTINF:-1 group-title="央视",CCTV 4
+http://$api?p=gitv&id=G_CCTV-4-HD-265-8M.m3u8
+#EXTINF:-1 group-title="央视",CCTV 5
+http://$api?p=gitv&id=G_CCTV-5-AVS-4K264.m3u8
+#EXTINF:-1 group-title="央视",CCTV 5+
+http://$api?p=gitv&id=G_CCTV-5PLUS-HD-265-8M.m3u8
+#EXTINF:-1 group-title="央视",CCTV 6
+http://$api?p=gitv&id=G_CCTV-6-AVS-4K264.m3u8
+#EXTINF:-1 group-title="央视",CCTV 7
+http://$api?p=gitv&id=G_CCTV-7-HD-265-8M.m3u8
+#EXTINF:-1 group-title="央视",CCTV 8
+http://$api?p=gitv&id=G_CCTV-8-AVS-4K264.m3u8
+#EXTINF:-1 group-title="央视",CCTV 9
+http://$api?p=gitv&id=G_CCTV-9-HD-265-8M.m3u8
+#EXTINF:-1 group-title="央视",CCTV 10
+http://$api?p=gitv&id=G_CCTV-10-HD-265-8M.m3u8
+#EXTINF:-1 group-title="央视",CCTV 11
+http://$api?p=gitv&id=H265-5500k-1080P-cctv11.m3u8
+#EXTINF:-1 group-title="央视",CCTV 12
+http://$api?p=gitv&id=G_CCTV-12-HD-265-8M.m3u8
+#EXTINF:-1 group-title="央视",CCTV 13
+http://$api?p=gitv&id=G_CCTV-13-HD-265-8M.m3u8
+#EXTINF:-1 group-title="央视",CCTV 14
+http://$api?p=gitv&id=G_CCTV-14-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 15
+http://$api?p=gitv&id=H265-5500k-1080P-cctv15.m3u8
+#EXTINF:-1 group-title="央视",CCTV 16
+http://$api?p=gitv&id=G_CCTV-16-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 16 4K
+http://$api?p=gitv&id=G_CCTV-16-4K.m3u8
+#EXTINF:-1 group-title="央视",CCTV 17
+http://$api?p=gitv&id=G_CCTV-17-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 4K
+http://$api?p=gitv&id=G_CCTV-4K-HD.m3u8
+#EXTINF:-1 group-title="央视",CCTV 世界地理
+http://$api?p=gitv&id=G_SHIJIEDL-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 风云剧场
+http://$api?p=gitv&id=G_FENGYUNJC-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 风云足球
+http://$api?p=gitv&id=G_FENGSHANGZQ-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 风云音乐
+http://$api?p=gitv&id=G_FENGYUNYY-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 兵器科技
+http://$api?p=gitv&id=G_BINGQIKJ-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 央视台球
+http://$api?p=gitv&id=G_TAIQIU-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 高尔夫网球
+http://$api?p=gitv&id=G_CCTV-GOLF-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 女性时尚
+http://$api?p=gitv&id=G_NVXINGSS-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 电视指南
+http://$api?p=gitv&id=G_DIANSHIZN-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 第一剧场
+http://$api?p=gitv&id=G_DIYIJC-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 怀旧剧场
+http://$api?p=gitv&id=G_HUAIJIUJC-CQ.m3u8
+#EXTINF:-1 group-title="央视",CCTV 央视文化精品
+http://$api?p=gitv&id=G_CCTV-WENHUA-CQ.m3u8
+#EXTINF:-1 group-title="央视",CETV 早期教育
+http://$api?p=gitv&id=G_CETV-ZQJY-CQ.m3u8
+#EXTINF:-1 group-title="卫视",江苏卫视
+http://$api?p=gitv&id=G_JIANGSU-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",东方卫视
+http://$api?p=gitv&id=G_DONGFANG-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",北京卫视
+http://$api?p=gitv&id=G_BEIJING-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",广东卫视
+http://$api?p=gitv&id=G_GUANGDONG-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",山东卫视
+http://$api?p=gitv&id=G_SHANDONG-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",深圳卫视
+http://$api?p=gitv&id=G_SHENZHEN-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",湖北卫视
+http://$api?p=gitv&id=G_HUBEI-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",湖南卫视
+http://$api?p=gitv&id=G_HUNAN-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",浙江卫视
+http://$api?p=gitv&id=G_ZHEJIANG-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",黑龙江卫视
+http://$api?p=gitv&id=G_HEILONGJIANG-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",天津卫视
+http://$api?p=gitv&id=G_TIANJIN-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",安徽卫视
+http://$api?p=gitv&id=G_ANHUI-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",辽宁卫视
+http://$api?p=gitv&id=G_LIAONING-HD-265-8M.m3u8
+#EXTINF:-1 group-title="卫视",东南卫视
+http://$api?p=gitv&id=H265-5500k-1080P-dongnanstv.m3u8
+#EXTINF:-1 group-title="卫视",吉林卫视
+http://$api?p=gitv&id=G_JILIN-CQ.m3u8
+#EXTINF:-1 group-title="卫视",四川卫视
+http://$api?p=gitv&id=G_SICHUAN-CQ.m3u8
+#EXTINF:-1 group-title="卫视",江西卫视
+http://$api?p=gitv&id=G_JIANGXI-CQ.m3u8
+#EXTINF:-1 group-title="卫视",河北卫视
+http://$api?p=gitv&id=G_HEBEI-CQ.m3u8
+#EXTINF:-1 group-title="卫视",河南卫视
+http://$api?p=gitv&id=G_HENAN-CQ.m3u8
+#EXTINF:-1 group-title="卫视",贵州卫视
+http://$api?p=gitv&id=G_GUIZHOU-CQ.m3u8
+#EXTINF:-1 group-title="卫视",重庆卫视
+http://$api?p=gitv&id=G_CHONGQING-CQ.m3u8
+#EXTINF:-1 group-title="卫视",云南卫视
+http://$api?p=gitv&id=G_YUNNAN-HQ.m3u8
+#EXTINF:-1 group-title="卫视",三沙卫视
+http://$api?p=gitv&id=G_SANSHA-HQ.m3u8
+#EXTINF:-1 group-title="卫视",海南卫视
+http://$api?p=gitv&id=HD-8000k-1080P-lvyoustv.m3u8
+#EXTINF:-1 group-title="其他",上海纪实人文
+http://$api?p=gitv&id=H265-5500k-1080P-shanghaijishi.m3u8
+#EXTINF:-1 group-title="其他",北京纪实科教
+http://$api?p=gitv&id=HD-8000k-1080P-beijingjishi.m3u8
+#EXTINF:-1 group-title="卫视",凤凰卫视中文
+http://$api?p=gitv&id=HD-10000k-1080P-fhchinese5s.m3u8
+#EXTINF:-1 group-title="卫视",凤凰卫视资讯
+http://$api?p=gitv&id=HD-10000k-1080P-fhzixun5s.m3u8
+#EXTINF:-1 group-title="卫视",凤凰卫视香港
+http://$api?p=gitv&id=HD-10000k-1080P-fhhongkong5s.m3u8
+#EXTINF:-1 group-title="其他",纯享 4K
+http://$api?p=gitv&id=HD-20M-2160P-chunxiang4k.m3u8
+#EXTINF:-1 group-title="其他",高清臻享睛彩篮球
+http://$api?p=gitv&id=miguaoyun01-AVS-4K01.m3u8
+#EXTINF:-1 group-title="其他",睛彩篮球
+http://$api?p=gitv&id=HD-8000k-1080P-miguaoyun1.m3u8
+#EXTINF:-1 group-title="其他",高清臻享睛彩竞技
+http://$api?p=gitv&id=miguaoyun1-AVS.m3u8
+#EXTINF:-1 group-title="其他",睛彩竞技
+http://$api?p=gitv&id=HD-8000k-1080P-miguaoyun2.m3u8
+#EXTINF:-1 group-title="其他",睛彩青少
+http://$api?p=gitv&id=HD-8000k-1080P-quanminrl.m3u8
+#EXTINF:-1 group-title="其他",黑莓电影
+http://$api?p=gitv&id=HD-8000k-1080P-Supermovie.m3u8
+#EXTINF:-1 group-title="其他",NewTV 炫舞未来
+http://$api?p=gitv&id=HD-4000k-1080P-xwwl.m3u8
+#EXTINF:-1 group-title="地方",南京新闻综合频道
+http://$api?p=gitv&id=G_NJXW.m3u8
+#EXTINF:-1 group-title="地方",南京影视频道
+http://$api?p=gitv&id=G_NJYS.m3u8
+#EXTINF:-1 group-title="地方",南京少儿频道
+http://$api?p=gitv&id=G_NJSE.m3u8
+#EXTINF:-1 group-title="地方",南京生活频道
+http://$api?p=gitv&id=G_NJSH.m3u8
+#EXTINF:-1 group-title="地方",南京信息频道
+http://$api?p=gitv&id=G_NJXX.m3u8
+#EXTINF:-1 group-title="地方",南京娱乐频道
+http://$api?p=gitv&id=G_NJYL.m3u8
+#EXTINF:-1 group-title="地方",南京教科频道
+http://$api?p=gitv&id=G_NJJK.m3u8
+#EXTINF:-1 group-title="地方",南京十八频道
+http://$api?p=gitv&id=G_NJSB.m3u8
+#EXTINF:-1 group-title="地方",徐州新闻综合
+http://$api?p=gitv&id=xzxwzh.m3u8
+#EXTINF:-1 group-title="地方",徐州经济生活
+http://$api?p=gitv&id=xzjjsh.m3u8
+#EXTINF:-1 group-title="地方",徐州文艺影视
+http://$api?p=gitv&id=xzwyys.m3u8
+#EXTINF:-1 group-title="地方",徐州公共
+http://$api?p=gitv&id=xzgg.m3u8
+#EXTINF:-1 group-title="地方",徐州新沂3套
+http://$api?p=gitv&id=G_XZXYTV-3.m3u8
+#EXTINF:-1 group-title="地方",徐州沛县新闻综合
+http://$api?p=gitv&id=xzpxxwzh.m3u8
+#EXTINF:-1 group-title="地方",徐州沛县综艺
+http://$api?p=gitv&id=xzpxzy.m3u8
+#EXTINF:-1 group-title="地方",徐州沛县生活
+http://$api?p=gitv&id=xzpxsh.m3u8
+#EXTINF:-1 group-title="地方",常州新闻
+http://$api?p=gitv&id=jsczxinwen.m3u8
+#EXTINF:-1 group-title="地方",常州都市
+http://$api?p=gitv&id=jsczdushi.m3u8
+#EXTINF:-1 group-title="地方",常州生活
+http://$api?p=gitv&id=jsczshenghuo.m3u8
+#EXTINF:-1 group-title="地方",常州公共
+http://$api?p=gitv&id=jsczgonggong.m3u8
+#EXTINF:-1 group-title="地方",睢宁综合
+http://$api?p=gitv&id=xzsnzh.m3u8
+#EXTINF:-1 group-title="地方",睢宁资讯
+http://$api?p=gitv&id=xzsnzx.m3u8
+#EXTINF:-1 group-title="地方",睢宁生活
+http://$api?p=gitv&id=xzsnshjy.m3u8
+#EXTINF:-1 group-title="地方",睢宁三农
+http://$api?p=gitv&id=xzsnsn.m3u8
+#EXTINF:-1 group-title="地方",南通一套
+http://$api?p=gitv&id=jsntyitao.m3u8
+#EXTINF:-1 group-title="地方",南通二套
+http://$api?p=gitv&id=jsntertao.m3u8
+#EXTINF:-1 group-title="地方",公共崇川
+http://$api?p=gitv&id=jsntsantao.m3u8
+#EXTINF:-1 group-title="地方",镇江一套
+http://$api?p=gitv&id=G_ZHENJIANGTV-1.m3u8
+#EXTINF:-1 group-title="地方",镇江二套
+http://$api?p=gitv&id=G_ZHENJIANGTV-2.m3u8
+#EXTINF:-1 group-title="地方",镇江三套
+http://$api?p=gitv&id=G_ZHENJIANGTV-3.m3u8
+#EXTINF:-1 group-title="地方",宿迁综合
+http://$api?p=gitv&id=G_SQZH.m3u8
+#EXTINF:-1 group-title="地方",宿迁公共
+http://$api?p=gitv&id=G_SQGG.m3u8
+#EXTINF:-1 group-title="地方",邳州综合
+http://$api?p=gitv&id=pzzonghe.m3u8
+#EXTINF:-1 group-title="地方",邳州综艺
+http://$api?p=gitv&id=pzzongyi.m3u8
+#EXTINF:-1 group-title="地方",赣榆新闻综合
+http://$api?p=gitv&id=HD-2500k-1080P-ganyutv.m3u8
+#EXTINF:-1 group-title="地方",江苏仪化电视
+http://$api?p=gitv&id=HD-4000k-1080P-jsyihua.m3u8
+#EXTINF:-1 group-title="特色",猎冰
+http://$api?p=gitv&id=cos-liebing.m3u8
+#EXTINF:-1 group-title="特色",永安梦
+http://$api?p=gitv&id=cos-yonganmeng.m3u8
+#EXTINF:-1 group-title="特色",漫长的季节
+http://$api?p=gitv&id=manchangdjj.m3u8
+#EXTINF:-1 group-title="特色",梦中的那片海
+http://$api?p=gitv&id=mengzhongdnph.m3u8
+#EXTINF:-1 group-title="特色",繁花
+http://$api?p=gitv&id=fanhua.m3u8
+#EXTINF:-1 group-title="特色",庆余年
+http://$api?p=gitv&id=zhifouzf.m3u8
+#EXTINF:-1 group-title="特色",百姓生活
+http://$api?p=gitv&id=baixingsh.m3u8
+#EXTINF:-1 group-title="特色",黑土无言
+http://$api?p=gitv&id=COSHD-4000k-1080P-htwy.m3u8
+#EXTINF:-1 group-title="特色",问心
+http://$api?p=gitv&id=COSHD-4000k-1080P-wenxin.m3u8
+#EXTINF:-1 group-title="特色",父辈的荣耀
+http://$api?p=gitv&id=COSHD-4000k-1080P-fbdry.m3u8
+#EXTINF:-1 group-title="特色",繁城之下
+http://$api?p=gitv&id=COSHD-4000k-1080P-fczx.m3u8
+#EXTINF:-1 group-title="特色",小日子
+http://$api?p=gitv&id=COSHD-4000k-1080P-xiaorizi.m3u8
+#EXTINF:-1 group-title="特色",谢谢你温暖我
+http://$api?p=gitv&id=COSHD-4000k-1080P-xxnwnw.m3u8
+#EXTINF:-1 group-title="特色",当你沉睡时
+http://$api?p=gitv&id=COSHD-4000k-1080P-dncss.m3u8
+#EXTINF:-1 group-title="特色",梨园经典荟萃
+http://$api?p=gitv&id=COSHD-4000k-1080P-lyjdhc.m3u8
+#EXTINF:-1 group-title="特色",影视剧场
+http://$api?p=gitv&id=GITV-JS-1.m3u8
+#EXTINF:-1 group-title="特色",第一院线
+http://$api?p=gitv&id=GITV-JS-2.m3u8
+#EXTINF:-1 group-title="特色",居家健身
+http://$api?p=gitv&id=GITV-JS-4.m3u8
+#EXTINF:-1 group-title="特色",电视剧
+http://$api?p=gitv&id=GITV-JS-6.m3u8
+#EXTINF:-1 group-title="特色",二更视频
+http://$api?p=gitv&id=GITV-JS-7.m3u8
+#EXTINF:-1 group-title="特色",德凯奥特曼
+http://$api?p=gitv&id=GITV-JS-9.m3u8
+#EXTINF:-1 group-title="特色",熊出没
+http://$api?p=gitv&id=GITV-JS-10.m3u8
+#EXTINF:-1 group-title="特色",超级飞侠
+http://$api?p=gitv&id=GITV-JS-11.m3u8
+#EXTINF:-1 group-title="特色",小猪佩奇
+http://$api?p=gitv&id=GITV-JS-12.m3u8
+#EXTINF:-1 group-title="特色",汪汪队立大功
+http://$api?p=gitv&id=GITV-JS-13.m3u8
+#EXTINF:-1 group-title="特色",高分电影
+http://$api?p=gitv&id=GITV-JS-14.m3u8
+#EXTINF:-1 group-title="特色",乡村爱情
+http://$api?p=gitv&id=GITV-JS-15.m3u8
+#EXTINF:-1 group-title="特色",热门综艺
+http://$api?p=gitv&id=GITV-JS-16.m3u8
+#EXTINF:-1 group-title="特色",美食美味
+http://$api?p=gitv&id=GITV-JS-17.m3u8
+#EXTINF:-1 group-title="特色",自然风景
+http://$api?p=gitv&id=GITV-JS-18.m3u8
+#EXTINF:-1 group-title="特色",动物世界
+http://$api?p=gitv&id=GITV-JS-19.m3u8
+#EXTINF:-1 group-title="特色",书籍解读
+http://$api?p=gitv&id=GITV-JS-20.m3u8
+#EXTINF:-1 group-title="特色",亲子玩具
+http://$api?p=gitv&id=GITV-JS-21.m3u8
+#EXTINF:-1 group-title="特色",广场舞
+http://$api?p=gitv&id=GITV-JS-22.m3u8
+#EXTINF:-1 group-title="特色",戏曲音乐
+http://$api?p=gitv&id=GITV-JS-23.m3u8
+#EXTINF:-1 group-title="特色",相声联欢
+http://$api?p=gitv&id=GITV-JS-24.m3u8
+#EXTINF:-1 group-title="特色",动漫星空
+http://$api?p=gitv&id=GITV-JS-25.m3u8
+#EXTINF:-1 group-title="特色",楚乔传
+http://$api?p=gitv&id=GITV-JS-26.m3u8
+#EXTINF:-1 group-title="特色",完美的她
+http://$api?p=gitv&id=GITV-JS-27.m3u8
+#EXTINF:-1 group-title="特色",哈尔滨一九四四
+http://$api?p=gitv&id=GITV-JS-28.m3u8
+#EXTINF:-1 group-title="特色",军事之旅
+http://$api?p=gitv&id=GITV-JS-29.m3u8
+#EXTINF:-1 group-title="特色",科幻世界
+http://$api?p=gitv&id=GITV-JS-30.m3u8
+#EXTINF:-1 group-title="特色",儿童天地
+http://$api?p=gitv&id=GITV-JS-31.m3u8
+#EXTINF:-1 group-title="特色",纪录片
+http://$api?p=gitv&id=GITV-JS-32.m3u8
+#EXTINF:-1 group-title="特色",音乐心情
+http://$api?p=gitv&id=GITV-JS-33.m3u8
+#EXTINF:-1 group-title="特色",掼蛋频道
+http://$api?p=gitv&id=GITV-JS-34.m3u8
+#EXTINF:-1 group-title="特色",体坛同期声
+http://$api?p=gitv&id=GITV-JS-35.m3u8
+#EXTINF:-1 group-title="特色",臻享推荐
+http://$api?p=gitv&id=GITV-JS-36.m3u8
+#EXTINF:-1 group-title="特色",怀旧MTV
+http://$api?p=gitv&id=GITV-JS-37.m3u8
+#EXTINF:-1 group-title="特色",南来北往
+http://$api?p=gitv&id=GITV-JS-39.m3u8
+#EXTINF:-1 group-title="特色",狗剩快跑
+http://$api?p=gitv&id=GITV-JS-40.m3u8
+#EXTINF:-1 group-title="特色",狂飙
+http://$api?p=gitv&id=GITV-JS-41.m3u8
+#EXTINF:-1 group-title="特色",人世间
+http://$api?p=gitv&id=GITV-JS-42.m3u8
+#EXTINF:-1 group-title="特色",大江大河
+http://$api?p=gitv&id=GITV-JS-43.m3u8
+#EXTINF:-1 group-title="特色",山海情
+http://$api?p=gitv&id=GITV-JS-44.m3u8
+#EXTINF:-1 group-title="特色",冰雪竞技场
+http://$api?p=gitv&id=GITV-JS-45.m3u8
+#EXTINF:-1 group-title="特色",邪恶与疯狂
+http://$api?p=gitv&id=GITV-JS-46.m3u8
+#EXTINF:-1 group-title="特色",来自星星的你
+http://$api?p=gitv&id=GITV-JS-47.m3u8
+#EXTINF:-1 group-title="特色",哦我的鬼神大人
+http://$api?p=gitv&id=GITV-JS-48.m3u8
+#EXTINF:-1 group-title="特色",太阳的后裔
+http://$api?p=gitv&id=GITV-JS-49.m3u8
+#EXTINF:-1 group-title="特色",请回答1988
+http://$api?p=gitv&id=GITV-JS-50.m3u8

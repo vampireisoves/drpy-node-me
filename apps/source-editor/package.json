@@ -1,0 +1,11 @@
+{
+  "name": "source-editor",
+  "pluginName": "源配置编辑器",
+  "version": "1.0.0",
+  "description": "编辑源顺序和过滤",
+  "main": "index.html",
+  "logo": "",
+  "pluginType": "ui",
+  "author": "drpy-node",
+  "dependencies": {}
+}

@@ -1,0 +1,11 @@
+{
+  "name": "encoder",
+  "pluginName": "drpyS源加解密工具",
+  "version": "1.0.0",
+  "description": "提供4种模式处理加密和解密ds源",
+  "main": "index.html",
+  "logo": "",
+  "pluginType": "ui",
+  "author": "drpy-node",
+  "dependencies": {}
+}

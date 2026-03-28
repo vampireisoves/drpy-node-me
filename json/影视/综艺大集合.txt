@@ -1,0 +1,17 @@
+﻿综艺大集合,#genre#
+20250525期,https://v.cdnlz21.com/20250526/10545_c51d5a65/2000k/hls/mixed.m3u8
+20250518期,https://v.cdnlz21.com/20250519/10220_3ce5d8ef/2000k/hls/mixed.m3u8
+20250511期,https://v.cdnlz21.com/20250512/9872_dcf077c1/2000k/hls/mixed.m3u8
+20250503期,https://v.cdnlz21.com/20250428/9247_1dd46d35/2000k/hls/mixed.m3u8
+20250427期,https://v.cdnlz21.com/20250428/9247_1dd46d35/2000k/hls/mixed.m3u8
+20250420期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250420/index.m3u8
+20250406期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250406/index.m3u8
+20250323期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250323/index.m3u8
+20250316期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250316/index.m3u8
+20250309期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250309/index.m3u8
+20250302期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250302/index.m3u8
+20250202期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250202/index.m3u8
+20250126期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250126/index.m3u8
+20250119期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250119/index.m3u8
+20250112期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250112/index.m3u8
+20250105期,https://p.bvvvvvvv7f.com/video/zongyidajihe/20250105/index.m3u8

@@ -1,0 +1,106 @@
+<html lang="zh">
+<head>
+    <title>主页日历钟-20250915</title>
+    <meta charset="utf-8">
+
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+    <script src="calendar.js"></script>
+</head>
+
+<body style="text-align: center">
+
+<div class="a-nav item" id='clock'>
+    <div class="aclass" style="width: 100%;height: 80%;"></div>
+    <div>
+        <object style="border:0;margin-top:0" type="text/x-scriptlet" id='clock_obj' data="white_clock.html"
+                width="90%" height="80%">
+        </object>
+        <div id="showHistory" style="margin-top:0">
+            <span id="clockText" style="color: #34b1ff;font-size: 12px;letter-spacing: 0;"></span>
+            <span id="workdayText" style="color: #ff9044;font-size: 18px;letter-spacing: 1px;"></span>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function darkModeHandler() {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        if (mediaQuery.matches) {
+            document.body.style.background = '#1b1b1b';
+        }
+    }
+
+    function showDate() {
+        let dNow = new Date();
+        let dYear = dNow.getFullYear();
+        let dMonth = dNow.getMonth() + 1;
+        let dDay = dNow.getDate();
+        let date_obj = calendar.solar2lunar(dYear, dMonth, dDay);
+        let lValue = dYear + "年" + dMonth + "月" + dDay + "日 " + date_obj.ncWeek + " " + date_obj.gzYear + date_obj.Animal + "年 " + date_obj.IMonthCn + date_obj.IDayCn;
+        console.log(lValue);
+        return lValue;
+    }
+
+    function getNowFormatDate() {
+        let date = new Date();
+        let seperator1 = "-";
+        let seperator2 = ":";
+        let month = date.getMonth() + 1;
+        let strDate = date.getDate();
+        let strHours = date.getHours();
+        let strMinutes = date.getMinutes();
+        let strSeconds = date.getSeconds() + 1;
+        if (month >= 1 && month <= 9) {
+            month = "0" + month
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate
+        }
+        if (strHours >= 0 && strHours <= 9) {
+            strHours = "0" + strHours
+        }
+        if (strMinutes >= 0 && strMinutes <= 9) {
+            strMinutes = "0" + strMinutes
+        }
+        if (strSeconds >= 0 && strSeconds <= 9) {
+            strSeconds = "0" + strSeconds
+        }
+        let current_date = date.getFullYear() + seperator1 + month + seperator1 + strDate + " " + strHours + seperator2 + strMinutes + seperator2 + strSeconds;
+        console.log(`current date: ${current_date}`);
+        return current_date
+    }
+
+    function init_clock() {
+        let data = showDate();
+        document.getElementById('clockText').textContent = data.substring(5, data.length);
+        setInterval(function () {
+            let time = getNowFormatDate();
+            document.getElementById('workdayText').textContent = time.split(" ")[1];
+        }, 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        darkModeHandler();
+        init_clock();
+    });
+
+</script>
+
+</body>
+
+<style>
+    .a-nav {
+        position: relative;
+    }
+
+    .aclass {
+        position: absolute;
+        z-index: 999;
+    }
+</style>
+
+</html>

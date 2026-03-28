@@ -1,0 +1,13 @@
+[
+  {
+    "name": "本地ftp",
+    "id": "local",
+    "host": "192.168.31.183",
+    "port": 2121,
+    "basePath": "/宝盒/",
+    "username": "your-username",
+    "password": "your-password",
+    "secure": false,
+    "pasv": true
+  }
+]

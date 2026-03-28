@@ -1,0 +1,11 @@
+{
+  "name": "cookie-butler",
+  "pluginName": "ck管家",
+  "version": "0.0.1",
+  "description": "获取Cookie，就是这么简单！用您的手机扫码，立刻解锁专属福利。快来体验‘扫码即得’的便捷吧！",
+  "main": "index.html",
+  "logo": "",
+  "pluginType": "ui",
+  "author": "Hiram",
+  "dependencies": {}
+}

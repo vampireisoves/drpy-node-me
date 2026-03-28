@@ -1,0 +1,11 @@
+{
+  "name": "source-checker",
+  "pluginName": "源可用性检测器",
+  "version": "1.0.0",
+  "description": "检测drpyS源站的可用性，支持快速检测和全量检测模式",
+  "main": "index.html",
+  "logo": "",
+  "pluginType": "ui",
+  "author": "drpy-node",
+  "dependencies": {}
+}

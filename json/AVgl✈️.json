@@ -1,0 +1,17 @@
+{
+  "作者": "Aricx",
+  "站名": "https://www.av.gl/",
+  "请求头": "User-Agent$MOBILE_UA",
+  "编码": "UTF-8",
+  "主页url": "https://www.av.gl/",
+  "分类url": "https://www.av.gl/vod/show/by/{by}/id/{cateId}/page/{catePg}.html",
+  "分类": "日本有碼$Censored#日本無碼$Uncensored#FC2-PPV$FC2-PPV#無碼破解$Mosaic_Removed#中文字幕$CHN_SUB#MGS動画$MGS#寫真$Adult_IDOL#國產$Asian_Amateur#歐美成人$Western_Porn",
+  "数组": "thumbnail&&</a>",
+  "标题": ">&&</a>",
+  "图片": "data-src=\"&&\"",
+  "副标题": "🔞+瑟瑟才是源动力+🔞",
+  "简介": "🔞瑟瑟才是源动力:+>&&</a>",
+  "链接": "href=\"&&\"",
+  "直接播放": "1",
+  "搜索url": "https://www.av.gl/vod/search/page/{Pg}/wd/{wd}.html"
+}
