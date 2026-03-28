@@ -12,7 +12,7 @@ RUN git config --global http.version HTTP/1.1
 WORKDIR /app
 
 # 克隆GitHub仓库到工作目录
-RUN git clone https://github.com/hjdhnx/drpy-node.git .
+RUN git clone https://github.com/vampireisoves/drpy-node-me.git .
 
 # 安装项目依赖项和puppeteer
 RUN yarn && yarn add puppeteer
