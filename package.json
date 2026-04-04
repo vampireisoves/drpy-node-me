@@ -1,6 +1,6 @@
 {
   "name": "drpy-node",
-  "version": "1.4.1",
+  "version": "20260404.2203",
   "main": "index.js",
   "type": "module",
   "scripts": {
