@@ -1,0 +1,60 @@
+name: build-mcpb
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'drpy-node-mcp/**'
+  pull_request:
+    paths:
+      - 'drpy-node-mcp/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Get release tag
+        id: get-tag
+        run: |
+          VERSION=$(node -p "require('./drpy-node-mcp/package.json').version")
+          echo "tag=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Install drpy-node-mcp dependencies
+        working-directory: drpy-node-mcp
+        run: npm install
+
+      - name: Build drpy-node-mcp
+        working-directory: drpy-node-mcp
+        run: npm run build
+
+      - name: Upload mcpb artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: drpy-node-mcp-mcpb
+          path: drpy-node-mcp/drpy-node-mcp.mcpb
+
+      - name: Create Release and Upload MCPB
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: mcpb-v${{ steps.get-tag.outputs.tag }}
+          name: mcpb-v${{ steps.get-tag.outputs.tag }}
+          files: drpy-node-mcp/drpy-node-mcp.mcpb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
