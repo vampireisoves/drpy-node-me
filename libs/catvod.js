@@ -127,7 +127,7 @@ const init = async function (filePath, env = {}, refresh) {
                 return cached.moduleObject;
             }
         }
-        log(`Loading module: ${filePath}`);
+        log(`[catvod] Loading module: ${filePath} | enable_cat_debug:${enable_cat_debug}`);
         let t1 = getNowTime();
         let module;
         if (enable_cat_debug) {

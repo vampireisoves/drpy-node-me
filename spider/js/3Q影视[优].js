@@ -5,9 +5,281 @@
   quickSearch: 0,
   title: '3Q影视',
   author: 'EylinSir',
-  '类型': '影视',
-  lang: 'ds'
+  类型: '影视',
+  lang: 'ds',
 })
 */
 
-dmFyIHJ1bGUgPSB7CiAgICDnsbvlnos6ICflvbHop4YnLAogICAgYXV0aG9yOiAnRXlsaW5TaXInLAogICAgdGl0bGU6ICczUeW9seinhicsCiAgICBkZXNjOiAnM1HlvbHop4bmupAnLAogICAgaG9zdDogJ2h0dHBzOi8vcXFxeXMuY29tJywKICAgIGhvbWVVcmw6ICdodHRwczovL3FxcXlzLmNvbScsCiAgICB1cmw6ICcvYXBpLnBocC9maWx0ZXIvdm9kP3R5cGVfbmFtZT1meWNsYXNzJnBhZ2U9ZnlwYWdlJnNvcnQ9aGl0cycsCiAgICBzZWFyY2hVcmw6ICcvYXBpLnBocC9zZWFyY2gvaW5kZXg/d2Q9KiomcGFnZT1meXBhZ2UmbGltaXQ9MTUnLAogICAgc2VhcmNoYWJsZTogMSwKICAgIHF1aWNrU2VhcmNoOiAwLAogICAgZmlsdGVyYWJsZTogMSwKICAgIHRpbWVvdXQ6IDEwMDAwLAogICAgcGxheV9wYXJzZTogdHJ1ZSwKICAgIGhlYWRlcnM6IHsKICAgICAgICAnVXNlci1BZ2VudCc6ICdNb3ppbGxhLzUuMCAoV2luZG93cyBOVCAxMC4wOyBXaW42NDsgeDY0KSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvMTQyLjAuMC4wIFNhZmFyaS81MzcuMzYnLAogICAgICAgICdhY2NlcHQtbGFuZ3VhZ2UnOiAnemgtQ04semg7cT0wLjknLAogICAgICAgICdjYWNoZS1jb250cm9sJzogJ25vLWNhY2hlJywKICAgICAgICAncHJhZ21hJzogJ25vLWNhY2hlJywKICAgICAgICAncHJpb3JpdHknOiAndT0xLCBpJywKICAgICAgICAnc2VjLWNoLXVhJzogJyJDaHJvbWl1bSI7dj0iMTQyIiwgIkdvb2dsZSBDaHJvbWUiO3Y9IjE0MiIsICJOb3RfQSBCcmFuZCI7dj0iOTkiJywKICAgICAgICAnc2VjLWNoLXVhLW1vYmlsZSc6ICI/MCIsCiAgICAgICAgJ3NlYy1jaC11YS1wbGF0Zm9ybSc6ICciV2luZG93cyInLAogICAgICAgICdzZWMtZmV0Y2gtZGVzdCc6ICJlbXB0eSIsCiAgICAgICAgJ3NlYy1mZXRjaC1tb2RlJzogImNvcnMiLAogICAgICAgICdzZWMtZmV0Y2gtc2l0ZSc6ICJzYW1lLW9yaWdpbiIKICAgIH0sCiAgICAKCgogICAganNvbjJ2b2RzOiBmdW5jdGlvbiAoYXJyKSB7CiAgICAgICAgbGV0IHZpZGVvcyA9IFtdOwogICAgICAgIGZvciAoY29uc3QgaSBvZiBhcnIpIHsKICAgICAgICAgICAgbGV0IHR5cGVfbmFtZSA9IGkudHlwZV9uYW1lIHx8ICcnOwogICAgICAgICAgICBpZiAoaS52b2RfY2xhc3MpIHsKICAgICAgICAgICAgICAgIHR5cGVfbmFtZSA9IHR5cGVfbmFtZSArICcsJyArIGkudm9kX2NsYXNzOwogICAgICAgICAgICB9CiAgICAgICAgICAgIHZpZGVvcy5wdXNoKHsKICAgICAgICAgICAgICAgIHRpdGxlOiBpLnZvZF9uYW1lLAogICAgICAgICAgICAgICAgdXJsOiBgJHt0aGlzLmhvc3R9L2FwaS5waHAvdm9kL2dldF9kZXRhaWw/dm9kX2lkPSR7aS52b2RfaWR9YCwKICAgICAgICAgICAgICAgIGRlc2M6IGkudm9kX3JlbWFya3MsCiAgICAgICAgICAgICAgICBwaWNfdXJsOiBpLnZvZF9waWMsCiAgICAgICAgICAgICAgICB2b2RfeWVhcjogaS52b2RfeWVhciwKICAgICAgICAgICAgICAgIHR5cGVfbmFtZTogdHlwZV9uYW1lCiAgICAgICAgICAgIH0pOwogICAgICAgIH0KICAgICAgICByZXR1cm4gdmlkZW9zOwogICAgfSwKICAgIAogICAg6aKE5aSE55CGOiBhc3luYyBmdW5jdGlvbiAoKSB7fSwKICAgIAogICAgY2xhc3NfcGFyc2U6IGFzeW5jIGZ1bmN0aW9uICgpIHsKICAgICAgICBsZXQgdXJsID0gYCR7dGhpcy5ob3N0fS9hcGkucGhwL2luZGV4L2hvbWVgOwogICAgICAgIGxldCByZXNwID0gYXdhaXQgX2ZldGNoKHVybCwgeyBoZWFkZXJzOiB0aGlzLmhlYWRlcnMgfSk7CiAgICAgICAgbGV0IGpzb24gPSBKU09OLnBhcnNlKGF3YWl0IHJlc3AudGV4dCgpKTsKICAgICAgICBsZXQgY2F0ZWdvcmllcyA9IGpzb24uZGF0YS5jYXRlZ29yaWVzOwogICAgICAgIGxldCBjbGFzc2VzID0gW107CiAgICAgICAgZm9yIChjb25zdCBpIG9mIGNhdGVnb3JpZXMpIHsKICAgICAgICAgICAgY2xhc3Nlcy5wdXNoKHsKICAgICAgICAgICAgICAgIHR5cGVfaWQ6IGkudHlwZV9uYW1lLAogICAgICAgICAgICAgICAgdHlwZV9uYW1lOiBpLnR5cGVfbmFtZQogICAgICAgICAgICB9KTsKICAgICAgICB9CiAgICAgICAgcmV0dXJuIHsgY2xhc3M6IGNsYXNzZXMsIGZpbHRlcnM6IHt9IH07CiAgICB9LAogICAgCiAgICDmjqjojZA6IGFzeW5jIGZ1bmN0aW9uICgpIHsKICAgICAgICBsZXQgdXJsID0gYCR7dGhpcy5ob3N0fS9hcGkucGhwL2luZGV4L2hvbWVgOwogICAgICAgIGxldCByZXNwID0gYXdhaXQgX2ZldGNoKHVybCwgeyBoZWFkZXJzOiB0aGlzLmhlYWRlcnMgfSk7CiAgICAgICAgbGV0IGpzb24gPSBKU09OLnBhcnNlKGF3YWl0IHJlc3AudGV4dCgpKTsKICAgICAgICBsZXQgY2F0ZWdvcmllcyA9IGpzb24uZGF0YS5jYXRlZ29yaWVzOwogICAgICAgIGxldCB2aWRlb3MgPSBbXTsKICAgICAgICBmb3IgKGNvbnN0IGkgb2YgY2F0ZWdvcmllcykgewogICAgICAgICAgICB2aWRlb3MucHVzaCguLi50aGlzLmpzb24ydm9kcyhpLnZpZGVvcykpOwogICAgICAgIH0KICAgICAgICByZXR1cm4gc2V0UmVzdWx0KHZpZGVvcyk7CiAgICB9LAogICAgCiAgICDkuIDnuqc6IGFzeW5jIGZ1bmN0aW9uICh0aWQsIHBnLCBmaWx0ZXIsIGV4dGVuZCkgewogICAgICAgIGxldCB1cmwgPSBgJHt0aGlzLmhvc3R9L2FwaS5waHAvZmlsdGVyL3ZvZD90eXBlX25hbWU9JHtlbmNvZGVVUklDb21wb25lbnQodGlkKX0mcGFnZT0ke3BnfSZzb3J0PWhpdHNgOwogICAgICAgIGxldCByZXNwID0gYXdhaXQgX2ZldGNoKHVybCwgeyBoZWFkZXJzOiB0aGlzLmhlYWRlcnMgfSk7CiAgICAgICAgbGV0IGpzb24gPSBKU09OLnBhcnNlKGF3YWl0IHJlc3AudGV4dCgpKTsKICAgICAgICBsZXQgdmlkZW9zID0gdGhpcy5qc29uMnZvZHMoanNvbi5kYXRhKTsKICAgICAgICByZXR1cm4gc2V0UmVzdWx0KHZpZGVvcyk7CiAgICB9LAogICAgCiAgICDkuoznuqc6IGFzeW5jIGZ1bmN0aW9uICgpIHsKICAgICAgICBsZXQgdm9kSWQgPSB0aGlzLmlucHV0Lm1hdGNoKC92b2RfaWQ9KFxkKykvKVsxXTsKICAgICAgICBsZXQgdXJsID0gYCR7dGhpcy5ob3N0fS9hcGkucGhwL3ZvZC9nZXRfZGV0YWlsP3ZvZF9pZD0ke3ZvZElkfWA7CiAgICAgICAgbGV0IHJlc3AgPSBhd2FpdCBfZmV0Y2godXJsLCB7IGhlYWRlcnM6IHRoaXMuaGVhZGVycyB9KTsKICAgICAgICBsZXQganNvbiA9IEpTT04ucGFyc2UoYXdhaXQgcmVzcC50ZXh0KCkpOwogICAgICAgIGxldCBkYXRhID0ganNvbi5kYXRhWzBdOwogICAgICAgIGxldCB2b2RwbGF5ZXIgPSBqc29uLnZvZHBsYXllcjsKICAgICAgICBsZXQgc2hvd3MgPSBbXTsKICAgICAgICBsZXQgcGxheV91cmxzID0gW107CiAgICAgICAgbGV0IHJhd19zaG93cyA9IGRhdGEudm9kX3BsYXlfZnJvbS5zcGxpdCgnJCQkJyk7CiAgICAgICAgbGV0IHJhd191cmxzX2xpc3QgPSBkYXRhLnZvZF9wbGF5X3VybC5zcGxpdCgnJCQkJyk7CiAgICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCByYXdfc2hvd3MubGVuZ3RoOyBpKyspIHsKICAgICAgICAgICAgbGV0IHNob3dfY29kZSA9IHJhd19zaG93c1tpXTsKICAgICAgICAgICAgbGV0IHVybHNfc3RyID0gcmF3X3VybHNfbGlzdFtpXTsKICAgICAgICAgICAgbGV0IG5lZWRfcGFyc2UgPSAwOwogICAgICAgICAgICBsZXQgaXNfc2hvdyA9IDA7CiAgICAgICAgICAgIGxldCBuYW1lID0gc2hvd19jb2RlOwogICAgICAgICAgICBmb3IgKGNvbnN0IHBsYXllciBvZiB2b2RwbGF5ZXIpIHsKICAgICAgICAgICAgICAgIGlmIChwbGF5ZXIuZnJvbSA9PT0gc2hvd19jb2RlKSB7CiAgICAgICAgICAgICAgICAgICAgaXNfc2hvdyA9IDE7CiAgICAgICAgICAgICAgICAgICAgbmVlZF9wYXJzZSA9IHBsYXllci5kZWNvZGVfc3RhdHVzOwogICAgICAgICAgICAgICAgICAgIGlmIChzaG93X2NvZGUudG9Mb3dlckNhc2UoKSAhPT0gcGxheWVyLnNob3cudG9Mb3dlckNhc2UoKSkgewogICAgICAgICAgICAgICAgICAgICAgICBuYW1lID0gYCR7cGxheWVyLnNob3d9ICgke3Nob3dfY29kZX0pYDsKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgYnJlYWs7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgCiAgICAgICAgICAgIGlmIChpc19zaG93ID09PSAxKSB7CiAgICAgICAgICAgICAgICBsZXQgdXJscyA9IFtdOwogICAgICAgICAgICAgICAgbGV0IGl0ZW1zID0gdXJsc19zdHIuc3BsaXQoJyMnKTsKICAgICAgICAgICAgICAgIGZvciAoY29uc3QgaXRlbSBvZiBpdGVtcykgewogICAgICAgICAgICAgICAgICAgIGlmIChpdGVtLmluY2x1ZGVzKCckJykpIHsKICAgICAgICAgICAgICAgICAgICAgICAgbGV0IHBhcnRzID0gaXRlbS5zcGxpdCgnJCcpOwogICAgICAgICAgICAgICAgICAgICAgICBsZXQgZXBpc29kZSA9IHBhcnRzWzBdOwogICAgICAgICAgICAgICAgICAgICAgICBsZXQgbV91cmwgPSBwYXJ0c1sxXTsKICAgICAgICAgICAgICAgICAgICAgICAgdXJscy5wdXNoKGAke2VwaXNvZGV9JCR7c2hvd19jb2RlfUAke25lZWRfcGFyc2V9QCR7bV91cmx9YCk7CiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgaWYgKHVybHMubGVuZ3RoID4gMCkgewogICAgICAgICAgICAgICAgICAgIHBsYXlfdXJscy5wdXNoKHVybHMuam9pbignIycpKTsKICAgICAgICAgICAgICAgICAgICBzaG93cy5wdXNoKG5hbWUpOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIAogICAgICAgIGxldCBWT0QgPSB7CiAgICAgICAgICAgIHZvZF9pZDogZGF0YS52b2RfaWQudG9TdHJpbmcoKSwKICAgICAgICAgICAgdm9kX25hbWU6IGRhdGEudm9kX25hbWUsCiAgICAgICAgICAgIHZvZF9waWM6IGRhdGEudm9kX3BpYywKICAgICAgICAgICAgdm9kX3JlbWFya3M6IGRhdGEudm9kX3JlbWFya3MsCiAgICAgICAgICAgIHZvZF95ZWFyOiBkYXRhLnZvZF95ZWFyLAogICAgICAgICAgICB2b2RfYXJlYTogZGF0YS52b2RfYXJlYSwKICAgICAgICAgICAgdm9kX2FjdG9yOiBkYXRhLnZvZF9hY3RvciwKICAgICAgICAgICAgdm9kX2RpcmVjdG9yOiBkYXRhLnZvZF9kaXJlY3RvciwKICAgICAgICAgICAgdm9kX2NvbnRlbnQ6IGRhdGEudm9kX2NvbnRlbnQsCiAgICAgICAgICAgIHZvZF9wbGF5X2Zyb206IHNob3dzLmpvaW4oJyQkJCcpLAogICAgICAgICAgICB2b2RfcGxheV91cmw6IHBsYXlfdXJscy5qb2luKCckJCQnKSwKICAgICAgICAgICAgdHlwZV9uYW1lOiBkYXRhLnZvZF9jbGFzcwogICAgICAgIH07CiAgICAgICAgcmV0dXJuIFZPRDsKICAgIH0sCiAgICAKICAgIOaQnOe0ojogYXN5bmMgZnVuY3Rpb24gKCkgewogICAgICAgIGxldCB1cmwgPSBgJHt0aGlzLmhvc3R9L2FwaS5waHAvc2VhcmNoL2luZGV4P3dkPSR7ZW5jb2RlVVJJQ29tcG9uZW50KHRoaXMuS0VZKX0mcGFnZT0ke3RoaXMuTVlfUEFHRX0mbGltaXQ9MTVgOwogICAgICAgIGxldCByZXNwID0gYXdhaXQgX2ZldGNoKHVybCwgeyBoZWFkZXJzOiB0aGlzLmhlYWRlcnMgfSk7CiAgICAgICAgbGV0IGpzb24gPSBKU09OLnBhcnNlKGF3YWl0IHJlc3AudGV4dCgpKTsKICAgICAgICBsZXQgdmlkZW9zID0gdGhpcy5qc29uMnZvZHMoanNvbi5kYXRhKTsKICAgICAgICByZXR1cm4gc2V0UmVzdWx0KHZpZGVvcyk7CiAgICB9LAogICAgCiAgICBsYXp5OiBhc3luYyBmdW5jdGlvbiAoKSB7CiAgICAgICAgbGV0IFtwbGF5X2Zyb20sIG5lZWRfcGFyc2UsIHJhd191cmxdID0gdGhpcy5pbnB1dC5zcGxpdCgnQCcpOwogICAgICAgIGxldCBqeCA9IDA7CiAgICAgICAgbGV0IGZpbmFsX3VybCA9ICcnOwogICAgICAgIGlmIChuZWVkX3BhcnNlID09PSAnMScpIHsKICAgICAgICAgICAgbGV0IGF1dGhfdG9rZW4gPSAnJzsKICAgICAgICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCAyOyBpKyspIHsKICAgICAgICAgICAgICAgIHRyeSB7CiAgICAgICAgICAgICAgICAgICAgbGV0IGFwaVVybCA9IGAke3RoaXMuaG9zdH0vYXBpLnBocC9kZWNvZGUvdXJsLz91cmw9JHtlbmNvZGVVUklDb21wb25lbnQocmF3X3VybCl9JnZvZEZyb209JHtwbGF5X2Zyb219JHthdXRoX3Rva2VufWA7CiAgICAgICAgICAgICAgICAgICAgbGV0IHJlc3AgPSBhd2FpdCBfZmV0Y2goYXBpVXJsLCB7IGhlYWRlcnM6IHRoaXMuaGVhZGVycyB9KTsKICAgICAgICAgICAgICAgIGxldCBqc29uID0gSlNPTi5wYXJzZShhd2FpdCByZXNwLnRleHQoKSk7CiAgICAgICAgICAgICAgICAgICAgaWYgKGpzb24uY29kZSA9PT0gMiAmJiBqc29uLmNoYWxsZW5nZSkgewogICAgICAgICAgICAgICAgICAgICAgICBsZXQgdG9rZW4gPSBldmFsKGpzb24uY2hhbGxlbmdlKTsKICAgICAgICAgICAgICAgICAgICAgICAgYXV0aF90b2tlbiA9IGAmdG9rZW49JHt0b2tlbn1gOwogICAgICAgICAgICAgICAgICAgICAgICBjb250aW51ZTsKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgbGV0IHBsYXlfdXJsID0ganNvbi5kYXRhOwogICAgICAgICAgICAgICAgICAgIGlmIChwbGF5X3VybCAmJiBwbGF5X3VybC5zdGFydHNXaXRoKCdodHRwJykpIHsKICAgICAgICAgICAgICAgICAgICAgICAgZmluYWxfdXJsID0gcGxheV91cmw7CiAgICAgICAgICAgICAgICAgICAgICAgIGJyZWFrOwogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0gY2F0Y2ggKGUpIHsKICAgICAgICAgICAgICAgICAgICBjb25zb2xlLmVycm9yKGUpOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIAogICAgICAgIGlmICghZmluYWxfdXJsKSB7CiAgICAgICAgICAgIGZpbmFsX3VybCA9IHJhd191cmw7CiAgICAgICAgICAgIGlmICgvKD86d3d3XC5pcWl5aXx2XC5xcXx2XC55b3VrdXx3d3dcLm1ndHZ8d3d3XC5iaWxpYmlsaSlcLmNvbS8udGVzdChyYXdfdXJsKSkgewogICAgICAgICAgICAgICAganggPSAxOwogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIHJldHVybiB7CiAgICAgICAgICAgIHBhcnNlOiBqeCwKICAgICAgICAgICAgdXJsOiBmaW5hbF91cmwsCiAgICAgICAgICAgIGhlYWRlcjogeyAnVXNlci1BZ2VudCc6IHRoaXMuaGVhZGVyc1snVXNlci1BZ2VudCddIH0KICAgICAgICB9OwogICAgfQp9Ow==
+var rule = {
+    类型: '影视',
+    author: 'EylinSir',
+    title: '3Q影视',
+    desc: '3Q影视源',
+    host: 'https://qqqys.com',
+    homeUrl: 'https://qqqys.com',
+    url: '/api.php/web/filter/vod?type_id=fyclass&page=fypage&sort=hits',
+    searchUrl: '/api.php/web/search/index?wd=**&page=fypage&limit=15',
+    searchable: 1,
+    quickSearch: 0,
+    filterable: 1,
+    timeout: 10000,
+    play_parse: true,
+    headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
+        'accept': 'application/json',
+        'accept-language': 'zh-CN,zh;q=0.9',
+        'cache-control': 'no-cache',
+        'pragma': 'no-cache',
+        'priority': 'u=1, i',
+        'sec-ch-ua': '"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'X-Client': '8f3d2a1c7b6e5d4c9a0b1f2e3d4c5b6a',
+        'web-sign': 'f65f3a83d6d9ad6f'
+    },
+
+    json2list: function (arr) {
+        let d = [];
+        for (const i of (arr || [])) {
+            d.push({
+                title: i.vod_name || '',
+                url: String(i.vod_id || ''),
+                pic_url: i.vod_pic || '',
+                desc: i.vod_remarks || ''
+            });
+        }
+        return d;
+    },
+
+    apiRequest: async function (path, params) {
+        let query = params ? '?' + buildQueryString(params) : '';
+        let url = path.startsWith('http') ? path : urljoin(this.host, path + query);
+        let html = await request(url, { headers: this.headers });
+        return JSON.parse(html || '{}');
+    },
+
+    buildEpisodes: function (from, urls, parseFlag) {
+        let out = [];
+        let items = String(urls || '').split('#');
+        for (const item of items) {
+            if (!item.includes('$')) continue;
+            let parts = item.split('$');
+            let name = parts[0];
+            let link = parts.slice(1).join('$');
+            if (name && link) {
+                out.push(`${name}$${from}@${parseFlag}@${link}`);
+            }
+        }
+        return out;
+    },
+
+    预处理: async function () {},
+
+    class_parse: async function () {
+        let json = await this.apiRequest('/api.php/web/index/home');
+        let categories = (json.data && json.data.categories) || [];
+        let classes = categories.map(it => ({
+            type_id: String(it.type_id || it.type_name),
+            type_name: it.type_name
+        }));
+        return { class: classes, filters: {} };
+    },
+
+    推荐: async function () {
+        let json = await this.apiRequest('/api.php/web/index/home');
+        let categories = (json.data && json.data.categories) || [];
+        let videos = [];
+        for (const cate of categories) {
+            videos.push(...(cate.videos || []));
+        }
+        return setResult(this.json2list(videos));
+    },
+
+    一级: async function (tid, pg) {
+        let json = await this.apiRequest('/api.php/web/filter/vod', {
+            type_id: tid,
+            page: pg || 1,
+            sort: 'hits'
+        });
+        return setResult(this.json2list(json.data || []));
+    },
+
+    二级: async function (ids) {
+        let rawId = ids || this.input;
+        let match = String(rawId || '').match(/(\d+)(?!.*\d)/);
+        let vodId = match ? match[1] : String(rawId || '').trim();
+        let json = await this.apiRequest('/api.php/web/vod/get_detail', { vod_id: vodId });
+        let data = (json.data || [])[0] || {};
+        let vodplayer = json.vodplayer || [];
+        let tabs = [];
+        let playUrls = [];
+
+        let raw_shows = String(data.vod_play_from || '').split('$$$');
+        let raw_urls_list = String(data.vod_play_url || '').split('$$$');
+        for (let i = 0; i < raw_shows.length; i++) {
+            let show_code = raw_shows[i];
+            let urls_str = raw_urls_list[i];
+            if (!show_code || !urls_str) continue;
+            let need_parse = 0;
+            let name = show_code;
+            let matched = false;
+            for (const player of vodplayer) {
+                if (player.from === show_code) {
+                    matched = true;
+                    need_parse = player.decode_status;
+                    if (player.show && show_code.toLowerCase() !== player.show.toLowerCase()) {
+                        name = `${player.show} (${show_code})`;
+                    }
+                    break;
+                }
+            }
+            if (!matched && vodplayer.length === 0) matched = true;
+            if (!matched) continue;
+            let urls = this.buildEpisodes(show_code, urls_str, need_parse);
+            if (urls.length) {
+                tabs.push(name);
+                playUrls.push(urls.join('#'));
+            }
+        }
+
+        try {
+            let ext = await this.apiRequest('/api.php/web/internal/search_aggregate', { vod_id: vodId });
+            let exts = ext.data || [];
+            for (const item of exts) {
+                let from = String(item.vod_play_from || item.site_key || 'ext');
+                let name = String(item.site_name || from);
+                let parseFlag = String(item.decode_status === undefined ? 1 : item.decode_status);
+                let urls = this.buildEpisodes(from, item.vod_play_url || '', parseFlag);
+                if (urls.length) {
+                    tabs.push(name + ' [站外]');
+                    playUrls.push(urls.join('#'));
+                }
+            }
+        } catch (e) {
+            log('3Q external aggregate error:' + (e.message || e));
+        }
+
+        return {
+            vod_id: String(data.vod_id || vodId),
+            vod_name: data.vod_name || '',
+            vod_pic: data.vod_pic || '',
+            vod_remarks: data.vod_remarks || '',
+            vod_year: data.vod_year || '',
+            vod_area: data.vod_area || '',
+            vod_actor: data.vod_actor || '',
+            vod_director: data.vod_director || '',
+            vod_content: data.vod_content || '',
+            vod_play_from: tabs.join('$$$'),
+            vod_play_url: playUrls.join('$$$'),
+            type_name: data.vod_class || ''
+        };
+    },
+
+    搜索: async function () {
+        let json = await this.apiRequest('/api.php/web/search/index', {
+            wd: this.KEY,
+            page: this.MY_PAGE,
+            limit: 15
+        });
+        return setResult(this.json2list(json.data || []));
+    },
+
+    lazy: async function (flag, id) {
+        let source = id || this.input || '';
+        let [play_from, need_parse, raw_url] = String(source).split('@');
+        let final_url = raw_url || source;
+        let jx = 0;
+        let ua = this.headers['User-Agent'];
+
+        let isPlayPage = /\/play\/\d+-\d+-\d+\.html$/i.test(final_url);
+        let isDirect = /^https?:\/\/.*\.(m3u8|mp4|flv|m4s)(\?.*)?$/i.test(final_url);
+        let isMainstream = /(?:www\.iqiyi|v\.qq|v\.youku|www\.mgtv|www\.bilibili)\.com/.test(final_url);
+
+        if (isDirect) {
+            return {
+                parse: 0,
+                url: final_url,
+                header: { 'User-Agent': ua }
+            };
+        }
+
+        if (isMainstream) {
+            return {
+                parse: 1,
+                url: final_url,
+                header: { 'User-Agent': ua }
+            };
+        }
+
+        if (isPlayPage) {
+            try {
+                let html = await request(final_url, {
+                    headers: {
+                        'User-Agent': ua,
+                        'Referer': getHome(final_url) + '/'
+                    }
+                });
+                let m = String(html).match(/player_aaaa\s*=\s*(\{[\s\S]*?\})\s*<\/script>/);
+                if (!m) {
+                    m = String(html).match(/player_aaaa\s*=\s*(\{[\s\S]*?\})\s*;/);
+                }
+                if (m) {
+                    let player = JSON5.parse(m[1]);
+                    let purl = unescape(player.url || '');
+                    if (/^https?:\/\/.*\.(m3u8|mp4|flv|m4s)(\?.*)?$/i.test(purl)) {
+                        return {
+                            parse: 0,
+                            url: purl,
+                            header: {
+                                'User-Agent': ua,
+                                'Referer': final_url
+                            }
+                        };
+                    }
+                    if (/^https?:\/\//i.test(purl)) {
+                        return {
+                            parse: 1,
+                            url: purl,
+                            header: {
+                                'User-Agent': ua,
+                                'Referer': final_url
+                            }
+                        };
+                    }
+                }
+            } catch (e) {
+                log('3Q play page parse fail:' + (e.message || e));
+            }
+            return {
+                parse: 1,
+                url: final_url,
+                header: { 'User-Agent': ua }
+            };
+        }
+
+        if (need_parse === '1') {
+            return {
+                parse: 1,
+                url: final_url,
+                header: { 'User-Agent': ua }
+            };
+        }
+
+        if (need_parse === '2') {
+            return {
+                parse: 0,
+                url: final_url,
+                header: { 'User-Agent': ua }
+            };
+        }
+
+        return {
+            parse: 0,
+            url: final_url,
+            header: { 'User-Agent': ua }
+        };
+    }
+};

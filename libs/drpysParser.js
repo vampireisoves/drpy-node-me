@@ -448,7 +448,8 @@ export async function homeParseAfter(d, _type, hikerListCol, hikerClassListCol, 
         cate_exclude,
         home_flag,
     } = injectVars;
-    if (!Array.isArray(d.class)) {
+    // 根修复：字符串型 class_parse 失败时常返回 {class: []}，这里也要回退静态分类
+    if (!Array.isArray(d.class) || d.class.length === 0) {
         d.class = classes;
     }
     if (!d.filters) {
@@ -477,7 +478,7 @@ export async function homeVodParse(rule) {
     return createParserContext(url, rule, {
         TYPE: 'home',
         input: url,
-        double: rule.double,
+        double: rule.hasOwnProperty('double') ? rule.double : false,
     });
 }
 
@@ -681,7 +682,7 @@ export async function playParse(rule, flag, id, flags) {
 
 export async function playParseAfter(rule, obj, playUrl, flag) {
     let common_play = {
-        parse: SPECIAL_URL.test(playUrl) || /^(push:)/.test(playUrl) ? 0 : 1,
+        parse: SPECIAL_URL.test(playUrl) || /^(push:)/.test(playUrl) || /\.(m3u8|mp4|m4a|mp3)/.test(playUrl) ? 0 : 1,
         url: playUrl,
         flag: flag,
         jx: tellIsJx(playUrl)
@@ -694,7 +695,7 @@ export async function playParseAfter(rule, obj, playUrl, flag) {
     } else if (is_lazy_function || is_lazy_function_str) {
         try {
             lazy_play = typeof (obj) === 'object' ? obj : {
-                parse: SPECIAL_URL.test(obj) || /^(push:)/.test(obj) ? 0 : 1,
+                parse: SPECIAL_URL.test(obj) || /^(push:)/.test(obj) || /\.(m3u8|mp4|m4a|mp3)/.test(obj) ? 0 : 1,
                 jx: tellIsJx(obj),
                 url: obj
             };
@@ -1417,23 +1418,35 @@ export async function commonLazyParse(moduleObject, method, injectVars, args) {
     const tmpLazyFunction = async function (flag, id, flags) {
         let {input} = this;
         log('[tmpLazyFunction] input:', input);
-        let html = await executeSandboxFunction('request', [sandboxString(input), {}], moduleObject.context, '[commonLazyParse] 获取播放页源码失败');
-        let hconf = html.match(/r player_.*?=(.*?)</)[1];
-        let json = JSON5.parse(hconf);
-        let url = json.url;
-        if (json.encrypt == '1') {
-            url = unescape(url);
-        } else if (json.encrypt == '2') {
-            url = unescape(base64Decode(url));
-        }
-        if (/\.(m3u8|mp4|m4a|mp3)/.test(url)) {
-            input = {
+        if (/\.(m3u8|mp4|m4a|mp3)/.test(input)) {
+            return {
                 parse: 0,
                 jx: 0,
-                url: url,
+                url: input,
             };
+        }
+        let html = await executeSandboxFunction('request', [sandboxString(input), {}], moduleObject.context, '[commonLazyParse] 获取播放页源码失败');
+        let hconf_match = html.match(/r player_.*?=(.*?)</);
+        if (hconf_match) {
+            let hconf = hconf_match[1];
+            let json = JSON5.parse(hconf);
+            let url = json.url;
+            if (json.encrypt == '1') {
+                url = unescape(url);
+            } else if (json.encrypt == '2') {
+                url = unescape(base64Decode(url));
+            }
+            if (/\.(m3u8|mp4|m4a|mp3)/.test(url)) {
+                input = {
+                    parse: 0,
+                    jx: 0,
+                    url: url,
+                };
+            } else {
+                input = url && url.startsWith('http') && tellIsJx(url) ? {parse: 0, jx: 1, url: url} : input;
+            }
         } else {
-            input = url && url.startsWith('http') && tellIsJx(url) ? {parse: 0, jx: 1, url: url} : input;
+            input = { parse: 1, url: input, jx: tellIsJx(input) };
         }
         log('[tmpLazyFunction] result:', input);
         return input;

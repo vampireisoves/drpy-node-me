@@ -661,8 +661,10 @@ async function invokeMethod(filePath, env, method, args = [], injectVars = {}) {
     }
     // 字符串lazy且非js:直接返回嗅探
     else if (method === 'lazy' && typeof moduleObject[method] === 'string' && !moduleObject[method].startsWith('js:')) {
+        let is_direct = /\.(m3u8|mp4|m4a|mp3)/.test(injectVars.input);
         return {
-            parse: 1,
+            parse: is_direct ? 0 : 1,
+            jx: is_direct ? 0 : 1,
             url: injectVars.input,
             header: moduleObject.headers && Object.keys(moduleObject.headers).length > 0 ? moduleObject.headers : undefined
         }
@@ -755,7 +757,7 @@ async function initParse(rule, env, vm, context) {
 
     rule.类型 = rule.类型 || '影视'; // 影视|听书|漫画|小说
     rule.url = rule.url || '';
-    rule.double = rule.double || false;
+    rule.double = rule.hasOwnProperty('double') ? rule.double : false;
     rule.homeUrl = rule.homeUrl || '';
     rule.detailUrl = rule.detailUrl || '';
     rule.searchUrl = rule.searchUrl || '';

@@ -1,9 +1,9 @@
 /**
  * Python守护进程管理器
- * 
+ *
  * 该模块提供了管理Python守护进程的功能，包括启动、停止、状态检查等。
  * 主要用于管理爬虫系统的Python后端服务。
- * 
+ *
  * @author drpy-node
  * @version 1.0.0
  */
@@ -55,7 +55,7 @@ function log(logFile, level, msg) {
 
 /**
  * Python守护进程管理器类
- * 
+ *
  * 负责管理Python守护进程的生命周期，包括启动、停止、状态监控等功能。
  * 支持两种模式：完整模式和轻量模式。
  */
@@ -109,12 +109,17 @@ export class DaemonManager {
 
     /**
      * 检查Python是否可用
-     * @returns {Promise<boolean>} Python是否可用
+     * @returns {Promise<string|boolean>} Python是否可用，可用则返回版本号字符串，否则返回false
      */
     async isPythonAvailable() {
         try {
-            const {stdout} = await execAsync(`${this.getPythonPath()} --version`);
-            return stdout.includes('Python');
+            const {stdout, stderr} = await execAsync(`${this.getPythonPath()} --version`);
+            const out = stdout || stderr;
+            if (out && out.includes('Python')) {
+                const match = out.match(/Python\s+([0-9.]+)/i);
+                return match ? match[1] : true;
+            }
+            return false;
         } catch {
             return false;
         }
@@ -202,7 +207,10 @@ export class DaemonManager {
             pythonPath: this.getPythonPath(),
             pythonOptions: ['-u'], // 无缓冲输出
             scriptPath: path.dirname(this.config.daemonScript),
-            env: {PYTHONIOENCODING: 'utf-8'}, // 设置编码
+            env: {
+                ...process.env,
+                PYTHONIOENCODING: 'utf-8'
+            }, // 设置编码
             args: [
                 '--pid-file', this.config.pidFile,
                 '--log-file', this.config.logFile,

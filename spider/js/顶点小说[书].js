@@ -15,7 +15,7 @@ var rule = {
   host: 'https://www.23ddw.cc/',
   编码: 'utf-8',
   url: '/class/fyclass_fypage/',
-  searchUrl: '/searchss/?searchkey=**&page=fypage',
+  searchUrl: '/searchsss/',
   searchable: 2,
   quickSearch: 0,
   filterable: 1,
@@ -29,7 +29,7 @@ var rule = {
   class_name: '全本',
   class_url: '0',
   class_parse: '.nav&&ul&&li;a&&Text;a&&href;class/(.*?)_',
-  cate_exclude: '',
+  cate_exclude: '热门|记录',
   play_parse: true,
   lazy: $js.toString(async () => {
     log('input:', input);
@@ -85,5 +85,25 @@ var rule = {
     list_url: 'a&&href',
     list_url_prefix: '',
   },
-  搜索: '#hotcontent&&.item;#newscontent ul li;a&&title;img&&data-original;.btm a&&Text;.blue.visible-xs&&Text;a&&href;dd&&Text;.s2&&Text;.s4&&Text;.s3&&Text'
+  搜索: async function() {
+    let {KEY, pdfa, pdfh, pd} = this;
+    let d = [];
+    let url = rule.host.replace(/\/+$/, '') + '/searchsss/';
+    let resp = await axios.post(url, 'searchkey=' + encodeURIComponent(KEY), {
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    });
+    let html = typeof resp.data === 'string' ? resp.data : JSON.stringify(resp.data);
+    let items = pdfa(html, '#hotcontent&&.item');
+    if (!items || items.length === 0) items = pdfa(html, '#newscontent&&ul&&li');
+    if (!items || items.length === 0) return setResult(d);
+    items.forEach(it => {
+      d.push({
+        title: pdfh(it, 'a&&title') || pdfh(it, '.s2&&Text'),
+        img: pd(it, 'img&&data-original', rule.host) || '',
+        desc: pdfh(it, '.btm&&a&&Text') || pdfh(it, '.s4&&Text'),
+        url: pd(it, 'dt&&a&&href', rule.host) || pd(it, '.s2&&a&&href', rule.host)
+      });
+    });
+    return setResult(d);
+  }
 };

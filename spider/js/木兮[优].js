@@ -40,111 +40,111 @@ var rule = {
     class_url: '1&2&3&4&5',
     推荐: $js.toString(async () => {
         let d = [];
-        let html = await request(input + '/api/film/category');
-        let categories = JSON.parse(html).data;
-
+        let html = await request(HOST + '/api/film/category', { headers: rule.headers });
+        let categories = (JSON.parse(html || '{}').data) || [];
         categories.forEach(category => {
-            category.filmList.forEach(item => {
-                let title = item.name;
+            (category.filmList || []).forEach(item => {
+                let title = item.name || '';
                 if (!/名称|排除/.test(title)) {
                     d.push({
                         title: title,
-                        desc: item.updateStatus,
-                        img: item.cover,
+                        desc: item.updateStatus || '',
+                        img: item.cover || '',
                         url: item.id,
-                        content:item.blurb,
+                        content: item.blurb || ''
                     });
                 }
             });
         });
-
         return setResult(d);
     }),
     一级: $js.toString(async () => {
         let d = [];
-        let html = await request(input);
-        let data = JSON.parse(html).data.list;
+        let html = await request(input, { headers: rule.headers });
+        let data = (((JSON.parse(html || '{}').data) || {}).list) || [];
         data.forEach(item => {
-            let title = item.name;
+            let title = item.name || '';
             if (!/名称|排除/.test(title)) {
                 d.push({
                     title: title,
-                    desc: item.updateStatus,
-                    img: item.cover,
+                    desc: item.updateStatus || '',
+                    img: item.cover || '',
                     url: item.id,
-                    content:item.blurb,
+                    content: item.blurb || ''
                 });
             }
         });
         return setResult(d);
     }),
-
     二级: $js.toString(async () => {
-        let html = await request(input);
-        let data = JSON.parse(html).data;
-        // 定义类型映射
+        let detailId = String(input).match(/id=(\d+)/);
+        detailId = detailId ? detailId[1] : String(input).trim();
+        let html = await request(input, { headers: rule.headers });
+        let data = (JSON.parse(html || '{}').data) || {};
         let categoryMap = {
-            1: "电视剧",
-            2: "电影",
-            3: "综艺",
-            4: "动漫",
-            5: "短剧"
+            1: '电视剧',
+            2: '电影',
+            3: '综艺',
+            4: '动漫',
+            5: '短剧'
         };
-        let categoryName = categoryMap[data.categoryId]
+        let categoryName = categoryMap[data.categoryId] || '';
         let VOD = {
-            vod_id: orId,
-            vod_name: data.name,
+            vod_id: String(data.id || detailId),
+            vod_name: data.name || '',
             type_name: categoryName,
-            vod_pic: data.cover,
-            vod_remarks: data.updateStatus,
-            vod_content: data.blurb
+            vod_pic: data.cover || '',
+            vod_remarks: data.updateStatus || '',
+            vod_content: data.blurb || ''
         };
-
         let playlist = data.playLineList || [];
         let playFrom = [];
         let playUrl = [];
-
         playlist.forEach(line => {
+            if (!line || !line.playerName) return;
             playFrom.push(line.playerName);
             let lines = line.lines || [];
             let lineUrls = lines.map(tag => {
-                let title = tag.name;
+                let title = tag.name || '播放';
                 let url = tag.id;
                 return `${title}$${url}`;
-            });
-            playUrl.push(lineUrls.join("#"));
+            }).filter(Boolean);
+            playUrl.push(lineUrls.join('#'));
         });
-
-        VOD.vod_play_from = playFrom.join("$$$");
-        VOD.vod_play_url = playUrl.join("$$$");
-        return VOD
+        VOD.vod_play_from = playFrom.join('$$$');
+        VOD.vod_play_url = playUrl.join('$$$');
+        return VOD;
     }),
-
     搜索: $js.toString(async () => {
         let d = [];
-        let html = await request(input);
-        let data = JSON.parse(html).data.list;
+        let html = await request(input, { headers: rule.headers });
+        let json = {};
+        try {
+            json = JSON.parse(html || '{}');
+        } catch (e) {
+            return setResult([]);
+        }
+        let data = ((json.data || {}).list) || [];
         data.forEach(item => {
-            let title = item.name;
+            let title = item.name || '';
             d.push({
                 title: title,
-                desc: item.updateStatus,
-                img: item.cover,
+                desc: item.updateStatus || '',
+                img: item.cover || '',
                 url: item.id,
-                content:item.blurb,
+                content: item.blurb || ''
             });
         });
         return setResult(d);
     }),
     lazy: $js.toString(async () => {
-        let purl = 'https://film.symx.club/api/line/play/parse?lineId=' + input;
-        let html = await request(purl);
-        let url = JSON.parse(html).data;
+        let purl = HOST + '/api/line/play/parse?lineId=' + input;
+        let html = await request(purl, { headers: rule.headers });
+        let url = (JSON.parse(html || '{}').data) || input;
         input = {
-            parse: 0,
+            parse: /^https?:\/\/.*\.(m3u8|mp4|flv|m4s)(\?.*)?$/i.test(url) ? 0 : 1,
             url: url
         };
-        return input
+        return input;
     }),
-
 }

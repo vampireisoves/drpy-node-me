@@ -132,12 +132,17 @@ dist
 !README.md
 .idea
 /config/env.json
+/spider/js/UC分享.js
+/json/UC分享.json
+/jx/奇奇.js
+/spider/js/百忙无果[官].js
 /data/settings/link_data.json
 /yarn.lock
 /t4_daemon.pid
 /custom.json
 /index.json
 /vod_cache/
+/jx/芒果关姐.js
 /data/mv/
 /database.db
 /scripts/python/XYQ提取结果.json
@@ -158,9 +163,11 @@ dist
 .DS_Store
 /spider/catvod/mtv60w[差].js
 /drpy-node-bundle/jx/_30wmv.js
+/.git-token
+
+# mcpb
+drpy-node-mcp/*.mcpb
 /installerfiles
-spider/py/黄色/lsp_videos_auto.json
-spider/py/黄色/lsp_auto_export_1761582324.json
-spider/py/黄色/lsp_videos_auto.m3u
-spider/py/»ÆÉ«/lsp_videos_auto.json
 spider/php/lsp.db
+spider/py/黄色/lsp_videos_auto.json
+spider/py/»ÆÉ«/lsp_videos_auto.json
