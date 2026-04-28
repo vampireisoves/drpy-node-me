@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const __dirname_custom = '/storage/emulated/0/peekpili/drpy-node';
+const __dirname_custom = '/storage/emulated/0/peekpro/drpy-node';
 const logFilePath = path.join(__dirname_custom, 'drpy_node.log');
 
 function writeLog(msg) {
@@ -15,14 +15,19 @@ try { fs.writeFileSync(logFilePath, ''); } catch(e) {}
 writeLog('[drpy-start] 启动脚本开始');
 writeLog('[drpy-start] Node.js: ' + process.version);
 writeLog('[drpy-start] 平台: ' + process.platform + ' ' + process.arch);
+writeLog('[drpy-env] API_PWD: ' + (process.env.API_PWD ? '已设置(' + process.env.API_PWD.length + '位)' : '(空)'));
+writeLog('[drpy-env] API_AUTH_NAME: ' + (process.env.API_AUTH_NAME || '(未设置)'));
+writeLog('[drpy-env] API_AUTH_CODE: ' + (Object.prototype.hasOwnProperty.call(process.env, 'API_AUTH_CODE')
+  ? (process.env.API_AUTH_CODE ? '已设置(' + process.env.API_AUTH_CODE.length + '位)' : '(空)')
+  : '(未设置)'));
 
 // ===== 设置 PHP 环境变量 =====
-process.env.PHP_PATH = '/data/user/0/com.example.peekpili/files/php/php';
-process.env.PHPRC = '/data/user/0/com.example.peekpili/files/php';
-process.env.PHP_INI_SCAN_DIR = '/data/user/0/com.example.peekpili/files/php/conf.d';
-process.env.HOME = '/data/user/0/com.example.peekpili/files/php';
-process.env.TMPDIR = '/data/user/0/com.example.peekpili/cache';
-process.env.LD_LIBRARY_PATH = '/data/user/0/com.example.peekpili/files/php/libs:/system/lib64:/system/lib';
+process.env.PHP_PATH = '/data/user/0/com.example.peekpro/files/php/php';
+process.env.PHPRC = '/data/user/0/com.example.peekpro/files/php';
+process.env.PHP_INI_SCAN_DIR = '/data/user/0/com.example.peekpro/files/php/conf.d';
+process.env.HOME = '/data/user/0/com.example.peekpro/files/php';
+process.env.TMPDIR = '/data/user/0/com.example.peekpro/cache';
+process.env.LD_LIBRARY_PATH = '/data/user/0/com.example.peekpro/files/php/libs:/system/lib64:/system/lib';
 writeLog('[drpy-start] PHP 环境变量已设置');
 writeLog('[drpy-start] PHP_PATH: ' + process.env.PHP_PATH);
 writeLog('[drpy-start] LD_LIBRARY_PATH: ' + process.env.LD_LIBRARY_PATH);
@@ -272,6 +277,17 @@ try {
   writeLog('[drpy-start] 工作目录: ' + process.cwd());
 } catch (e) {
   writeLog('[drpy-start] 切换目录失败: ' + e.message);
+}
+
+// ===== Worker Threads 兼容 =====
+// 在 nodejs-mobile 的 Worker Threads 中，process.chdir() 可能不被支持。
+// 但 drpy-node 的部分后台接口会通过 process.cwd() 查找 package.json / config 等文件。
+// 因此这里强制把 process.cwd() 绑定到实际服务目录，避免落到 node_service_manager 目录。
+try {
+  process.cwd = () => __dirname_custom;
+  writeLog('[drpy-start] 已绑定 process.cwd(): ' + process.cwd());
+} catch (e) {
+  writeLog('[drpy-start] 绑定 process.cwd() 失败: ' + e.message);
 }
 
 process.env.NODE_ENV = 'production';

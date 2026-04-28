@@ -167,6 +167,7 @@ dist
 
 # mcpb
 drpy-node-mcp/*.mcpb
+
 /installerfiles
 spider/php/lsp.db
 spider/py/黄色/lsp_videos_auto.json
