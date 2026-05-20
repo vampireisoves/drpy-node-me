@@ -5,9 +5,7 @@ FROM node:22-slim AS builder
 # 安装必要的系统依赖和 Puppeteer 依赖
 RUN apt-get update && apt-get install -y \
     make python3 python3-pip build-essential \
-    libnss3 libxss1 libasound2 libatk1.0-0 libatk-bridge2.0-0 \
-    libcups2 libdrm2 libgbm1 libpango-1.0-0 libpangocairo-1.0-0 \
-    libxcomposite1 libxdamage1 libxext6 libxfixes3 libxrandr2 xdg-utils \
+    tar unzip \
     git \
     && rm -rf /var/lib/apt/lists/*
 
