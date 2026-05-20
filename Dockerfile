@@ -1,16 +1,22 @@
 # 构建器阶段
-# 使用node:20-alpine(17 < version < 23)作为基础镜像
-FROM node:20-alpine AS builder
+# 使用node:20-slim作为基础镜像(17 < version < 23)
+FROM node:20-slim AS builder
 
-# 安装git
-RUN apk add --no-cache make python3 py3-pip build-base
+# 安装必要的系统依赖和 Puppeteer 依赖
+RUN apt-get update && apt-get install -y \
+    make python3 python3-pip build-essential \
+    libnss3 libxss1 libasound2 libatk1.0-0 libatk-bridge2.0-0 \
+    libcups2 libdrm2 libgbm1 libpango-1.0-0 libpangocairo-1.0-0 \
+    libxcomposite1 libxdamage1 libxext6 libxfixes3 libxrandr2 xdg-utils \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
 # 创建一个工作目录
 WORKDIR /app
 
 # 克隆GitHub仓库到工作目录
 COPY . /app
-RUN sed -i 's|const shell = os.platform() === '"'"'win32'"'"' ? '"'"'powershell.exe'"'"' : '"'"'bash'"'"'|const shell = os.platform() === '"'"'win32'"'"' ? '"'"'powershell.exe'"'"' : '"'"'sh'"'"'|' controllers/admin/terminalController.js
+RUN sed -i 's|const shell = os.platform() === '"'"'win32'"'"' ? '"'"'powershell.exe'"'"' : '"'"'bash'"'"'|const shell = os.platform() === '"'"'win32'"'"' ? '"'"'powershell.exe'"'"' : '"'"'sh'"'"'|g' /app/index.js || true
 RUN rm -rf drpy-node-admin drpy-node-bundle drpy-node-mcp drpy2-quickjs
 
 # 安装项目依赖项和puppeteer
@@ -23,46 +29,32 @@ RUN mkdir -p /tmp/drpys && \
 
 
 # 运行器阶段
-# 使用alpine:latest作为基础镜像来创建一个更小的镜像
-# 但是无法用pm2
-FROM alpine:latest AS runner
+# 使用debian:bookworm-slim作为基础镜像来创建一个较小的镜像
+FROM debian:bookworm-slim AS runner
 
 # 创建一个工作目录
 WORKDIR /app
 
 # 复制构建器阶段中准备好的文件和依赖项到运行器阶段的工作目录中
 COPY --from=builder /tmp/drpys/. /app
+
+# 安装运行时依赖
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    php8.3 php8.3-cli php8.3-curl php8.3-mbstring php8.3-xml \
+    php8.3-pdo php8.3-pdo-mysql php8.3-pdo-sqlite php8.3-openssl \
+    php8.3-sqlite3 php8.3-json \
+    python3 python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -sf /usr/bin/php8.3 /usr/bin/php
+
+# 配置环境和应用
 RUN cp /app/.env.development /app/.env && \
     rm -f /app/.env.development && \
     sed -i 's|^VIRTUAL_ENV[[:space:]]*=[[:space:]]*$|VIRTUAL_ENV=/app/.venv|' /app/.env && \
     sed -i 's|^ENABLE_TERMINAL=0|ENABLE_TERMINAL=1|' /app/.env && \
     echo '{"ali_token":"","ali_refresh_token":"","quark_cookie":"","uc_cookie":"","bili_cookie":"","thread":"10","enable_dr2":"1","enable_py":"2"}' > /app/config/env.json
-
-# 安装Node.js运行时（如果需要的话，这里已经假设在构建器阶段中安装了所有必要的Node.js依赖项）
-# 由于我们已经将node_modules目录复制到了运行器阶段，因此这里不需要再次安装npm或node_modules中的依赖项
-# 但是，我们仍然需要安装Node.js运行时本身（除非drpys项目是一个纯静态资源服务，不需要Node.js运行时）
-RUN apk add --no-cache nodejs
-
-# 安装php8.3及其扩展
-RUN apk add --no-cache \
-    php83 \
-    php83-cli \
-    php83-curl \
-    php83-mbstring \
-    php83-xml \
-    php83-pdo \
-    php83-pdo_mysql \
-    php83-pdo_sqlite \
-    php83-openssl \
-    php83-sqlite3 \
-    php83-json
-RUN ln -sf /usr/bin/php83 /usr/bin/php
-
-# 安装python3依赖
-RUN apk add --no-cache python3 \
-    py3-pip \
-    py3-setuptools \
-    py3-wheel
 
 # 激活python3虚拟环境并安装requirements依赖
 RUN python3 -m venv /app/.venv && \
