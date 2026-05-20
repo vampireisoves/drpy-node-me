@@ -40,13 +40,12 @@ jobs:
       - name: Run packageJS-green script
         run: npm run packageJS-green
 
-      # 列出生成的文件（方便排查）
       - name: List built files
         run: |
           cd ..
           ls -la *.7z
 
-      # ✅ 新版创建 Release + 自动上传 7z 文件
+      # 👇 新版 Action：创建 Release + 上传文件一步到位
       - name: Create Release and upload assets
         uses: softprops/action-gh-release@v2
         with:
