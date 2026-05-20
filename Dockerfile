@@ -37,11 +37,17 @@ WORKDIR /app
 COPY --from=builder /tmp/drpys/. /app
 
 # 安装运行时依赖
+# 添加 PHP 仓库以获取 PHP 8.3 包
 RUN apt-get update && apt-get install -y \
+    lsb-release ca-certificates apt-transport-https software-properties-common \
+    && add-apt-repository "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
+    && apt-get update
+
+RUN apt-get install -y \
     nodejs \
     php8.3 php8.3-cli php8.3-curl php8.3-mbstring php8.3-xml \
     php8.3-pdo php8.3-pdo-mysql php8.3-pdo-sqlite php8.3-openssl \
-    php8.3-sqlite3 php8.3-json \
+    php8.3-json \
     python3 python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
