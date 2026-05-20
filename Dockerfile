@@ -1,6 +1,6 @@
 # 构建器阶段
-# 使用node:20-slim作为基础镜像(17 < version < 23)
-FROM node:20-slim AS builder
+# 使用node:22-slim作为基础镜像(17 < version < 23)
+FROM node:22-slim AS builder
 
 # 安装必要的系统依赖和 Puppeteer 依赖
 RUN apt-get update && apt-get install -y \
