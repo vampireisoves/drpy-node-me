@@ -1,6 +1,6 @@
 # 构建器阶段
-# 使用node:20-alpine(17 < version < 23)作为基础镜像
-FROM node:20-alpine AS builder
+# 使用node:22-alpine(17 < version < 23)作为基础镜像
+FROM node:22-alpine AS builder
 
 # 安装git
 RUN apk add --no-cache make python3 py3-pip build-base
@@ -14,7 +14,8 @@ RUN sed -i 's|const shell = os.platform() === '"'"'win32'"'"' ? '"'"'powershell.
 RUN rm -rf drpy-node-admin drpy-node-bundle drpy-node-mcp drpy2-quickjs
 
 # 安装项目依赖项和puppeteer
-RUN yarn && yarn add puppeteer
+# RUN yarn && yarn add puppeteer
+RUN yarn install && yarn add puppeteer
 
 # 复制工作目录中的所有文件到一个临时目录中
 # 以便在运行器阶段中使用
