@@ -37,27 +37,18 @@ WORKDIR /app
 COPY --from=builder /tmp/drpys/. /app
 
 # 安装运行时依赖
-# 添加 PHP 仓库以获取 PHP 8.3 包
 RUN apt-get update && apt-get install -y \
-    lsb-release ca-certificates apt-transport-https software-properties-common \
-    && add-apt-repository "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
-    && apt-get update
-
-RUN apt-get install -y \
     nodejs \
-    php8.3 php8.3-cli php8.3-curl php8.3-mbstring php8.3-xml \
-    php8.3-pdo php8.3-pdo-mysql php8.3-pdo-sqlite php8.3-openssl \
-    php8.3-json \
     python3 python3-venv \
+    --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
-
-RUN ln -sf /usr/bin/php8.3 /usr/bin/php
 
 # 配置环境和应用
 RUN cp /app/.env.development /app/.env && \
     rm -f /app/.env.development && \
     sed -i 's|^VIRTUAL_ENV[[:space:]]*=[[:space:]]*$|VIRTUAL_ENV=/app/.venv|' /app/.env && \
     sed -i 's|^ENABLE_TERMINAL=0|ENABLE_TERMINAL=1|' /app/.env && \
+    sed -i 's|^enable_php=.*|enable_php=2|' /app/.env && \
     echo '{"ali_token":"","ali_refresh_token":"","quark_cookie":"","uc_cookie":"","bili_cookie":"","thread":"10","enable_dr2":"1","enable_py":"2"}' > /app/config/env.json
 
 # 激活python3虚拟环境并安装requirements依赖
