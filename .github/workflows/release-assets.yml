@@ -12,13 +12,14 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 需要写入权限来创建发布
-
+      contents: write   # 必须加，才能创建 Release 和上传资产
+      packages: write
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 获取所有历史记录
+          fetch-depth: 0
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
